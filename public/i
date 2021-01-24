@@ -1,0 +1,96 @@
+#!/bin/bash
+# Autor: Thiago Brandao
+# E-mail: thiagubrandao@gmail.com
+#Verifica se foi escolhido -d ou -u, neste caso o script ira prosseguir se
+#tiver sido usado -d (dominio).
+	if [ "$1" = "-d" ]
+
+	then
+
+#Procura o dominio do usuario informado.
+	usuario=`/scripts/whoowns $2`
+
+	dominio=$2
+
+#Verifica se existe a pasta no /home para a conta informada.
+	if [ -d "/home/$usuario/public_html/" ]
+
+	then
+
+#Corrigi as permissoes e de algumas informacoes ao usuario.
+	cd /root
+	echo Usuario do $dominio encontrado: $usuario
+	echo ".................................................."
+	chown -R $usuario:$usuario /home/$usuario/public_html
+	chgrp nobody /home/$usuario/public_html
+	chmod 750 /home/$usuario/public_html
+	find /home/$usuario/public_html -type d -exec chmod 755 {} \;
+	find /home/$usuario/public_html -type f -exec chmod 644 {} \;
+	echo ".................................................."
+	echo "As permissoes do usuario: $usuario foram corrigidas"
+
+#Reposta para o cliente.
+	echo "----------------------------------------------------------"
+	echo "# Resposta ao cliente #"
+	echo "----------------------------------------------------------"
+	echo "Ola,"
+	echo ""
+	echo "Por gentileza verifique o acesso novamente. Verificamos que a conta $dominio estava com as permissoes erradas. Utilize sempre 755 para 
+diretorios e 644 para arquivos."
+
+	else
+
+#Informa ao cliente que o dominio informado nao existe no servidor ou foi informado outro argumento, invalido.
+	echo "Nao encontramos o usuario/diretorio do dominio $dominio ou nao a valido."
+
+	fi
+
+	else
+
+#Verifica se foi escolhido -d ou -u, neste caso o script ira prosseguir se
+#tiver sido usado -u (usuario).
+	if [ "$1" = "-u" ]
+	
+	then
+	usuario=$2
+
+#Verifica se existe a pasta no /home para a conta informada.
+	if [ -d "/home/$usuario/public_html/" ]
+
+	then
+
+#Corrigi as permissoes e de algumas informacoes ao usuario.
+	cd /root
+	find /home/$usuario/public_html -type d -exec chmod 755 {} \;
+	find /home/$usuario/public_html -type f -exec chmod 644 {} \;
+	chown -R $usuario:$usuario /home/$usuario/public_html
+	chgrp nobody /home/$usuario/public_html
+	chmod 750 /home/$usuario/public_html
+	echo ".................................................."
+	echo "As permissoes do usuario: $usuario foram corrigidas"
+
+#Reposta para o cliente.
+	echo "----------------------------------------------------------"
+	echo "# Resposta ao cliente #"
+	echo "----------------------------------------------------------"
+	echo "Ola,"
+	echo ""
+	echo "Por gentileza verifique o acesso novamente. Verificamos que a conta $dominio estava com as permissoes erradas. Utilize sempre 755 para 
+diretorios e 644 para arquivos."
+
+	else
+
+#Informa ao cliente que o usuario informado nao existe no servidor ou foi informado outro argumento, invalido.
+	echo "Nao encontramos o diretorio do usuario $usuario ou nao e valido."
+
+	fi
+
+	else
+
+#Se o usuario nao tiver digitado -d ou -u o script envia o texto de ajuda.
+	echo "Opcao invalida. Utilize:"
+	echo "-d      Para alterar a permissao informando o dominio da conta."
+	echo "-u      Para alterar a permissao informando o usuario da conta."
+
+	fi
+	fi

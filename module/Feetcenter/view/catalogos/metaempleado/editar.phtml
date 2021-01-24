@@ -1,0 +1,61 @@
+<?php 
+    $this->headTitle()->prepend('Editar meta de empleado');
+    echo $this->headTitle();
+?>
+<div id="clinica_container">
+    <h1>Meta de empleado: <?php echo \EmpleadoQuery::create()->filterByIdempleado($entidad)->findOne()->getEmpleadoNombre()?></h1>
+    <?php 
+        $form->setAttribute('action', '/catalogos/metaempleado/editar/'.$id);
+        $form->setAttribute('novalidate', true);
+        $form->setAttribute('class', 'forms');
+        $form->prepare();
+        echo $this->form()->openTag($form); 
+    ?>
+    <div class="units-row">
+        <div class="unit-50">
+            <label>
+                Empleado <span class="req">*</span>
+                <select name="idempleado" class="width-100">
+                            <option value="">Selecione un empleado..</option>
+                            <?php foreach ($empleados as $empleado) : ?>
+                            
+                            <?php if ($empleado['idempleado'] == $entidad) {?>
+                                <option value="<?php echo $empleado['idempleado']?>" selected><?php echo $empleado['empleado_nombre'] ?></option>
+                            <?php } else { ?>
+                                <option value="<?php echo $empleado['idempleado']?>"><?php echo $empleado['empleado_nombre']?></option>
+
+                            <?php } endforeach; ?>
+                        </select>
+            </label>
+        </div>
+        <div class="unit-50">
+            <label>
+                Meta <span class="req">*</span>
+                <?php echo $this->formText($form->get('metaempleado_meta')); ?>
+            </label>
+        </div>
+
+    </div>
+    <div class="units-row">
+        <div class="unit-50">
+            <label>
+                Año <span class="req">*</span>
+                <?php echo $this->formText($form->get('metaempleado_anio')); ?>
+            </label>
+        </div>
+        <div class="unit-50">
+            <label>
+                Mes
+                <?php echo $this->formSelect($form->get('metaempleado_mes')); ?>
+            </label>
+        </div>
+    </div>
+   
+    <div class="units-row">
+        <div class="unit-centered unit-40"><button data-action="submit" class="btn btn-green">Guardar</button></div>
+    </div>
+</div>
+<script src="/js/catalogos/metaempleado.js"></script>
+<script>
+    $('#clinica_container').clinica();
+</script>

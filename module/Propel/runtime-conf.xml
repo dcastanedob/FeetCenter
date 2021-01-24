@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <propel>
+        <datasources default="feetcent_feetcenter">
+            <datasource id="feetcent_feetcenter">
+                <adapter>mysql</adapter> <!-- sqlite, mysql, myssql, oracle, or pgsql -->
+                <connection>
+                    <dsn>mysql:host=127.0.0.1;dbname=feetcent_feetcenter</dsn>
+                    <user>root</user>
+                    <password>mysql</password>
+                </connection>
+            </datasource>
+        </datasources>
+    </propel>
+</config>

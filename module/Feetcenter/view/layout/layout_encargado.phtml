@@ -1,0 +1,170 @@
+<?php echo $this->doctype(); ?>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle('FeetCenter '. $this->translate('Administrador'))->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <!-- Le styles -->
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+                        ->prependStylesheet($this->basePath('fonts/font-awesome-4.4.0/css/font-awesome.css'))
+                        ->prependStylesheet($this->basePath('css/style.css'))
+                        ->prependStylesheet($this->basePath('plugins/fullcalendar/fullcalendar.css'))
+                        ->prependStylesheet($this->basePath('plugins/bootstrap-timepicker-0.5.1/css/timepicker.css'))
+                        ->prependStylesheet($this->basePath('plugins/tokeninput/styles/token-input-facebook.css'))
+                        ->prependStylesheet($this->basePath('plugins/tokeninput/styles/token-input-mac.css'))
+                        ->prependStylesheet($this->basePath('plugins/tokeninput/styles/token-input.css'))
+                        ->prependStylesheet($this->basePath('plugins/fancyBox/source/jquery.fancybox.css'))
+                         ->prependStylesheet($this->basePath('css/plugin/multiple.css'))
+                        ->prependStylesheet($this->basePath('css/plugin/datatable/jquery.dataTables.css'))
+                        ->prependStylesheet($this->basePath('css/plugin/default.date.css'))
+                        ->prependStylesheet($this->basePath('css/plugin/default.css'))
+                        ->prependStylesheet($this->basePath('css/kube.css')) ?>
+
+                        
+        <!-- Scripts -->
+        <?php echo $this->headScript()
+                ->prependFile('http://cdn.datatables.net/plug-ins/1.10.11/sorting/date-eu.js')
+                ->prependFile($this->basePath('js/check_browser_close.js'))
+                ->prependFile($this->basePath('plugins/bootstrap-timepicker-0.5.1/js/bootstrap-timepicker.js'))
+                ->prependFile($this->basePath('plugins/fancyBox/source/jquery.fancybox.js'))
+
+            ->prependFile($this->basePath('plugins/tokeninput/src/jquery.tokeninput.js'))
+            ->prependFile($this->basePath('plugins/fancyBox/source/jquery.fancybox.js'))
+
+            ->prependFile($this->basePath('/js/plugin/multiple.js'))
+            ->prependFile($this->basePath('js/plugin/datatable/jquery.dataTables.js'))
+            ->prependFile($this->basePath('js/plugin/picker.date.js'))
+            ->prependFile($this->basePath('js/plugin/picker.js'))
+            ->prependFile($this->basePath('js/plugin/lolliclock.js'))
+            ->prependFile($this->basePath('js/plugin/accounting.js')) 
+            ->prependFile($this->basePath('js/plugin/numeric.js'))     
+            ->prependFile($this->basePath('js/form.js'))
+            ->prependFile($this->basePath('js/kube.min.js'))
+            ->prependFile($this->basePath('js/jquery.min.js'));
+        ?>
+
+    </head>
+    <body class="loading">
+        <header id="top_header" class="group z-depth-1">
+            <nav id="top_header_resources" class="navbar navbar-left">
+                <ul>
+                    <li><img width="250" height="60" src="/img/logo/top_logo.png"></li>
+                    <li><a href="/">Agenda</a></li>
+                    <li><a href="#" data-tools="dropdown" data-target="#dropdown-pacientes">Clientes</a></li>
+                    <li><a href="#" data-tools="dropdown" data-target="#dropdown-ventas">Ventas</a></li>
+                    <li><a href="#"  data-tools="dropdown" data-target="#dropdown-inventarios">Inventarios <span id="notification_transfers" style="display: none"class="badge badge-error"><?php echo \Shared\Session\AouthSession::getTransferenciasPendientes()?></span></a></li>
+                    <li><a href="#" data-tools="dropdown" data-target="#dropdown-egresos">Egresos</a></li>
+                    <li><a href="#" data-tools="dropdown" data-target="#dropdown-empleados">Empleados</a></li>
+                    <li><a href="#" data-tools="dropdown" data-target="#dropdown-reportes">Reportes</a></li>
+                </ul>
+            </nav>
+            <nav class="navbar navbar-right">
+                <ul>
+                    <li style="float: right" id="profile_container" ><img width="35" height="35" src="<?php echo Shared\Session\AouthSession::getEmpleadoFoto()?>" class="circle"><a href="#" data-tools="dropdown" data-target="#dropdown-profile" style="display: inline; margin-left: 12px; margin-right: 12px;"><?php echo Shared\Session\AouthSession::getEmpleadoNombre()?></a></li>
+                </ul>
+            </nav>
+        </header>
+        <!--Dropdown-->
+        <ul id="dropdown-profile" class="dropdown">
+            <li><a href="/login/out">Cerrar sesión</a></li>
+            <li><a href="/micuenta">Mi cuenta</a></li>
+        </ul>
+        <ul id="dropdown-empleados" class="dropdown">
+            <li><a href="/empleados">Horarios</a></li>
+            <li><a href="/empleados/reportes">Reportes</a></li>
+            <li><a href="/empleados/comisiones">Comisiones</a></li>
+            <li><a href="/empleados/vendidos">Productos y servicios vendidos</a></li>
+            <li><a href="/empleados/faltantes">Faltantes</a></li>
+            <li><a href="/empleados/ausencias">Ausencias</a></li>
+        </ul>
+        <ul id="dropdown-pacientes" class="dropdown">
+            <li><a href="/pacientes/nuevo">Nuevo cliente</a></li>
+            <li><a href="/pacientes">Clientes</a></li>
+<!--            <li><a href="/pacientes/grupos">Grupos</a></li>-->
+            <li><a href="/pacientes/expediente">Expediente</a></li>
+            <li><a href="/pacientes/seguimiento">Seguimiento</a></li>
+            <li><a href="/pacientes/membresias">Membresías</a></li>
+            <li><a href="/pacientes/visitas">Visitas</a></li>
+        </ul>
+        <ul id="dropdown-ventas" class="dropdown">
+            <li><a href="/ventas">Caja</a></li>
+            <li><a href="/ventas/balance">Balance</a></li>
+            <li><a href="/reportes/ventas">Ventas</a></li>
+        </ul>
+        <ul id="dropdown-inventarios" class="dropdown">
+            <li><a href="/inventario/transferencias">Transferencias</a></li>
+            <li><a href="/inventario/transferencias/nuevo">Nueva transferencia</a></li>
+            <li><a href="/inventario/reorden">Definir precios y reorden</a></li>
+            <li><a href="/inventario/producto">Productos</a></li>
+            <li><a href="/inventario/insumo">Insumos</a></li>
+            <li><a href="/inventario/precios">Lista de precios</a></li>
+        </ul>
+        <ul id="dropdown-egresos" class="dropdown">
+            <li><a href="/egresos">Egresos</a></li>
+            <li><a href="/egresos/nuevo">Nuevo egreso</a></li>
+        </ul>
+        <ul id="dropdown-compras" class="dropdown">
+            <li><a href="/compras">Compras</a></li>
+            <li><a href="/compras/nuevo">Nueva compra</a></li>
+        </ul>
+        <ul id="dropdown-catalogos" class="dropdown">
+            <li><a href="/catalogos/clinica">Clínicas</a></li>
+            <li><a href="/catalogos/empleado">Empleados</a></li>
+            <li><a href="/catalogos/servicio">Servicios</a></li>
+            <li><a href="/catalogos/producto">Productos</a></li>
+            <li><a href="/catalogos/insumo">Insumos</a></li>
+            <li><a href="/catalogos/rol">Roles</a></li>
+            <li><a href="/catalogos/proveedor">Proveedores</a></li>
+            <li><a href="/catalogos/canal">Canal de comunicación</a></li>
+            <li><a href="/catalogos/concepto">Conceptos</a></li>
+        </ul>
+        <ul id="dropdown-reportes" class="dropdown">
+            <li><a href="/reportes/clinicas">Clínicas</a></li>
+            <li><a href="/reportes/empleados">Empleados</a></li>
+            <li><a href="/reportes/tablerodecontrol">Tablero de Control</a></li>
+        </ul>
+            <div class="units-row">
+                <div class="unit-centered unit-90">
+                    <?php echo $this->content; ?>
+                </div>
+            </div>
+            
+ 
+            <footer>
+                
+            </footer>
+        </div> <!-- /container -->
+        <?php echo $this->inlineScript() ?>
+    </body>
+    <script>
+        var transferencias_pendientes = parseInt(<?php echo \Shared\Session\AouthSession::getTransferenciasPendientes()?>);
+        if(transferencias_pendientes > 0){
+            $('#notification_transfers').css('display','inline');
+        }else{
+            $('#notification_transfers').hide();
+        }
+
+
+    
+    </script>
+    <div class="modal-loading"><!-- Place at bottom of page --></div>
+    <script>
+        $(document).ready(function(){
+            $('body').removeClass('loading');
+        });
+        
+        $(document).ajaxStart(function(){
+             $('body').addClass('loading');
+        }); 
+        
+        $( document ).ajaxComplete(function() {
+             $('body').removeClass('loading');
+        });
+    </script>
+</html>

@@ -1,0 +1,98 @@
+<?php 
+    $this->headTitle()->prepend('Caja');
+    echo $this->headTitle();
+?>
+<div id="ventas_container">
+    <h1>Caja</h1>
+    <?php if(count($successMessages)) :?>
+    <div class="units-row">
+        <?php foreach ($successMessages as $message) :?>
+            <div class="unit-100">    
+                <div class="tools-alert tools-alert-green">
+                    <?php echo $message?>
+                </div> 
+            </div>
+        <?php endforeach;?>
+    </div>
+<?php endif;?>
+    <div class="units-row">
+        <div class="unit-20">
+            Clínica
+            <select multiple="multiple" name="idclinica" class="width-100">
+                <?php foreach ($clinicas as $clinica) : ?>
+                    <option value="<?php echo $clinica->getIdclinica()?>"><?php echo $clinica->getClinicaNombre() ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="unit-20">
+            Estatus
+            <select multiple="multiple" name="visita_estatuspago" class="width-100">
+                <option value="pagada" selected>Pagadas</option>
+                <option value="no pagada">No pagadas</option>
+                <option value="cancelada">Canceladas</option>
+            </select>
+        </div>
+        <div class="unit-20">
+           
+            Pedicurista
+            <select multiple="multiple" name="idempleado" class="width-100">
+                <?php foreach ($empleados as $empleado) : ?>
+                <option value="<?php echo $empleado->getIdempleado()?>"><?php echo $empleado->getEmpleado()->getEmpleadoNombre() ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="unit-40" id="filter_container">
+            <label style="display: block">Filtrar por periodo de tiempo</label>
+            <input placeholder="Desde" type="email" name="ventas_from" class="width-6" />
+            <input placeholder="Hasta" type="email" name="ventas_to" class="width-6" />
+            <button id="filterbydate" class="btn btn-blue" style="height: 30px;"><i class="fa fa-filter"></i> </button>
+        </div>
+    </div>
+    <table class="table-ventas">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Clínica</th>
+                <th>Cliente</th>
+                <th>Pedicurista</th>
+                <th>Estatus</th>
+                <th>Efectivo</th>
+                <th>Tarjeta</th>
+                <th>Subtotal</th>
+                <th>IVA</th>
+                <th>Descuento</th>
+                <th>Total</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">Totales x pagina</td>
+                <td id="total_efectivo">0</td>
+                <td id="total_tarjeta">0</td>
+                <td colspan="3"></td>
+                <td id="total">0</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="5">Totales x periodo</td>
+                <td id="grantotal_efectivo">0</td>
+                <td id="grantotal_tarjeta">0</td>
+                <td colspan="3"></td>
+                <td id="grantotal">0</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    
+</div>
+<script src="/js/download.js"></script>
+<script src="/plugins/fullcalendar/moment.js"></script>
+<script src="/js/ventas/ventas.js"></script>
+<script>
+     $('#ventas_container').ventas({
+        session: <?php echo json_encode($session)?>,
+    });    
+</script>

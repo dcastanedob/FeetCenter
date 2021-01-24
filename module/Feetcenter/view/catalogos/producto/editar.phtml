@@ -1,0 +1,136 @@
+<?php 
+    $this->headTitle()->prepend('Editar producto');
+    echo $this->headTitle();
+?>
+<div id="producto_container">
+    <h1>Producto: <?php echo $form->get('producto_nombre')->getValue()?></h1>
+    <?php 
+        $form->setAttribute('action', '/catalogos/producto/editar/'.$id);
+        $form->setAttribute('novalidate', true);
+        $form->setAttribute('class', 'forms');
+        $form->setAttribute('enctype', 'multipart/form-data');
+        $form->prepare();
+        echo $this->form()->openTag($form); 
+    ?>
+    <div class="units-row">
+        <div class="unit-100">
+            <label>
+                Nombre <span class="req">*</span>
+                <?php echo $this->formText($form->get('producto_nombre')); ?>
+            </label>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-50">
+            <label>
+                Costo <span class="req">*</span>
+                <?php echo $this->formText($form->get('producto_costo')); ?>
+            </label>
+        </div>
+        <div class="unit-50">
+            <label>
+                Precio <span class="req">*</span>
+                <?php echo $this->formText($form->get('producto_precio')); ?>
+            </label>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-100">
+            <label>
+                Descripción <span class="req">*</span>
+                <?php echo $this->formTextarea($form->get('producto_descripcion')); ?>
+            </label>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-100">
+            <fieldset>
+                <legend>Ingresos y comisiones</legend>
+                <div class="units-row">
+                    <div class="unit-33">
+                        <label><b>Genera ingreso</b></label>
+                        <ul class="forms-inline-list">
+                            <li>
+                                <input checked type="radio" name="producto_generaingreso" value="1">
+                                <label for="radio-1">Si</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="producto_generaingreso" value="0">
+                                <label for="radio-1">No</label>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="unit-33">
+                        <label><b>Genera comisión</b></label>
+                        <ul class="forms-inline-list">
+                            <li>
+                                <input  type="radio" name="producto_generacomision" value="1">
+                                <label for="radio-1">Si</label>
+                            </li>
+                            <li>
+                                <input checked type="radio" name="producto_generacomision" value="0">
+                                <label>No</label>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="unit-33">
+                        <div class="units-row">
+                            <div class="unit-50">
+                                <label><b>Tipo de comisión</b></label>
+                                <select name="producto_tipocomision" disabled="disabled" style="padding-right: 4px;">
+                                    <option value="cantidad">Cantidad fija</option>
+                                    <option value="porcentaje">Porcentaje</option>
+                                </select>
+                            </div>
+                            <div class="unit-50">
+                                <label><b>Cantidad de comisión</b></label>
+                                <?php $form->get('producto_comision')->setAttribute('disabled',true);?>
+                                <?php echo $this->formText($form->get('producto_comision')); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-100">
+            <fieldset>
+                <legend>Fotografia</legend>
+                <div class="units-row">
+                    <div class="unit-centered unit-30">
+                        <img style="width: 250px; height: 210px; cursor: pointer; padding-left: 35px; margin-bottom: 6px;" align="middle" id="producto_foto" src="/img/productos/default.jpg">
+                        <input type="file" name="producto_foto" style="display: none" accept="image/*">
+                        <input type="hidden" name="producto_foto_submit">
+                        <p id="eliminar_imagen" style="text-align: center; display: none"><a style="text-decoration: none" href="javascript:void(0)">Eliminar Imagen</a></p>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-centered unit-40"><button data-action="submit" class="btn btn-green">Guardar</button></div>
+    </div>
+</div>
+<script src="/js/catalogos/producto.js"></script>
+<script>
+    var producto = <?php echo json_encode($entity)?>;
+
+    $('#producto_container').producto(producto);
+    
+    if(producto.producto_generacomision){
+        $('input[name=producto_generacomision][value=1]').prop('checked',true);
+        $('select[name=producto_tipocomision]').prop('disabled',false);
+        $('select[name=producto_tipocomision]').val(producto.producto_tipocomision);
+        $('input[name=producto_comision]').prop('disabled',false);
+    }else{
+        $('input[name=producto_generacomision][value=0]').prop('checked',true);
+    }
+    
+    if(producto.producto_generaingreso){
+        $('input[name=producto_generaingreso][value=1]').prop('checked',true);
+    }else{
+        $('input[name=producto_generaingreso][value=0]').prop('checked',true);
+    }
+    
+</script>

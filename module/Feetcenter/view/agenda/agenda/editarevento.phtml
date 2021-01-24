@@ -1,0 +1,688 @@
+<div id="modal_event_container" >
+     
+    <?php echo $this->formHidden($form->get('idvisita')); ?>
+    <?php echo $this->formHidden($form->get('idpaciente')); ?>
+    <?php echo $this->formHidden($form->get('idclinica')); ?>
+    <?php echo $this->formHidden($form->get('idempleado')); ?>
+    <?php echo $this->formHidden($form->get('idempleadocreador')); ?>
+    <?php echo $this->formHidden($form->get('visita_creadaen')); ?>
+    <?php echo $this->formHidden($form->get('visita_fechainicio')); ?>
+    <?php echo $this->formHidden($form->get('visita_fechafin')); ?>
+    <?php echo $this->formHidden($form->get('visita_tipo')); ?>
+    <input name="anticipado" value="<?php echo $anticipado?>" type="hidden">
+    
+   
+    <div class="units-row" style="margin-bottom: 0px;">
+        <?php 
+            echo $this->form()->openTag($form); 
+            //$visita = new Visita();
+        ?>
+        <div class="unit-50">
+            <div><span><b>Pedicurista: </b></span><span><?php echo  $visita->getEmpleadoRelatedByIdempleado()->getEmpleadoNombre() ?></span></div>
+            <div><span><b>Fecha y hora: </b></span><span><?php echo $visita->getVisitaFechainicio('d/m/Y - H:i') ?></span></div>
+        </div>
+    </div>
+    <div id="visita_container">
+    <div class="units-row" style="margin-bottom: 0px;">
+        <div class="unit-60">
+            <label>
+                <b>Cliente </b><span id="span_paciente" class="req">*</span>
+            <input class="width-100" type="text" name="paciente_autocomplete">
+            </label>
+            <div class="units-row" style="margin-bottom: 12px;">
+                <div class="unit-33">
+                    <div><span><b>Total de visitas: </b></span><span id="visita_total"></span></div>
+                </div>
+                <div class="unit-60">
+                     <div><span><b>Última visita: </b></span><span id="visita_ultima"></span></div>
+                </div>
+               
+                <div class="unit-100">
+                    <div><span><b>Último comentario: </b></span><span id="visita_comentario"></span></div>
+                </div>
+          
+            </div>
+        </div>
+        <div class="unit-40" style="margin-top: 25px;">
+              <button class="btn" style="height: 30px; padding-right: 50px; padding-left: 48px;" btn-action="open_paciente_container">Nuevo</button>
+              <button btn-action="open_relacionados_container" class="btn btn-disabled" style="margin-left: 7px; height: 30px;" disabled>Relacionados</button>
+        </div>
+    </div>
+    <div class="units-row" style="margin-bottom: 0px;">
+        <div class="unit-60">
+            <label>
+                <b>Tiempo en servicio: </b><?php echo date("H:i:s",strtotime($visita->getVisitaHorainicio()))." - ".date("H:i:s",strtotime($visita->getVisitaHorafin()))." ".$visita->getVisitaduracion()." minutos"; ?>
+            </label>
+        
+        </div>
+        <div class="unit-40" style="margin-top: 0px;">
+            <div class="unit-100">
+                <div><a target="_blank" href="/pacientes/expediente/ver/<?php echo $visita->getIdpaciente(); ?>"> <h2>Expediente</h2></a></div>
+            </div>
+        </div>
+        
+    </div>
+        <div id="paciente_membresia_container" class="units-row" style="display: none">
+        <div class="unit-100">
+            <fieldset style="position: relative">
+                <legend>Membresia</legend>
+                <div class="units-row">
+                <div class="unit-33">
+                    <div><span><b>Nombre: </b></span><span id="membresia_nombre"></span></div>
+                </div>
+                <div class="unit-33">
+                    <div><span><b>Servicios disponibles:</b></span><span id="pacientemembresia_serviciosdisponibles"></span></div>
+                </div>
+                <div class="unit-33">
+                    <div><span><b>Cupones disponibles:</b></span><span id="pacientemembresia_cuponesdisponibles"></span></div>
+                </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div id="paciente_container" class="units-row" style="display: none">
+        <div class="unit-100">
+            <fieldset style="position: relative">
+                <span class="nuevo_paciente_close">x</span>
+                <legend>Nuevo cliente</legend>
+                <div class="units-row" style="margin-bottom: 0px;">                  
+                    <div class="unit-100">
+                        <label>
+                            Nombre <span class="req">*</span>
+                            <input required name="paciente_nombre" type="text" class="width-100">
+                        </label>
+                    </div>
+                </div>
+                <div class="units-row">
+                    <div class="unit-50">
+                        <label>
+                            Celular <span class="req">*</span>
+                            <input required name="paciente_celular" type="password" class="width-100">
+                        </label>
+                    </div>
+                    <div class="unit-50">
+                        <label>
+                            Confirmar celular <span class="req">*</span>
+                            <input required name="paciente_celular_confirmar" type="text" class="width-100">
+                        </label>
+                    </div>
+                </div>
+                <div class="units-row">
+                    <div class="unit-40 centered">
+                        <button btn-action="submit_paciente" class="btn btn-green width-100">Guardar</button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div id="relacionados_container" class="units-row" style="display: none">
+        <div class="unit-100">
+            <fieldset style="position: relative">
+                <span class="relacionados_close">x</span>
+                <legend>Clientes relacionados</legend>
+                <div class="units-row">
+                    <div class="unit-80">
+                      Nombre
+                      <input class="width-100"type="text" name="paciente_relacionados_autocomplete">  
+                    </div>
+                    <div class="unit-20" style="margin-top: 4px;">
+                        <a data-action="addPaciente" class="btn btn-blue" style="height: 30px; margin-top: 20px; width: 100%;">Agregar</a>
+                    </div>
+                </div>
+                <table id="tabla_pacientes">
+                    <thead>
+                        <tr>
+                            <th>Clínica</th>
+                            <th>Nombre</th>
+                            <th>Celular</th>
+                            <th>Teléfono</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+                <div class="units-row">
+                    <div class="unit-40 centered">
+                        <button btn-action="submit_relacionados" class="btn btn-green width-100">Guardar</button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div class="units-row" style="margin-bottom: 0px;">
+        <div class="unit-25">
+            <b>Tipo de servicio</b>
+             <ul class="forms-inline-list">
+                <li>
+                    <input checked type="radio" name="visita_tipo" value="consulta">
+                    <label>Consulta</label>
+                    <input type="radio" name="visita_tipo" value="servicio">
+                    <label>Servicio</label>
+                    
+                </li>
+            </ul>
+        </div>
+        <div class="unit-75">
+            <label class="forms-inline-list">
+                <b>Estatus</b>
+                <?php echo $this->formSelect($form->get('visita_status')); ?>
+            </label>
+        </div>
+    </div>
+        <div class="units-row" id="reprogramar_container" style="display: none">
+        <div class="unit-100">
+            <fieldset>
+                <legend>Reprogramar cita</legend>
+                <div class="units-row">
+                    <div class="unit-50">
+                        <label style="margin-bottom: 0px">
+                            Fecha <span class="req">*</span>
+                        </label>
+                        <input required name="visita_reprogramar_fecha" type="text" class="width-100">
+                    </div>
+                    <div class="unit-50">
+                        <label>
+                            Hora (Formato 24 horas)<span class="req">*</span>
+                            <input required name="visita_reprogramar_hora" type="text" class="width-100">
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div class="units-row" id="addproduct_container">
+        <div class="unit-60">
+            <label><b>Servicio / Producto</b> <span class="req">*</span>
+                <select  class="width-100" id="visitadetalle_tipo">
+                    <option value="">Seleccione el producto/servicio...</option>
+                    <optgroup label="Servicios">
+                         <?php foreach ($servicios as $servicio) :?>
+                            <option data-dependencia="<?php echo $servicio['servicio_dependencia']?>" data-available="<?php echo $servicio['disponible'] ?>" data-name="<?php echo $servicio['servicio_nombre']?>"  data-price="<?php echo $servicio['servicioclinica_precio']?>" data-type="servicio" value="<?php echo $servicio['idservicioclinica']?>"><?php echo $servicio['servicio_nombre']?></option>
+                        <?php endforeach;?>
+                    </optgroup>
+                    <optgroup label="Productos">
+                        <?php foreach ($productos as $producto) :?>
+                            <option data-name="<?php echo $producto['producto_nombre']?>" data-existencias="<?php echo (int)$producto['productoclinica_existencia']?>" data-price="<?php echo $producto['producto_precio']?>" data-type="producto" value="<?php echo $producto['idproductoclinica']?>"><?php echo $producto['producto_nombre']?></option>
+                        <?php endforeach;?>
+                    </optgroup>
+                    <optgroup label="Membresías">
+                         <?php foreach ($membresias as $membresia) :?>
+                            <option data-name="<?php echo $membresia['membresia_nombre']?>"  data-price="<?php echo $membresia['membresia_precio']?>" data-type="membresia" value="<?php echo $membresia['idmembresia']?>"><?php echo $membresia['membresia_nombre']?></option>
+                        <?php endforeach;?>
+                    </optgroup>
+                </select>
+            </label>
+        </div>
+        <div class="unit-20" style="display: none">
+            <label>
+                <b>Cantidad</b> <span class="req">*</span>
+                <input  value="1" class="width-100" type="text"  name="visitadetalle_cantidad">
+            </label>
+        </div>
+        <div class="unit-20" style="margin-top: 22px;">
+            <a href="javascript:void(0)" id="addProduct" class="btn btn-blue width-100">Agregar</a>
+        </div>
+    </div>
+    <table id="visita_detalles">
+        <thead>
+            <tr>
+                <th>Cantidad</th>
+                <th>Servicio / Producto</th>
+                <th>Opciones</th>
+                <th>Importe</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $value = new Visitadetalle()?>
+            <?php foreach ($visita->getVisitadetalles() as $key => $value) :?>
+            <!--VALIDAMOS SI SE TRATA DE UN SERVICIO CON DEPENDENCIA EN MEMBRESIA-->
+            <?php 
+            $dependencia = false;
+                if(!is_null($value->getIdservicioclinica())){
+                    if($value->getServicioclinica()->getServicio()->getServicioDependencia() == 'membresia'){
+                         $dependencia = true;
+                    }
+                }
+            ?>
+            <?php if($dependencia) :?>
+                <tr depenencia="membresia">
+            <?php else :?>
+                <tr>
+            <?php endif;?>
+                <?php if ($value->getIdproductoclinica() != NULL) :?>
+                    <input type="hidden" value="<?php echo $value->getIdproductoclinica()?>" name="vistadetalle[<?php echo $key?>][id]">
+                    <input type="hidden" value="producto" name="vistadetalle[<?php echo $key?>][type]">
+                    <?php $name = $value->getProductoclinica()->getProducto()->getProductoNombre()?>
+                <?php elseif ($value->getIdservicioclinica() != NULl) :?>
+                    <?php if($value->getServicioclinica()->getServicio()->getServicioDependencia() == 'cupon') :?>
+                        <?php $paciente_membresia_detalle = PacientemembresiadetalleQuery::create()->filterByIdvisitadetalle($value->getIdvisitadetalle())->findOne() ?>
+                        <input type="hidden" value="<?php echo $paciente_membresia_detalle->getPacientemembresia()->getIdpacientemembresia()?>" name="vistadetalle[<?php echo $key?>][idpacientemembresia]">
+                    <?php endif;?>
+                    <input type="hidden" value="<?php echo $value->getIdservicioclinica()?>" name="vistadetalle[<?php echo $key?>][id]">
+                    <input type="hidden" value="servicio" name="vistadetalle[<?php echo $key?>][type]">
+                    <?php $name = $value->getServicioclinica()->getServicio()->getServicioNombre()?>
+                <?php else :?>
+                    <input type="hidden" value="<?php echo $value->getIdmembresia()?>" name="vistadetalle[<?php echo $key?>][id]">
+                    <input type="hidden" value="membresia" name="vistadetalle[<?php echo $key?>][type]">
+                    <?php $name = $value->getMembresia()->getMembresiaNombre()?>
+                <?php endif;?>
+                    <input type="hidden" value="<?php echo $value->getVisitadetallePreciounitario()?>" name="vistadetalle[<?php echo $key?>][price]">
+                    <input type="hidden" value="<?php echo $value->getVisitadetalleCantidad()?>" name="vistadetalle[<?php echo $key?>][cantidad]">
+                    <input type="hidden" value="<?php echo $value->getVisitadetalleSubtotal()?>" name="vistadetalle[<?php echo $key?>][subtotal]">
+                    <td><?php echo (int) $value->getVisitadetalleCantidad()?></td>
+                    <td><?php echo $name?></td>
+                    <td><a href="javascript:void(0)">Eliminar</a></td>
+                    <td class="visitadetalle_subtotal"><?php echo $value->getVisitadetalleSubtotal()?></td>
+            </tr>
+            <?php endforeach;?>
+        </tbody>
+        <tfoot>
+             
+         
+            <tr>
+            <input name="visita_iva" type="hidden" value="0">
+                <td colspan="3">IVA</td>
+                <td id="iva">$ 0</td>
+            </tr>
+            <tr>    
+            <input name="visita_total" type="hidden" value="0">
+                <td colspan="3">Total</td>
+                <td id="total">$ 0</td>
+            </tr>
+        </tfoot>
+    </table>
+    </div>
+    
+    <div class="units-row" style="margin-bottom: 0px;">
+        <div class="unit-100">
+            <div id="visita_estatuspago" value="<?php echo $visita->getVisitaEstatuspago()?>"><span><b>Estatus de pago: </b></span><span><?php echo ucfirst($visita->getVisitaEstatuspago()) ?></span></div>
+        </div>
+        <div class="unit-100">
+            <div id="visita_estatuspago" value="<?php echo $visita->getVisitaEstatuspago()?>"><span><b>Histórico de acciones: </b></span></div>
+        </div>
+        <div class="unit-100" style="border : solid 2px #DCDCDC; background : #ffffff; color : #000000; padding : 4px; height : 50px; overflow : auto; ">
+
+        <?php
+        
+               $logs =  \VisitalogQuery::create()->filterByIdvisita($visita->getIdvisita())->orderByIdvisitalog(Criteria::DESC)->find();
+               $log = new Visitalog();
+               foreach ($logs as $log)
+               {
+                   $empleado = \EmpleadoQuery::create()->filterByIdempleado($log->getIdempleado())->findOne();
+                   ?>
+                        <div id="visita_log" value="<?php echo $visita->getVisitaEstatuspago()?>"><span></span><span><?php echo "De: ".$empleado->getEmpleadoNombre().", acción: ".$log->getVisitalogAccion().", fecha: ".$log->getVisitalogFecha()  ?></span></div>
+
+                   <?php
+                   
+               }
+               
+        ?>
+        </div>
+
+    </div>
+
+   
+    <div id="pay_container">
+        <div id="pay_nextdate_container"class="units-row" style="margin-bottom: 0px; display: none">
+            <div class="unit-100">
+                <fieldset>
+                    <legend>
+                        ¿Agendar una próxima cita?
+                    </legend>
+                    <?php if($next_date) :?>
+                        <ul class="forms-inline-list">
+                            <li>
+                                <input  disabled="disabled" checked type="radio" name="visita_siguiente" value="si">
+                                <label>Si</label>
+                                <input disabled="disabled"  type="radio" name="visita_siguiente" value="no">
+                                <label>No</label>
+
+                            </li>
+                        </ul>
+                    <?php else :?>
+                        <ul class="forms-inline-list">
+                            <li>
+                                <input  type="radio" name="visita_siguiente" value="si">
+                                <label>Si</label>
+                                <input  type="radio" name="visita_siguiente" value="no">
+                                <label>No</label>
+
+                            </li>
+                        </ul>
+                    <?php endif;?>
+                </fieldset>
+            </div>
+        </div>
+        <div id="pay_date_container"class="units-row" style="margin-bottom: 0px; display: none">
+            <div class="unit-100">
+                <fieldset>
+                    <?php if($next_date) :?>
+                    
+                    <div class="unit-100">
+                    <b>Fecha y hora: </b>
+                    <?php echo $next_date->getVisitaFechainicio('d/m/Y')?>
+                    </div>
+             
+                    <div class="units-row" style="margin-bottom: 0px;">
+                    <div class="unit-100">
+                    <b>Pedicurista: </b>
+                    <?php echo $next_date->getEmpleadoRelatedByIdempleado()->getEmpleadoNombre()?>
+                    </div>
+                    </div>
+                <?php endif;?>
+                    <legend>
+                        Detalles cita
+                    </legend>
+                    <div id="next_date_form" class="units-row">
+                        <div class="unit-33">
+                           <label class="forms-inline-list">
+                                <b>Pedicurista</b> <span class="req">*</span>
+                                <select class="width-100" name="visita_siguiente_empleado">
+                                    <?php foreach ($empleados as $empleado) :?>
+                                        <option value="<?php echo $empleado->getEmpleado()->getIdempleado()?>"><?php echo $empleado->getEmpleado()->getEmpleadoNombre()?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </label> 
+                        </div>
+                        
+                        <div class="unit-33">
+                            <label style="margin-bottom: 0px">
+                                Fecha <span class="req">*</span>
+                            </label>
+                            <input required name="visita_siguiente_fecha" type="text" class="width-100">
+                        </div>
+                        <div class="unit-33">
+                            <label>
+                                Hora (Formato 24 horas)<span class="req">*</span>
+                                <input required name="visita_siguiente_hora" type="text" class="width-100">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="units-row">
+                        <div class="unit-40 centered">
+                            <a href="javascript:void(0)" btn-action="submit_visita_siguiente" class="btn btn-green width-100">Guardar</a>
+                        </div>
+                    </div>
+                    <?php if($anticipado == 'true') :?>
+                        <div id="pay_date_anticipado_selector"class="units-row" style="margin-bottom: 0px;  display: block">
+                        <div class="unit-100">
+                            <b>¿Pago anticipado?</b>
+                            <ul class="forms-inline-list">
+                                <li>
+                                    <input disabled="disabled" checked type="radio" name="visita_pagoanticipado" value="si">
+                                    <label>Si</label>
+                                    <input disabled="disabled" type="radio" name="visita_pagoanticipado" value="no">
+                                    <label>No</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="pay_date_anticipado_input"class="units-row" style="margin-bottom: 0px;  display: none">
+                        <div class="unit-100">
+                            <a id="addAnticipado" class="btn btn-blue">Agregar pago anticipado</a>
+                        </div>
+                    </div>
+                    <?php else :?>
+                        <div id="pay_date_anticipado_selector"class="units-row" style="margin-bottom: 0px;  display: block">
+                        <div class="unit-100">
+                            <b>¿Pago anticipado?</b>
+                            <ul class="forms-inline-list">
+                                <li>
+                                    <input type="radio" name="visita_pagoanticipado" value="si">
+                                    <label>Si</label>
+                                    <input type="radio" name="visita_pagoanticipado" value="no">
+                                    <label>No</label>
+
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="pay_date_anticipado_input"class="units-row" style="margin-bottom: 0px;  display: none">
+                        <div class="unit-100">
+                            <a id="addAnticipado" class="btn btn-blue">Agregar pago anticipado</a>
+                        </div>
+                    </div>
+                    <?php endif;?>
+                    
+                </fieldset>
+            </div>
+        </div>
+      
+        <div id="pay_details_container"class="units-row" style="margin-bottom: 0px; display: none">
+            <div class="unit-100">
+                <fieldset>
+                    <legend>
+                        Detalles pago
+                    </legend>
+                    <div class="units-row">
+                        <div class="unit-100">
+                             <table id="pay_details">
+                                <?php if(VisitadetalleQuery::create()->filterByIdvisita($visita->getIdvisita())->filterByIdmembresia(null,Criteria::NOT_EQUAL)->exists()) :?>
+                                <thead>
+                                    <tr>
+                                        <th>Cantidad</th>
+                                        <th>Servicio / Producto</th>
+                                        <th>Folio</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($visita->getVisitadetalles() as $key => $value) : ?>
+                                        <?php if ($value->getIdproductoclinica() != NULL) : ?>
+                                            <tr>
+                                                <input type="hidden" value="<?php echo $value->getIdproductoclinica() ?>" name="vistadetallepay[<?php echo $key ?>][id]">
+                                                <input type="hidden" value="producto" name="vistadetallepay[<?php echo $key ?>][type]">
+                                                <input type="hidden" value="<?php echo $value->getVisitadetalleCantidad()?>" name="vistadetallepay[<?php echo $key?>][cantidad]">
+                                                <input type="hidden" value="<?php echo $value->getVisitadetallePreciounitario()?>" name="vistadetallepay[<?php echo $key?>][price]">
+                                                <input type="hidden" value="<?php echo $value->getVisitadetalleSubtotal()?>" name="vistadetallepay[<?php echo $key?>][subtotal]">
+                                                <?php $name = $value->getProductoclinica()->getProducto()->getProductoNombre() ?>
+                                                <td><?php echo (int) $value->getVisitadetalleCantidad() ?></td>
+                                                <td><?php echo $name ?></td>
+                                                <td></td>
+                                                <td class="visitadetalle_subtotal"><?php echo $value->getVisitadetalleSubtotal() ?></td>
+                                            </tr>
+                                        <?php endif; ?>
+                                        <?php if ($value->getIdservicioclinica() != NULL) : ?>
+                                            <tr>
+                                                <?php if($value->getServicioclinica()->getServicio()->getServicioDependencia() == 'cupon') :?>
+                                                    <?php $paciente_membresia_detalle = PacientemembresiadetalleQuery::create()->filterByIdvisitadetalle($value->getIdvisitadetalle())->findOne() ?>
+                                                    <input type="hidden" value="<?php echo $paciente_membresia_detalle->getPacientemembresia()->getIdpacientemembresia()?>" name="vistadetallepay[<?php echo $key?>][idpacientemembresia]">
+                                                <?php endif;?>
+                                                <input type="hidden" value="<?php echo $value->getIdservicioclinica() ?>" name="vistadetallepay[<?php echo $key ?>][id]">
+                                                <input type="hidden" value="servicio" name="vistadetallepay[<?php echo $key ?>][type]">
+                                                <input type="hidden" value="<?php echo $value->getVisitadetallePreciounitario()?>" name="vistadetallepay[<?php echo $key?>][price]">
+                                                <input type="hidden" value="<?php echo $value->getVisitadetalleCantidad()?>" name="vistadetallepay[<?php echo $key?>][cantidad]">
+                                                <input type="hidden" value="<?php echo $value->getVisitadetalleSubtotal()?>" name="vistadetallepay[<?php echo $key?>][subtotal]">
+                                                <?php $name = $value->getServicioclinica()->getServicio()->getServicioNombre() ?>
+                                                <td><?php echo (int) $value->getVisitadetalleCantidad() ?></td>
+                                                <td><?php echo $name ?></td>
+                                                <td></td>
+                                                <td class="visitadetalle_subtotal"><?php echo $value->getVisitadetalleSubtotal() ?></td>
+                                            </tr>
+                                        <?php endif; ?>
+                                        <?php if ($value->getIdmembresia() != NULL) : ?>
+                                            <tr>
+                                                <input type="hidden" value="<?php echo $value->getVisitadetallePreciounitario()?>" name="vistadetallepay[<?php echo $key?>][price]">
+                                                <input type="hidden" value="<?php echo $value->getVisitadetalleSubtotal()?>" name="vistadetallepay[<?php echo $key?>][subtotal]">
+                                                <input type="hidden" value="<?php echo $value->getIdmembresia()?>" name="vistadetallepay[<?php echo $key?>][id]">
+                                                <input type="hidden" value="<?php echo $value->getVisitadetalleCantidad()?>" name="vistadetallepay[<?php echo $key?>][cantidad]">
+                                                <input type="hidden" value="membresia" name="vistadetallepay[<?php echo $key?>][type]">
+                                                <?php $name = $value->getMembresia()->getMembresiaNombre()?>    
+                                                <td><?php echo (int) $value->getVisitadetalleCantidad() ?></td>
+                                                <td><?php echo $name ?></td>
+                                                <td><input required type="text" name="vistadetallepay[<?php echo $key ?>][folio]"></td>
+                                                <td class="visitadetalle_subtotal"><?php echo $value->getVisitadetalleSubtotal() ?></td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                        
+
+                                
+                                 <tr>
+                                <tr>    
+                                 <input name="visita_total" type="hidden" value="0">
+                                 <td colspan="3
+                                     ">Descuento</td>
+                                 <td id="visita_descuento"><input name="visita_descuento" value="0"></td>
+                                 </tr>
+                                 <input name="visita_total" type="hidden" value="0">
+                                 <td colspan="3">Total</td>
+                                 <td id="total">$ 0</td>
+                                 </tr>
+                                 <tr>
+                                 <input name="visita_iva" type="hidden" value="0">
+                                 <td colspan="3">Impuesto incluído</td>
+                                 <td id="iva">$ 0</td>
+                                 </tr>
+                                 </tfoot>
+                                <?php else :?>
+                                    <thead>
+                                        <tr>
+                                            <th>Cantidad</th>
+                                            <th>Servicio / Producto</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($visita->getVisitadetalles() as $key => $value) : ?>
+                                            <?php if ($value->getIdproductoclinica() != NULL) : ?>
+                                                <tr>
+                                                    <input type="hidden" value="<?php echo $value->getVisitadetalleCantidad()?>" name="vistadetallepay[<?php echo $key?>][cantidad]">
+                                                    <input type="hidden" value="<?php echo $value->getVisitadetallePreciounitario()?>" name="vistadetallepay[<?php echo $key?>][price]">
+                                                    <input type="hidden" value="<?php echo $value->getVisitadetalleSubtotal()?>" name="vistadetallepay[<?php echo $key?>][subtotal]">
+                                                    <input type="hidden" value="<?php echo $value->getIdproductoclinica() ?>" name="vistadetallepay[<?php echo $key ?>][id]">
+                                                    <input type="hidden" value="producto" name="vistadetallepay[<?php echo $key ?>][type]">
+                                                    <?php $name = $value->getProductoclinica()->getProducto()->getProductoNombre() ?>
+                                                    <td><?php echo (int) $value->getVisitadetalleCantidad() ?></td>
+                                                    <td><?php echo $name ?></td>
+                                                    <td class="visitadetalle_subtotal"><?php echo $value->getVisitadetalleSubtotal() ?></td>
+                                                </tr>
+                                            <?php endif; ?>
+                                            <?php if ($value->getIdservicioclinica() != NULL) : ?>
+                                                <tr>
+                                                    <?php if($value->getServicioclinica()->getServicio()->getServicioDependencia() == 'cupon') :?>
+                                                    <?php $paciente_membresia_detalle = PacientemembresiadetalleQuery::create()->filterByIdvisitadetalle($value->getIdvisitadetalle())->findOne() ?>
+                                                    <input type="hidden" value="<?php echo $paciente_membresia_detalle->getPacientemembresia()->getIdpacientemembresia()?>" name="vistadetallepay[<?php echo $key?>][idpacientemembresia]">
+                                                    <?php endif;?>
+                                                    <input type="hidden" value="<?php echo $value->getVisitadetalleCantidad()?>" name="vistadetallepay[<?php echo $key?>][cantidad]">
+                                                    <input type="hidden" value="<?php echo $value->getVisitadetallePreciounitario()?>" name="vistadetallepay[<?php echo $key?>][price]">
+                                                    <input type="hidden" value="<?php echo $value->getVisitadetalleSubtotal()?>" name="vistadetallepay[<?php echo $key?>][subtotal]">
+                                                    <input type="hidden" value="<?php echo $value->getIdservicioclinica() ?>" name="vistadetallepay[<?php echo $key ?>][id]">
+                                                    <input type="hidden" value="servicio" name="vistadetallepay[<?php echo $key ?>][type]">
+                                                    <?php $name = $value->getServicioclinica()->getServicio()->getServicioNombre() ?>
+                                                    <td><?php echo (int) $value->getVisitadetalleCantidad() ?></td>
+                                                    <td><?php echo $name ?></td>
+                                                    <td class="visitadetalle_subtotal"><?php echo $value->getVisitadetalleSubtotal() ?></td>
+                                                </tr>
+                                            <?php endif; ?>
+                                        <?php endforeach;?>
+                                    </tbody>
+                                    <tfoot>
+                                           
+
+                                 
+                                 <tr>    
+                                 <input name="visita_total" type="hidden" value="0">
+                                 <td colspan="2
+                                     ">Descuento</td>
+                                 <td id="visita_descuento"><input name="visita_descuento" value="0"></td>
+                                 </tr>
+                                 <tr>    
+                                 <input name="visita_total" type="hidden" value="0">
+                                 <td colspan="2
+                                     ">Total</td>
+                                 <td id="total">$ 0</td>
+                                 </tr>
+                                 <tr>
+                                 <input name="visita_iva" type="hidden" value="0">
+                                 <td colspan="2">Impuesto incluído</td>
+                                 <td id="iva">$ 0</td>
+                                 </tr>
+                                 </tfoot>
+                                <?php endif;?>  
+                            </table>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        
+         <div id="pay_method_container"class="units-row" style="margin-bottom: 0px; display: none">
+            <div class="unit-100">
+                <fieldset>
+                    <legend>
+                        Método de pago
+                    </legend>
+                    <div class="units-row">
+                        <div class="unit-60">
+                            <label class="forms-inline-list">
+                                <b>Estatus</b> <span class="req">*</span>
+                                <select class="width-100" name="visitapago_tipo[0][type]">
+                                    <option value="efectivo">Efectivo</option>
+                                    <option value="tarjeta">Tarjeta</option>
+                                    <option value="tarjeta de puntos">Tarjeta de puntos</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="unit-30">
+                            <label class="forms-inline-list">
+                                <b>Cantidad</b> <span class="req">*</span>
+                                <input required name="visitapago_tipo[0][cantidad]" type="text">
+                            </label>
+                        </div>
+                        <div class="unit-10">
+                            <button id="addMethodPay" class="btn btn-blue width-100" style="margin-top: 20px;">+</button>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        Calculadora
+                    </legend>
+                    <div class="units-row">
+                        
+                        <div class="unit-30">
+                            <label class="forms-inline-list">
+                                <b>Recibí</b> <span ></span>
+                                <input name="recibi" type="text">
+                            </label>
+                        </div>
+                        <div class="unit-30">
+                            <label class="forms-inline-list">
+                                <b>Cambio</b>
+                                <span id="visita_cambio" style="display: block"><b>$0.00</b></span>
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<script src="/js/agenda/modalEvent.js"></script>
+
+<script>
+   
+    //Nuestro checkbox de tipo de servicio
+    var visita_tipo = "<?php echo $visita->getVisitaTipo() ?>";
+    $('#modal_event_container').find('input[name=visita_tipo]').prop('checked',false);
+    $('#modal_event_container').find('input[name=visita_tipo][value='+visita_tipo+']').prop('checked',true);
+    //Nuestro select pedicurista de siguiente cita
+    var idempleado = "<?php echo $visita->getIdempleado()?>";
+    $('#modal_event_container').find('select[name=visita_siguiente_empleado]').val(idempleado);
+    //Le damos formato a los subtotales
+    $('td.visitadetalle_subtotal').filter(function(){
+        var value = $(this).text();
+        $(this).text(accounting.formatMoney(value));
+    });
+    $('#modal_event_container').modalEvent({
+        paciente:<?php echo $paciente?>,
+    });
+</script>
+

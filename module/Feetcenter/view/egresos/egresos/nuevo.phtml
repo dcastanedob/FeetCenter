@@ -1,0 +1,99 @@
+<?php 
+    $this->headTitle()->prepend('Nuevo egreso');
+    echo $this->headTitle();
+?>
+<div id="egreso_container">
+    <h1>Nuevo egreso</h1>
+    <?php 
+        $form->setAttribute('action', '/egresos/nuevo');
+        $form->setAttribute('novalidate', true);
+        $form->setAttribute('class', 'forms');
+        $form->prepare();
+        echo $this->form()->openTag($form); 
+    ?>
+    <div class="units-row">
+        <div class="unit-50">
+            <label style="margin-bottom: 0px">
+                Fecha <span class="req">*</span>
+                
+            </label>
+            <?php echo $this->formText($form->get('egresoclinica_fechaegreso')); ?>
+        </div>
+        <div class="unit-50">
+            <label>
+                Clínica <span class="req">*</span>
+                <?php echo $this->formSelect($form->get('idclinica')); ?>
+            </label>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-50">
+            <label>
+                Tipo <span class="req">*</span>
+                <?php echo $this->formSelect($form->get('idconcepto')); ?>
+            </label>
+        </div>
+        <div class="unit-50">
+            <label>
+                Cantidad <span class="req">*</span>
+                <?php echo $this->formText($form->get('egresoclinica_cantidad')); ?>
+            </label>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-50">
+            <label>
+                IVA <span class="req">*</span>
+                <?php echo $this->formText($form->get('egresoclinica_iva')); ?>
+            </label>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-100">
+            <fieldset>
+                <legend>Comprobante</legend>
+                <div class="units-row">
+                    <div class="unit-100">
+                        <label>
+                            Comprobante
+                            <?php echo $this->formFile($form->get('egresoclinica_comprobante')); ?>
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-100">
+            <label>
+                Nota
+                <?php echo $this->formTextarea($form->get('egresoclinica_nota')); ?>
+            </label>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-centered unit-40"><button data-action="submit" class="btn btn-green">Guardar</button></div>
+    </div>
+</div>
+<script>
+
+    $('input[name=egresoclinica_cantidad],input[name=egresoclinica_iva]').numeric();
+    
+    $('input[name=egresoclinica_fechaegreso]').pickadate({
+                monthsFull: [ 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre' ],
+                monthsShort: [ 'ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic' ],
+                weekdaysFull: [ 'domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado' ],
+                weekdaysShort: [ 'dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb' ],
+                today: 'hoy',
+                clear: 'borrar',
+                close: 'cerrar',
+                firstDay: 1,
+                format: 'd !de mmmm !de yyyy',
+                formatSubmit: 'yyyy/mm/dd',
+                //selectYears: true,
+                selectMonths: true,
+                selectYears: 25,
+            });
+            
+
+</script>

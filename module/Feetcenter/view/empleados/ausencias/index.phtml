@@ -1,0 +1,50 @@
+<style>
+    .closeon{
+        position: absolute;
+        top: 0px;
+        right: 0px;
+    }
+</style>
+<?php 
+    $this->headTitle()->prepend('Ausencias');
+    echo $this->headTitle();
+?>
+<div id="agenda_container">
+     <h1>Ausencias</h1>
+    <?php if(count($successMessages)) :?>
+        <div class="units-row">yellow;
+            <?php foreach ($successMessages as $message) :?>
+                <div class="unit-100">    
+                    <div class="tools-alert tools-alert-green">
+                        <?php echo $message?>
+                    </div> 
+                </div>
+            <?php endforeach;?>
+        </div>
+    <?php endif;?>
+    <div class="units-row">
+        <div class="unit-30">
+            <label style="font-size: 18px">Clínica</label>
+            <select multiple="multiple" name="idclinica" class="width-100">
+                <?php foreach ($clinicas as $clinica) : ?>
+                    <option value="<?php echo $clinica->getIdclinica()?>"><?php echo $clinica->getClinicaNombre() ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+    <div id='calendar'></div>
+</div>
+<script src="/plugins/fullcalendar/moment.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.1/moment.min.js"></script>
+<script src="/plugins/fullcalendar/fullcalendar.js"></script>
+<script src="/js/plugin/accounting.js"></script>
+<script src="/plugins/fullcalendar/lang/es.js"></script>
+<script src='/js/empleados/ausencias.js'></script>
+<script>
+    var ausencias = $('#agenda_container').ausencias({
+        idclinica: <?php echo $idclinica?>,
+        idrol: <?php echo Shared\Session\AouthSession::getIdrol()?>,
+    });
+    ausencias.init();
+</script>

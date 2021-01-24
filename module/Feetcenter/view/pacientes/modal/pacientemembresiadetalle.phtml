@@ -1,0 +1,13 @@
+<?php //$entity = new Pacientemembresiadetalle()?>
+<div class="units-row">
+    <div class="unit-20"><label><b>Fecha Aplicación:</b></label></div>
+    <div class="unit-80"><label><?php echo $entity->getVisitadetalle()->getVisita()->getVisitaFechainicio('d/m/Y H:i')?></label></div>
+</div>
+<div class="units-row">
+    <div class="unit-20"><label><b>Aplicó:</b></label></div>
+    <div class="unit-80"><label><?php echo $entity->getVisitadetalle()->getVisita()->getEmpleadoRelatedByIdempleadocreador()->getEmpleadoNombre()?></label></div>
+</div>
+<div class="units-row">
+    <div class="unit-20"><label><b>Paciente:</b></label></div>
+    <div class="unit-80"><label><?php echo $entity->getVisitadetalle()->getVisita()->getPaciente()->getPacienteNombre()?></label></div>
+</div>

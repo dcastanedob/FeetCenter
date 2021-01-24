@@ -1,0 +1,215 @@
+<?php 
+    $this->headTitle()->prepend('Editar cliente');
+    echo $this->headTitle();
+?>
+<div id="clinica_container">
+    <h1>Cliente: <?php echo $form->get('paciente_nombre')->getValue()?></h1>
+    <?php 
+        $form->setAttribute('action', '/pacientes/editar/'.$id);
+        $form->setAttribute('novalidate', true);
+        $form->setAttribute('class', 'forms');
+        $form->prepare();
+        echo $this->form()->openTag($form); 
+    ?>
+    <div class="units-row">
+        <div class="unit-33">
+            <label>
+                Clínica
+                <?php echo $this->formSelect($form->get('idclinica')); ?>
+            </label>
+        </div>
+        <div class="unit-33">
+            <label>
+                Atendido por
+                <?php echo $this->formSelect($form->get('idempleado')); ?>
+            </label>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-33">
+            <label>
+                Nombre <span class="req">*</span>
+                <?php echo $this->formText($form->get('paciente_name')); ?>
+            </label>
+        </div>
+        <div class="unit-33">
+            <label>
+                Apellido paterno <span class="req">*</span>
+                <?php echo $this->formText($form->get('paciente_ap')); ?>
+            </label>
+        </div>
+        <div class="unit-33">
+           <label>
+                Apellido materno <span class="req">*</span>
+                <?php echo $this->formText($form->get('paciente_am')); ?>
+            </label>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-33">
+            <label>
+                Nombre <span class="req">*</span>
+                <?php echo $this->formText($form->get('paciente_nombre')); ?>
+            </label>
+        </div>
+        <div class="unit-33">
+            <label>
+                Celular <span class="req">*</span>
+                <?php if(\Shared\Session\AouthSession::getIdrol() != 1) :?>
+                 <input disabled value="<?php echo $form->get('paciente_celular')->getValue()?>"required name="paciente_celular" type="password" class="width-100" >
+                <?php else :?>
+                 <input  value="<?php echo $form->get('paciente_celular')->getValue()?>"required name="paciente_celular" type="password" class="width-100" >
+                <?php endif;?>
+               
+            </label>
+        </div>
+        <div class="unit-33">
+            <label>
+                Confirmar celular <span class="req">*</span>
+                <?php if(\Shared\Session\AouthSession::getIdrol() != 1) :?>
+                  <input  disabled value="<?php echo $form->get('paciente_celular')->getValue()?>"required name="paciente_celular_confirmar" type="text" class="width-100 confirm" for="paciente_celular">
+                <?php else :?>
+                  <input  value="<?php echo $form->get('paciente_celular')->getValue()?>"required name="paciente_celular_confirmar" type="text" class="width-100 confirm" for="paciente_celular">
+                <?php endif;?>
+                
+            </label>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-33">
+            <label>
+                Teléfono
+                <?php echo $this->formText($form->get('paciente_telefono')); ?>
+            </label>
+        </div>
+        <div class="unit-33">
+            <label>
+                Calle
+                <?php echo $this->formText($form->get('paciente_calle')); ?>
+            </label>
+        </div>
+        <div class="unit-33">
+            <label>
+                Número
+                <?php echo $this->formText($form->get('paciente_numero')); ?>
+            </label>
+        </div>
+        
+    </div>
+    <div class="units-row">
+        <div class="unit-33">
+            <label>
+                Colonia
+                <?php echo $this->formText($form->get('paciente_colonia')); ?>
+            </label>
+        </div>
+        <div class="unit-33">
+            <label>
+                Código postal
+                <?php echo $this->formText($form->get('paciente_codigopostal')); ?>
+            </label>
+        </div>
+        <div class="unit-33">
+            <label>
+                Ciudad
+                <?php echo $this->formText($form->get('paciente_ciudad')); ?>
+            </label>
+        </div>
+        
+    </div>
+    <div class="units-row">
+        <div class="unit-33">
+            <label>
+                Estado
+                <?php echo $this->formText($form->get('paciente_estado')); ?>
+            </label>
+        </div>
+        <div class="unit-33">
+            <label>
+                Sexo
+                <?php echo $this->formSelect($form->get('paciente_sexo')); ?>
+            </label>
+        </div>
+        <div class="unit-33">
+            <label style="margin-bottom: 0px">
+                Fecha de nacimiento
+            </label>
+            <?php echo $this->formText($form->get('paciente_fechanacimiento')); ?>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-100">
+            <fieldset>
+                <legend>Clientes relacionados</legend>
+                <div class="units-row">
+                    <div class="unit-80">
+                      Nombre
+                      <input class="width-100"type="text" name="paciente_autocomplete">  
+                    </div>
+                    <div class="unit-20" style="margin-top: 4px;">
+                        <a data-action="addPaciente" class="btn btn-blue" style="height: 30px; margin-top: 20px; width: 100%;">Agregar</a>
+                    </div>
+                </div>
+                <table id="tabla_pacientes">
+                    <thead>
+                        <tr>
+                            <th>Clínica</th>
+                            <th>Nombre</th>
+                            <th>Celular</th>
+                            <th>Teléfono</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $cliente = new Grupopersonal();?>
+                        <?php foreach ($pacientes as $cliente) :?>
+                        <tr id="<?php echo $cliente->getPacienteRelatedByIdpacienteagregado()->getIdpaciente()?>">
+                            <input type="hidden" value="<?php echo $cliente->getPacienteRelatedByIdpacienteagregado()->getIdpaciente()?>" name="pacientes[]">
+                            <td><?php echo $cliente->getPacienteRelatedByIdpacienteagregado()->getClinica()->getClinicaNombre()?></td>
+                            <td><?php echo $cliente->getPacienteRelatedByIdpacienteagregado()->getPacienteNombre()?></td>
+                            <td><?php echo $cliente->getPacienteRelatedByIdpacienteagregado()->getPacienteCelular()?></td>
+                            <td><?php echo $cliente->getPacienteRelatedByIdpacienteagregado()->getPacienteTelefono()?></td>
+                            <td>
+                            <a href="javascript:void(0)">Eliminar</a>
+                            </td>
+                        </tr>
+                        <?php endforeach;?>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-centered unit-40"><button data-action="submit" class="btn btn-green">Guardar</button></div>
+    </div>
+</div>
+<script src="/js/pacientes/grupos.js"></script>
+<script>
+
+    //Inicializamos los campos de fecha
+    $('input[name=paciente_fechanacimiento]').pickadate({
+                monthsFull: [ 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre' ],
+                monthsShort: [ 'ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic' ],
+                weekdaysFull: [ 'domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado' ],
+                weekdaysShort: [ 'dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb' ],
+                today: 'hoy',
+                clear: 'borrar',
+                close: 'cerrar',
+                firstDay: 1,
+                format: 'd !de mmmm !de yyyy',
+                formatSubmit: 'yyyy/mm/dd',
+                //selectYears: true,
+                selectMonths: true,
+                selectYears: 25,
+            });
+
+
+    var grupoFrom = $('#clinica_container').grupos();
+    grupoFrom.form();
+    
+    $('input[name=paciente_celular_confirmar],input[name=paciente_celular]').bind("cut copy paste",function(e) {
+        e.preventDefault();
+    });
+
+
+</script>

@@ -1,0 +1,67 @@
+<?php 
+    $this->headTitle()->prepend('Transferencias');
+    echo $this->headTitle();
+?>
+<div id="transferencias_control_container">
+    <h1>Transferencias<a style="float: right; text-decoration: none"href="/inventario/transferencias/nuevo">Nuevo</a></h1>
+    <?php if(count($successMessages)) :?>
+    <div class="units-row">
+        <?php foreach ($successMessages as $message) :?>
+            <div class="unit-100">    
+                <div class="tools-alert tools-alert-green">
+                    <?php echo $message?>
+                </div> 
+            </div>
+        <?php endforeach;?>
+    </div>
+<?php endif;?>
+    <fieldset>
+    <legend>Filtros</legend>
+    <div class="units-row">
+        <div class="unit-100" id="filter_container">
+            <label style="display: block">Filtrar por periodo de tiempo</label>
+            <input placeholder="Desde" type="email" name="transferencia_from" class="width-6" />
+            <input placeholder="Hasta" type="email" name="transferencia_to" class="width-6" />
+            <button id="filterbydate" class="btn btn-blue" style="height: 30px;"><i class="fa fa-filter"></i> </button>
+        </div>
+    </div>
+</fieldset>
+    <table class="table-transferencias">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Remitente</th>
+                <th>Receptor</th>
+                <th>Estatus</th>
+                <th>Comprobante</th>
+                <th>Recibió</th>
+                <th>Nota</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $entity = new Transferencia()?>
+            <?php foreach($collection as $entity) : ?>
+            <tr id="<?php echo $entity->getIdtransferencia()?>">
+                <td><?php echo $entity->getTransferenciaFechamovimiento('d/m/Y')?></td>
+                <td><?php echo $entity->getClinicaRelatedByIdclinicaremitente()->getClinicaNombre()?></td>
+                <td><?php echo $entity->getClinicaRelatedByIdclinicadestinataria()->getClinicaNombre()?></td>
+                <td class="transferencia_estatus"><?php echo $entity->getTransferenciaEstatus()?></td>
+                <td class="transferencia_comprobante"><?php echo $entity->getTransferenciaComprobante()?></td>
+                <?php if($entity->getTransferenciaEstatus() != 'enviada') :?>
+                    <td><?php echo $entity->getEmpleadoRelatedByIdempleadoreceptor()->getEmpleadoNombre()?></td>
+                    <?php else: ?>
+                    <td></td>
+                <?php endif;?>
+                <td class="transferencia_nota"><?php echo $entity->getTransferenciaNota()?></td>
+                <td class="tr_options"><a class="ver_detalles" data-content="/inventario/transferencias/verdetalle?html=true&id=<?php echo $entity->getIdtransferencia()?>" data-tools="modal" data-width="700" data-title="<h2>Transferencia #<?php  echo $entity->getIdtransferencia()?></h2>"  href="javascript:void(0)">Ver detalles</a><a class="change_status" href="javascript:void(0)" data-tools="modal" data-width="700" data-title="<h2>Cambiar estatus</h2>" data-content="/inventario/transferencias/cambiarstatus?html=true&id=<?php echo $entity->getIdtransferencia()?>" > Cambiar status</a></td>
+                </tr>
+            <?php endforeach;?>
+        </tbody>
+    </table>
+</div>
+<script src="/plugins/fullcalendar/moment.js"></script>
+<script src="/js/inventario/transferenciasControl.js"></script>
+<script>
+    $('#transferencias_control_container').transferenciasControl();
+</script>

@@ -1,0 +1,95 @@
+<?php 
+    $this->headTitle()->prepend('Definir existencias');
+    echo $this->headTitle();
+?>
+<div id="definir_existencias_container">
+    <h1>Definir existencias</h1>
+    <?php if(count($successMessages)) :?>
+    <div class="units-row">
+        <?php foreach ($successMessages as $message) :?>
+            <div class="unit-100">    
+                <div class="tools-alert tools-alert-green">
+                    <?php echo $message?>
+                </div> 
+            </div>
+        <?php endforeach;?>
+    </div>
+<?php endif;?>
+    <table>
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Articulo</th>
+                <th>Existencias</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($collection as $entity) : ?>
+            <tr data-type="<?php echo $entity['tipo']?>" id="<?php echo $entity['id']?>">
+                    <td><?php echo $entity['tipo']?></td>
+                    <td><?php echo $entity['nombre']?></td>
+                    <td><?php echo (int)$entity['existencias']?></td>
+                    <td><a class="add-existencia" href="javascript:void(0)" data-tools="modal" data-width="700" data-title="<h2>Agregar existencia</h2>" data-content="/inventario/existencias/nuevo?html=true?type=<?php echo $entity['tipo']?>?id=<?php echo $entity['id']?>">agregar</a></td>
+                </tr>
+            <?php endforeach;?>
+        </tbody>
+    </table>
+</div>
+<script src="/js/inventario/existencias.js"></script>
+<script>
+    $('#definir_existencias_container').existencias();
+    
+    $('.add-existencia').on('loading.tools.modal', function(modal)
+    {
+        var $modalHeader = this.$modalHeader;
+        $modalHeader.addClass('modal_header_action');
+        
+        var id = this.$element.closest('tr').attr('id');
+        var type = this.$element.closest('tr').attr('data-type');
+        
+        var $modal = this ;
+        
+        this.createCancelButton('Cancelar');
+
+        var buttonAction = this.createActionButton('Guardar');
+        buttonAction.attr('data-action','submit');
+        
+        buttonAction.on('click', $.proxy(function()
+        {
+            
+            var empty = false;
+            $('input[name=cantidad]').removeClass('input-error');
+            
+            //Verificamos que no este vacio
+            if($('input[name=cantidad]').val() == ""){
+                empty=true;
+                $('input[name=cantidad]').addClass('input-error');
+            }
+            
+            if(!empty){
+                
+                var cantidad = $('input[name=cantidad]').val();
+                
+                //Hacemos la peticion ajax
+                $.ajax({
+                    url:'/inventario/existencias/nuevo',
+                    dataType: 'json',
+                    method:'POST',
+                    data:{id:id,type:type,cantidad:cantidad},
+                    success: function(data){
+                        if(data.response){
+                            $modal.close();
+                            window.location.replace('/inventario/existencias');
+                        }
+                    }
+                });
+            }
+            
+            
+
+            
+        }, this));
+
+    });
+</script>

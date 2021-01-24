@@ -1,0 +1,17 @@
+order allow,deny
+allow from all
+
+RewriteEngine On
+RewriteRule ^/ferozo/?$  http://%{HTTP_HOST}:2082 [L,R]
+RewriteRule ^/dpanel/?$  http://%{HTTP_HOST}:2082 [L,R]
+RewriteRule ^/dattapanel/?$  http://%{HTTP_HOST}:2082 [L,R]
+RewriteRule ^/fzadmin/?$  http://%{HTTP_HOST}:2083 [L,R]
+RewriteRule ^/dhm/?$  http://%{HTTP_HOST}:2083 [L,R]
+RewriteRule ^/webmail/?$  http://%{HTTP_HOST}:2084 [L,R]
+RewriteRule ^/ferozosite/?$  http://%{HTTP_HOST}:2085 [L,R]
+RewriteRule ^/exchange/?$  http://%{HTTP_HOST}:2087 [L,R]
+RewriteRule ^/ferozossl/?$ https://sd-1125019-l.ferozo.com:2092 [L,R]
+RewriteRule ^/dpanelssl/?$ https://sd-1125019-l.ferozo.com:2092 [L,R]
+RewriteRule ^/dattapanelssl/?$ https://sd-1125019-l.ferozo.com:2092 [L,R]
+RewriteRule ^/webmailssl/?$ https://sd-1125019-l.ferozo.com:2094 [L,R]
+RewriteOptions inherit

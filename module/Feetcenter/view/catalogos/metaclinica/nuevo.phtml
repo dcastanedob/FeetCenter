@@ -1,0 +1,59 @@
+<?php 
+    $this->headTitle()->prepend('Nueva meta de clínica');
+    echo $this->headTitle();
+?>
+<div id="clinica_container">
+    <h1>Nueva meta de clínica</h1>
+    <?php 
+        $form->setAttribute('action', '/catalogos/metaclinica/nuevo');
+        $form->setAttribute('novalidate', true);
+        $form->setAttribute('class', 'forms');
+        $form->prepare();
+        echo $this->form()->openTag($form); 
+    ?>
+    <div class="units-row">
+        <div class="unit-50">
+            <label>
+                Clínica <span class="req">*</span>
+                <select name="idclinica" class="width-100">
+                            <option value="">Selecione una clínica...</option>
+                            <?php foreach ($clinicas as $clinica) : ?>
+                                <option value="<?php echo $clinica['idclinica']?>"><?php echo $clinica['clinica_nombre'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+            </label>
+        </div>
+        <div class="unit-50">
+            <label>
+                Meta <span class="req">*</span>
+                <?php echo $this->formText($form->get('metaclinica_meta')); ?>
+            </label>
+        </div>
+
+    </div>
+    <div class="units-row">
+        <div class="unit-50">
+            <label>
+                Año <span class="req">*</span>
+                <?php echo $this->formText($form->get('metaclinica_anio')); ?>
+            </label>
+        </div>
+        <div class="unit-50">
+            <label>
+                Mes <span class="req">*</span>
+                <?php echo $this->formSelect($form->get('metaclinica_mes')); ?>
+            </label>
+        </div>
+    </div>
+
+    <div class="units-row">
+        <div class="unit-centered unit-40"><button data-action="submit" class="btn btn-green">Guardar</button></div>
+    </div>
+</div>
+<script src="/js/catalogos/metaclinica.js"></script>
+<script>
+    $('input[name=metaclinica_meta]').numeric();
+    $('input[name=metaclinica_anio]').numeric();
+    $('#clinica_container').metaclinica();
+    
+</script>

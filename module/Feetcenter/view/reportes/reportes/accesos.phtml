@@ -1,0 +1,45 @@
+<?php
+    $this->headTitle()->prepend('Reporte por empleados');
+    echo $this->headTitle();
+?>
+<div id="reportes_empleados_container">
+    <h1>Reporte de accesos de usuario al sistema</h1>
+    <div class="units-row">
+        <div class="unit-30">
+            Empleado
+            <select multiple="multiple" name="idempleado" class="width-100">
+                <?php $empleado = new Clinicaempleado()?>;
+                <?php foreach ($empleados as $empleado) : ?>
+                <option value="<?php echo $empleado->getIdempleado()?>"><?php echo $empleado->getEmpleado()->getEmpleadoNombre() ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="unit-70" id="filter_container">
+            <label style="display: block">Filtrar por periodo de tiempo</label>
+            <input placeholder="Desde" type="text" name="filter_from" class="width-6" />
+            <input placeholder="Hasta" type="text" name="filter_to" class="width-6" />
+            <button id="filterbydate" class="btn btn-blue" style="height: 30px;"><i class="fa fa-filter"></i> </button>
+        </div>
+    </div>
+    <div class="units-row">
+        <div class="unit-100">
+            <table class="table-accesos table-bordered">
+            <thead>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+            </tfoot>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+<script src="/plugins/fullcalendar/moment.js"></script>
+<script src="/js/reportes/reporteAccesos.js"></script>
+<script>
+    $('#reportes_empleados_container').reporteAccesos({
+        session: <?php echo json_encode($session)?>,
+    });
+</script>

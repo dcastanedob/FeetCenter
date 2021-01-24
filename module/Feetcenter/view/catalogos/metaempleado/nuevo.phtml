@@ -1,0 +1,58 @@
+<?php 
+    $this->headTitle()->prepend('Nueva meta de empleado');
+    echo $this->headTitle();
+?>
+<div id="clinica_container">
+    <h1>Nueva meta de empleado</h1>
+    <?php 
+        $form->setAttribute('action', '/catalogos/metaempleado/nuevo');
+        $form->setAttribute('novalidate', true);
+        $form->setAttribute('class', 'forms');
+        $form->prepare();
+        echo $this->form()->openTag($form); 
+    ?>
+    <div class="units-row">
+        <div class="unit-50">
+            <label>
+                Empleado <span class="req">*</span>
+                <select name="idempleado" class="width-100">
+                            <option value="">Selecione un empleado...</option>
+                            <?php foreach ($empleados as $empleado) : ?>
+                                <option value="<?php echo $empleado['idempleado']?>"><?php echo $empleado['empleado_nombre'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+            </label>
+        </div>
+        <div class="unit-50">
+            <label>
+                Meta <span class="req">*</span>
+                <?php echo $this->formText($form->get('metaempleado_meta')); ?>
+            </label>
+        </div>
+
+    </div>
+    <div class="units-row">
+        <div class="unit-50">
+            <label>
+                Año <span class="req">*</span>
+                <?php echo $this->formText($form->get('metaempleado_anio')); ?>
+            </label>
+        </div>
+        <div class="unit-50">
+            <label>
+                Mes <span class="req">*</span>
+                <?php echo $this->formSelect($form->get('metaempleado_mes')); ?>
+            </label>
+        </div>
+    </div>
+
+    <div class="units-row">
+        <div class="unit-centered unit-40"><button data-action="submit" class="btn btn-green">Guardar</button></div>
+    </div>
+</div>
+<script src="/js/catalogos/metaempleado.js"></script>
+<script>
+    $('input[name=metaempleado_meta]').numeric();
+    $('input[name=metaempleado_anio]').numeric();
+    $('#clinica_container').metaclinica();
+</script>
