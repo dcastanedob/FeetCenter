@@ -779,6 +779,35 @@ CREATE TABLE `paciente`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- pacientelog
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pacientelog`;
+
+CREATE TABLE `pacientelog`
+(
+    `idpacientelog` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `idpaciente` INTEGER NOT NULL,
+    `idempleado` INTEGER NOT NULL,
+    `pacientelog_fecha` DATETIME NOT NULL,
+    `pacientelog_nombre` VARCHAR(255) DEFAULT '' NOT NULL,
+    `pacientelog_telefono` VARCHAR(255) DEFAULT '' NOT NULL,
+    PRIMARY KEY (`idpacientelog`),
+    INDEX `idpaciente` (`idpaciente`),
+    INDEX `idempleado` (`idempleado`),
+    CONSTRAINT `idempleado_pacientelog`
+        FOREIGN KEY (`idempleado`)
+        REFERENCES `empleado` (`idempleado`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idpaciente_pacientelog`
+        FOREIGN KEY (`idpaciente`)
+        REFERENCES `paciente` (`idpaciente`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- pacientemembresia
 -- ---------------------------------------------------------------------
 
@@ -1231,11 +1260,13 @@ CREATE TABLE `visita`
     `visita_horafin` DATETIME,
     `visita_duracion` INTEGER NOT NULL,
     `visita_descuento` DECIMAL(10,2) NOT NULL,
+    `idvisitapadre` INTEGER,
     PRIMARY KEY (`idvisita`),
     INDEX `idempleadocreador` (`idempleadocreador`),
     INDEX `idempleado` (`idempleado`),
     INDEX `idpaciente` (`idpaciente`),
     INDEX `idclinica` (`idclinica`),
+    INDEX `idvisitapadre` (`idvisitapadre`),
     CONSTRAINT `idclinica_visita`
         FOREIGN KEY (`idclinica`)
         REFERENCES `clinica` (`idclinica`)
@@ -1254,6 +1285,11 @@ CREATE TABLE `visita`
     CONSTRAINT `idpaciente_visita`
         FOREIGN KEY (`idpaciente`)
         REFERENCES `paciente` (`idpaciente`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idvisitapadre_visita`
+        FOREIGN KEY (`idvisitapadre`)
+        REFERENCES `visita` (`idvisita`)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 ) ENGINE=InnoDB;

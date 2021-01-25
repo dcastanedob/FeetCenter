@@ -8,8 +8,8 @@
     <?php echo $this->formHidden($form->get('visita_fechainicio')); ?>
     <?php echo $this->formHidden($form->get('visita_fechafin')); ?>
     <div class="units-row" style="margin-bottom: 0px;">
-        <?php 
-            echo $this->form()->openTag($form); 
+        <?php
+            echo $this->form()->openTag($form);
         ?>
         <div class="unit-50">
             <div><span><b>Pedicurista: </b></span><span><?php echo $empleado->getEmpleadoNombre() ?></span></div>
@@ -76,7 +76,7 @@
             <fieldset style="position: relative">
                 <span class="nuevo_paciente_close">x</span>
                 <legend>Nuevo cliente</legend>
-                <div class="units-row" style="margin-bottom: 0px;">                  
+                <div class="units-row" style="margin-bottom: 0px;">
                     <div class="unit-33">
                         <label>
                             Nombre <span class="req">*</span>
@@ -100,13 +100,13 @@
                     <div class="unit-50">
                         <label>
                             Celular <span class="req">*</span>
-                            <input required name="paciente_celular" type="password" class="width-100">
+                            <input required name="paciente_celular" type="password" class="width-100" maxlength="10">
                         </label>
                     </div>
                     <div class="unit-50">
                         <label>
                             Confirmar celular <span class="req">*</span>
-                            <input required name="paciente_celular_confirmar" type="text" class="width-100">
+                            <input required name="paciente_celular_confirmar" type="text" class="width-100" maxlength="10" readonly>
                         </label>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                 <div class="units-row">
                     <div class="unit-80">
                       Nombre
-                      <input class="width-100"type="text" name="paciente_relacionados_autocomplete">  
+                      <input class="width-100"type="text" name="paciente_relacionados_autocomplete">
                     </div>
                     <div class="unit-20" style="margin-top: 4px;">
                         <a data-action="addPaciente" class="btn btn-blue" style="height: 30px; margin-top: 20px; width: 100%;">Agregar</a>
@@ -143,7 +143,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                     </tbody>
                 </table>
                 <div class="units-row">
@@ -163,7 +163,7 @@
                     <label>Consulta</label>
                     <input checked type="radio" name="visita_tipo" value="servicio">
                     <label>Servicio</label>
-                    
+
                 </li>
             </ul>
         </div>
@@ -225,13 +225,13 @@
                 <td colspan="3">Subtotal</td>
                 <td id="subtotal">$ 0</td>
             </tr>
-         
+
             <tr>
             <input name="visita_iva" type="hidden" value="0">
                 <td colspan="3">IVA</td>
                 <td id="iva">$ 0</td>
             </tr>
-            <tr>    
+            <tr>
             <input name="visita_total" type="hidden" value="0">
                 <td colspan="3">Total</td>
                 <td id="total">$ 0</td>

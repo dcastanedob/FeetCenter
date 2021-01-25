@@ -116,6 +116,10 @@
  * @method EmpleadoQuery rightJoinPaciente($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Paciente relation
  * @method EmpleadoQuery innerJoinPaciente($relationAlias = null) Adds a INNER JOIN clause to the query using the Paciente relation
  *
+ * @method EmpleadoQuery leftJoinPacientelog($relationAlias = null) Adds a LEFT JOIN clause to the query using the Pacientelog relation
+ * @method EmpleadoQuery rightJoinPacientelog($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Pacientelog relation
+ * @method EmpleadoQuery innerJoinPacientelog($relationAlias = null) Adds a INNER JOIN clause to the query using the Pacientelog relation
+ *
  * @method EmpleadoQuery leftJoinPacienteseguimiento($relationAlias = null) Adds a LEFT JOIN clause to the query using the Pacienteseguimiento relation
  * @method EmpleadoQuery rightJoinPacienteseguimiento($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Pacienteseguimiento relation
  * @method EmpleadoQuery innerJoinPacienteseguimiento($relationAlias = null) Adds a INNER JOIN clause to the query using the Pacienteseguimiento relation
@@ -2205,6 +2209,80 @@ abstract class BaseEmpleadoQuery extends ModelCriteria
         return $this
             ->joinPaciente($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Paciente', 'PacienteQuery');
+    }
+
+    /**
+     * Filter the query by a related Pacientelog object
+     *
+     * @param   Pacientelog|PropelObjectCollection $pacientelog  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 EmpleadoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByPacientelog($pacientelog, $comparison = null)
+    {
+        if ($pacientelog instanceof Pacientelog) {
+            return $this
+                ->addUsingAlias(EmpleadoPeer::IDEMPLEADO, $pacientelog->getIdempleado(), $comparison);
+        } elseif ($pacientelog instanceof PropelObjectCollection) {
+            return $this
+                ->usePacientelogQuery()
+                ->filterByPrimaryKeys($pacientelog->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByPacientelog() only accepts arguments of type Pacientelog or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Pacientelog relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return EmpleadoQuery The current query, for fluid interface
+     */
+    public function joinPacientelog($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Pacientelog');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Pacientelog');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Pacientelog relation Pacientelog object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   PacientelogQuery A secondary query class using the current class as primary query
+     */
+    public function usePacientelogQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinPacientelog($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Pacientelog', 'PacientelogQuery');
     }
 
     /**

@@ -5,7 +5,7 @@
         display: block;
     }
 </style>
-<?php 
+<?php
     $this->headTitle()->prepend('Visitas');
     echo $this->headTitle();
 ?>
@@ -62,6 +62,14 @@
         </div>
     </div>
     <div class="units-row">
+      <div class="unit-20">
+          Usuarios
+          <select multiple="multiple" name="idempleadoacceso" class="width-100">
+              <?php foreach ($usuarios as $usuario) : ?>
+              <option value="<?php echo $usuario->getIdempleado()?>"><?php echo $usuario->getEmpleado()->getEmpleadoNombre() ?></option>
+              <?php endforeach; ?>
+          </select>
+      </div>
         <div class="unit-20">
             Estatus
             <select multiple="multiple" name="visita_estatus" class="width-100">
@@ -69,7 +77,7 @@
                     <option value="<?php echo $est->getIdestatusseguimiento()?>"><?php echo $est->getEstatusseguimientoNombre() ?></option>
                 <?php endforeach; ?>
             </select>
-            
+
         </div>
         <div class="unit-40" >
             <label style="display: block">Estatus fecha</label>
@@ -79,11 +87,11 @@
         </div>
     </div>
     <table class="table-visitas table-bordered">
-        <thead> 
+        <thead>
         </thead>
         <tbody>
         </tbody>
-        <tfoot>           
+        <tfoot>
         </tfoot>
     </table>
 </div>

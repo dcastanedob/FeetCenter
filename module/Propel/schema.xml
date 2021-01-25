@@ -592,6 +592,29 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="pacientelog" phpName="Pacientelog" idMethod="native">
+    <column name="idpacientelog" phpName="Idpacientelog" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idpaciente" phpName="Idpaciente" type="INTEGER" required="true"/>
+    <column name="idempleado" phpName="Idempleado" type="INTEGER" required="true"/>
+    <column name="pacientelog_fecha" phpName="PacientelogFecha" type="TIMESTAMP" required="true"/>
+    <column name="pacientelog_nombre" phpName="PacientelogNombre" type="VARCHAR" size="255" required="true" defaultValue=""/>
+    <column name="pacientelog_telefono" phpName="PacientelogTelefono" type="VARCHAR" size="255" required="true" defaultValue=""/>
+    <foreign-key foreignTable="empleado" name="idempleado_pacientelog" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempleado" foreign="idempleado"/>
+    </foreign-key>
+    <foreign-key foreignTable="paciente" name="idpaciente_pacientelog" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idpaciente" foreign="idpaciente"/>
+    </foreign-key>
+    <index name="idpaciente">
+      <index-column name="idpaciente"/>
+    </index>
+    <index name="idempleado">
+      <index-column name="idempleado"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="pacientemembresia" phpName="Pacientemembresia" idMethod="native">
     <column name="idpacientemembresia" phpName="Idpacientemembresia" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idpaciente" phpName="Idpaciente" type="INTEGER" required="true"/>
@@ -948,6 +971,7 @@
     <column name="visita_horafin" phpName="VisitaHorafin" type="TIMESTAMP" required="false"/>
     <column name="visita_duracion" phpName="VisitaDuracion" type="INTEGER" required="true"/>
     <column name="visita_descuento" phpName="VisitaDescuento" type="DECIMAL" size="10" scale="2" required="true"/>
+    <column name="idvisitapadre" phpName="Idvisitapadre" type="INTEGER" required="false"/>
     <foreign-key foreignTable="clinica" name="idclinica_visita" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idclinica" foreign="idclinica"/>
     </foreign-key>
@@ -960,6 +984,9 @@
     <foreign-key foreignTable="paciente" name="idpaciente_visita" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idpaciente" foreign="idpaciente"/>
     </foreign-key>
+    <foreign-key foreignTable="visita" name="idvisitapadre_visita" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idvisitapadre" foreign="idvisita"/>
+    </foreign-key>
     <index name="idempleadocreador">
       <index-column name="idempleadocreador"/>
     </index>
@@ -971,6 +998,9 @@
     </index>
     <index name="idclinica">
       <index-column name="idclinica"/>
+    </index>
+    <index name="idvisitapadre">
+      <index-column name="idvisitapadre"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>

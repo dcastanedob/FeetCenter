@@ -204,7 +204,7 @@ class AgendaController extends AbstractActionController
         $idclinica = $this->params()->fromRoute('id');
         $dia = $this->params()->fromQuery('dia');
 
-        $visitas = \VisitaQuery::create()->joinPaciente()->withColumn('paciente_nombre')->filterByIdclinica($idclinica)->filterByVisitaFechainicio(array('min' => $dia.' 00:00:00', 'max' => $dia. ' 23:59:59'))->find();
+        $visitas = \VisitaQuery::create()->joinPaciente()->withColumn('paciente_nombre')->filterByIdclinica($idclinica)->filterByVisitaFechainicio(array('min' => $dia.' 00:00:00', 'max' => $dia. ' 23:59:59'))->filterByVisitaStatus('reprogramda',\Criteria::NOT_EQUAL)->find();
         $visita = new \Visita();
         $array = array();
         foreach ($visitas as $visita){
@@ -261,7 +261,7 @@ class AgendaController extends AbstractActionController
         $to = $this->params()->fromQuery('to');
 
 
-        $visitas = \VisitaQuery::create()->joinEmpleadoRelatedByIdempleado()->withColumn('empleado_nombre')->filterByVisitaFechainicio(array('min' => $from.' 00:00:00', 'max' => $to.' 23:59:59'))->joinPaciente()->withColumn('paciente_nombre')->filterByIdclinica($idclinica)->find();
+        $visitas = \VisitaQuery::create()->joinEmpleadoRelatedByIdempleado()->withColumn('empleado_nombre')->filterByVisitaFechainicio(array('min' => $from.' 00:00:00', 'max' => $to.' 23:59:59'))->filterByVisitaStatus('reprogramda',\Criteria::NOT_EQUAL)->joinPaciente()->withColumn('paciente_nombre')->filterByIdclinica($idclinica)->find();
 
         return $this->response->setContent(json_encode($visitas->toArray(null,false,  \BasePeer::TYPE_FIELDNAME)));
     }
@@ -335,13 +335,23 @@ class AgendaController extends AbstractActionController
                     return $this->getResponse()->setContent(\Zend\Json\Json::encode($disponibilidad));
                 }
 
-                $entity->setVisitaStatus('por confirmar');
+                $entity->setVisitaStatus('reprogramda');
 
                 $reprogramar_fecha_fin = new \DateTime($post_data['visita_reprogramar_fecha_submit'].' '.$post_data['visita_reprogramar_hora']);
                 $reprogramar_fecha_fin->add(new \DateInterval('PT' . 30 . 'M'));
 
-                $entity->setVisitaFechainicio($reprogramar_fecha_inicio);
-                $entity->setVisitaFechafin($reprogramar_fecha_fin);
+                $ecopy = $entity->copy();
+
+                $ecopy->setIdvisita(NULL);
+                $ecopy->setIdempleadocreador($sesion->getIdempleado());
+                $ecopy->setIdvisitapadre($entity->getIdvisita());
+                $ecopy->setVisitaStatus('por confirmar');
+                $ecopy->setVisitaFechainicio($reprogramar_fecha_inicio);
+                $ecopy->setVisitaFechafin($reprogramar_fecha_fin);
+                $ecopy->setVisitaYear($reprogramar_fecha_inicio->format('Y'));
+                $ecopy->setVisitaMonth($reprogramar_fecha_inicio->format('m'));
+                $ecopy->setVisitaDay($reprogramar_fecha_inicio->format('d'));
+                $ecopy->save();
 
 
 

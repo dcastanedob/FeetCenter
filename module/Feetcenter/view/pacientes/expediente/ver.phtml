@@ -1,4 +1,4 @@
-<?php 
+<?php
     $this->headTitle()->prepend('Expediente');
     echo $this->headTitle();
 ?>
@@ -21,10 +21,20 @@
         <tbody>
             <?php $visita = new Visita()?>
             <?php foreach ($visitas as $visita) :?>
-                <?php 
+                <?php
                     $estatus_pago = '';
                     if($visita->getVisitaEstatuspago() == 'cancelada'){
                         $estatus_pago = 'cancelada '."(".$visita->getVisitaCanceladaen('d/m/Y H:i').")";
+                    }
+
+                    $repro =  "";
+                    if($visita->getVisitaStatus()== 'reprogramda'){
+                        $visita_reprogramada = \VisitaQuery::create()->filterByIdvisitapadre($visita->getIdvisita())->findOne();
+                        if(!is_null($visita_reprogramada)){
+                          $repro = $visita_reprogramada->getVisitaFechainicio('d/m/Y H:i');
+                        }
+
+
                     }
                 ?>
                 <tr id="<?php echo $visita->getIdvisita()?>">
@@ -33,7 +43,7 @@
                     <td><?php echo $visita->getClinica()->getClinicaNombre()?></td>
                     <td><?php echo $visita->getEmpleadoRelatedByIdempleado()->getEmpleadoNombre()?></td>
                     <td><?php echo $visita->getVisitaTipo()?></td>
-                    <td><?php echo $visita->getVisitaStatus()?></td>
+                    <td class="visita-status" data-status="<?php echo $visita->getVisitaStatus()?>" data-fecharepro="<?php echo $repro?>"><?php echo $visita->getVisitaStatus()?></td>
                     <td><?php echo $estatus_pago ?></td>
                     <td class="visita_total"><?php echo $visita->getVisitaTotal()?></td>
                     <td><a class="detalles-modal" href="javascript:void(0)" data-tools="modal" data-width="700" data-title="<h2><?php echo 'Visita #'. $visita->getIdvisita()?></h2>" data-content="/pacientes/expediente/detalles?html=true&idvisita=<?php echo $visita->getIdvisita()?>" href="javascript:void(0)">Detalles</a></td>
@@ -42,8 +52,10 @@
         </tbody>
     </table>
 </div>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
 <script>
-    
+
     $.ajax({
         url: '/json/lang_es_datatable.json',
         dataType: 'json',
@@ -57,52 +69,69 @@
             table.on( 'draw', function () {
                 $('[data-tools="modal"]').unbind();
                 $('[data-tools="modal"]').modal();
-                
-                
+
+
     $('.table-visitas').find('.visita_total').filter(function(){
         var txt_value = $(this).text();
         var money_value = accounting.formatMoney(txt_value);
         $(this).text(money_value);
     });
-    
+
     $('.detalles-modal').on('loading.tools.modal', function(modal)
     {
         var $modalHeader = this.$modalHeader;
         $modalHeader.addClass('modal_header_action');
         var id = this.$element.closest('tr').attr('id');
         var $modal = this ;
-        
+
         this.createCancelButton('Cancelar');
 
-      
+
 
     });
-    
+
             });
         }
     });
-    
+
     $('.detalles-modal').on('loading.tools.modal', function(modal)
     {
         var $modalHeader = this.$modalHeader;
         $modalHeader.addClass('modal_header_action');
         var id = this.$element.closest('tr').attr('id');
         var $modal = this ;
-        
+
         this.createCancelButton('Cancelar');
 
-      
+
 
     });
-    
-    
-    
-    
+
+
+    $( "td.visita-status" ).each(function( index ) {
+      var status = $(this).attr('data-status')
+      if(status == 'reprogramda'){
+        var fecha = $(this).attr('data-fecharepro');
+
+        var idx = parseInt(index)+1;
+
+        tippy('tr:nth-child('+idx+') .visita-status', {
+          content: fecha,
+        });
+
+      }
+
+    });
+
+
+
+
+
 </script>
 <!--<script src="/plugins/fullcalendar/moment.js"></script>
 <script src="/js/pacientes/expediente.js"></script>
 <script>
     $('#expedientese_container').expediente({
         session: <?php echo json_encode($session)?>,
-    });   
+    });
 </script>-->

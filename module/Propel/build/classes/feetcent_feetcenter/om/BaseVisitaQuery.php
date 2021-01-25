@@ -29,6 +29,7 @@
  * @method VisitaQuery orderByVisitaHorafin($order = Criteria::ASC) Order by the visita_horafin column
  * @method VisitaQuery orderByVisitaDuracion($order = Criteria::ASC) Order by the visita_duracion column
  * @method VisitaQuery orderByVisitaDescuento($order = Criteria::ASC) Order by the visita_descuento column
+ * @method VisitaQuery orderByIdvisitapadre($order = Criteria::ASC) Order by the idvisitapadre column
  *
  * @method VisitaQuery groupByIdvisita() Group by the idvisita column
  * @method VisitaQuery groupByIdempleado() Group by the idempleado column
@@ -53,6 +54,7 @@
  * @method VisitaQuery groupByVisitaHorafin() Group by the visita_horafin column
  * @method VisitaQuery groupByVisitaDuracion() Group by the visita_duracion column
  * @method VisitaQuery groupByVisitaDescuento() Group by the visita_descuento column
+ * @method VisitaQuery groupByIdvisitapadre() Group by the idvisitapadre column
  *
  * @method VisitaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method VisitaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -73,6 +75,14 @@
  * @method VisitaQuery leftJoinPaciente($relationAlias = null) Adds a LEFT JOIN clause to the query using the Paciente relation
  * @method VisitaQuery rightJoinPaciente($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Paciente relation
  * @method VisitaQuery innerJoinPaciente($relationAlias = null) Adds a INNER JOIN clause to the query using the Paciente relation
+ *
+ * @method VisitaQuery leftJoinVisitaRelatedByIdvisitapadre($relationAlias = null) Adds a LEFT JOIN clause to the query using the VisitaRelatedByIdvisitapadre relation
+ * @method VisitaQuery rightJoinVisitaRelatedByIdvisitapadre($relationAlias = null) Adds a RIGHT JOIN clause to the query using the VisitaRelatedByIdvisitapadre relation
+ * @method VisitaQuery innerJoinVisitaRelatedByIdvisitapadre($relationAlias = null) Adds a INNER JOIN clause to the query using the VisitaRelatedByIdvisitapadre relation
+ *
+ * @method VisitaQuery leftJoinVisitaRelatedByIdvisita($relationAlias = null) Adds a LEFT JOIN clause to the query using the VisitaRelatedByIdvisita relation
+ * @method VisitaQuery rightJoinVisitaRelatedByIdvisita($relationAlias = null) Adds a RIGHT JOIN clause to the query using the VisitaRelatedByIdvisita relation
+ * @method VisitaQuery innerJoinVisitaRelatedByIdvisita($relationAlias = null) Adds a INNER JOIN clause to the query using the VisitaRelatedByIdvisita relation
  *
  * @method VisitaQuery leftJoinVisitadetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Visitadetalle relation
  * @method VisitaQuery rightJoinVisitadetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Visitadetalle relation
@@ -107,6 +117,7 @@
  * @method Visita findOneByVisitaHorafin(string $visita_horafin) Return the first Visita filtered by the visita_horafin column
  * @method Visita findOneByVisitaDuracion(int $visita_duracion) Return the first Visita filtered by the visita_duracion column
  * @method Visita findOneByVisitaDescuento(string $visita_descuento) Return the first Visita filtered by the visita_descuento column
+ * @method Visita findOneByIdvisitapadre(int $idvisitapadre) Return the first Visita filtered by the idvisitapadre column
  *
  * @method array findByIdvisita(int $idvisita) Return Visita objects filtered by the idvisita column
  * @method array findByIdempleado(int $idempleado) Return Visita objects filtered by the idempleado column
@@ -131,6 +142,7 @@
  * @method array findByVisitaHorafin(string $visita_horafin) Return Visita objects filtered by the visita_horafin column
  * @method array findByVisitaDuracion(int $visita_duracion) Return Visita objects filtered by the visita_duracion column
  * @method array findByVisitaDescuento(string $visita_descuento) Return Visita objects filtered by the visita_descuento column
+ * @method array findByIdvisitapadre(int $idvisitapadre) Return Visita objects filtered by the idvisitapadre column
  *
  * @package    propel.generator.feetcent_feetcenter.om
  */
@@ -238,7 +250,7 @@ abstract class BaseVisitaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idvisita`, `idempleado`, `idempleadocreador`, `idpaciente`, `idclinica`, `visita_tipo`, `visita_creadaen`, `visita_canceladaen`, `visita_fechainicio`, `visita_fechafin`, `visita_status`, `visita_estatuspago`, `visita_total`, `visita_nota`, `visita_year`, `visita_month`, `visita_day`, `visita_foliomembresia`, `visita_cuponmembresia`, `visita_horainicio`, `visita_horafin`, `visita_duracion`, `visita_descuento` FROM `visita` WHERE `idvisita` = :p0';
+        $sql = 'SELECT `idvisita`, `idempleado`, `idempleadocreador`, `idpaciente`, `idclinica`, `visita_tipo`, `visita_creadaen`, `visita_canceladaen`, `visita_fechainicio`, `visita_fechafin`, `visita_status`, `visita_estatuspago`, `visita_total`, `visita_nota`, `visita_year`, `visita_month`, `visita_day`, `visita_foliomembresia`, `visita_cuponmembresia`, `visita_horainicio`, `visita_horafin`, `visita_duracion`, `visita_descuento`, `idvisitapadre` FROM `visita` WHERE `idvisita` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1230,6 +1242,50 @@ abstract class BaseVisitaQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the idvisitapadre column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdvisitapadre(1234); // WHERE idvisitapadre = 1234
+     * $query->filterByIdvisitapadre(array(12, 34)); // WHERE idvisitapadre IN (12, 34)
+     * $query->filterByIdvisitapadre(array('min' => 12)); // WHERE idvisitapadre >= 12
+     * $query->filterByIdvisitapadre(array('max' => 12)); // WHERE idvisitapadre <= 12
+     * </code>
+     *
+     * @see       filterByVisitaRelatedByIdvisitapadre()
+     *
+     * @param     mixed $idvisitapadre The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return VisitaQuery The current query, for fluid interface
+     */
+    public function filterByIdvisitapadre($idvisitapadre = null, $comparison = null)
+    {
+        if (is_array($idvisitapadre)) {
+            $useMinMax = false;
+            if (isset($idvisitapadre['min'])) {
+                $this->addUsingAlias(VisitaPeer::IDVISITAPADRE, $idvisitapadre['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idvisitapadre['max'])) {
+                $this->addUsingAlias(VisitaPeer::IDVISITAPADRE, $idvisitapadre['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(VisitaPeer::IDVISITAPADRE, $idvisitapadre, $comparison);
+    }
+
+    /**
      * Filter the query by a related Clinica object
      *
      * @param   Clinica|PropelObjectCollection $clinica The related object(s) to use as filter
@@ -1531,6 +1587,156 @@ abstract class BaseVisitaQuery extends ModelCriteria
         return $this
             ->joinPaciente($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Paciente', 'PacienteQuery');
+    }
+
+    /**
+     * Filter the query by a related Visita object
+     *
+     * @param   Visita|PropelObjectCollection $visita The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 VisitaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByVisitaRelatedByIdvisitapadre($visita, $comparison = null)
+    {
+        if ($visita instanceof Visita) {
+            return $this
+                ->addUsingAlias(VisitaPeer::IDVISITAPADRE, $visita->getIdvisita(), $comparison);
+        } elseif ($visita instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(VisitaPeer::IDVISITAPADRE, $visita->toKeyValue('PrimaryKey', 'Idvisita'), $comparison);
+        } else {
+            throw new PropelException('filterByVisitaRelatedByIdvisitapadre() only accepts arguments of type Visita or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the VisitaRelatedByIdvisitapadre relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return VisitaQuery The current query, for fluid interface
+     */
+    public function joinVisitaRelatedByIdvisitapadre($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('VisitaRelatedByIdvisitapadre');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'VisitaRelatedByIdvisitapadre');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the VisitaRelatedByIdvisitapadre relation Visita object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   VisitaQuery A secondary query class using the current class as primary query
+     */
+    public function useVisitaRelatedByIdvisitapadreQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinVisitaRelatedByIdvisitapadre($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'VisitaRelatedByIdvisitapadre', 'VisitaQuery');
+    }
+
+    /**
+     * Filter the query by a related Visita object
+     *
+     * @param   Visita|PropelObjectCollection $visita  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 VisitaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByVisitaRelatedByIdvisita($visita, $comparison = null)
+    {
+        if ($visita instanceof Visita) {
+            return $this
+                ->addUsingAlias(VisitaPeer::IDVISITA, $visita->getIdvisitapadre(), $comparison);
+        } elseif ($visita instanceof PropelObjectCollection) {
+            return $this
+                ->useVisitaRelatedByIdvisitaQuery()
+                ->filterByPrimaryKeys($visita->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByVisitaRelatedByIdvisita() only accepts arguments of type Visita or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the VisitaRelatedByIdvisita relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return VisitaQuery The current query, for fluid interface
+     */
+    public function joinVisitaRelatedByIdvisita($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('VisitaRelatedByIdvisita');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'VisitaRelatedByIdvisita');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the VisitaRelatedByIdvisita relation Visita object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   VisitaQuery A secondary query class using the current class as primary query
+     */
+    public function useVisitaRelatedByIdvisitaQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinVisitaRelatedByIdvisita($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'VisitaRelatedByIdvisita', 'VisitaQuery');
     }
 
     /**

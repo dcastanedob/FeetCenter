@@ -168,6 +168,12 @@ abstract class BaseVisita extends BaseObject implements Persistent
     protected $visita_descuento;
 
     /**
+     * The value for the idvisitapadre field.
+     * @var        int
+     */
+    protected $idvisitapadre;
+
+    /**
      * @var        Clinica
      */
     protected $aClinica;
@@ -186,6 +192,17 @@ abstract class BaseVisita extends BaseObject implements Persistent
      * @var        Paciente
      */
     protected $aPaciente;
+
+    /**
+     * @var        Visita
+     */
+    protected $aVisitaRelatedByIdvisitapadre;
+
+    /**
+     * @var        PropelObjectCollection|Visita[] Collection to store aggregation of Visita objects.
+     */
+    protected $collVisitasRelatedByIdvisita;
+    protected $collVisitasRelatedByIdvisitaPartial;
 
     /**
      * @var        PropelObjectCollection|Visitadetalle[] Collection to store aggregation of Visitadetalle objects.
@@ -218,6 +235,12 @@ abstract class BaseVisita extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $visitasRelatedByIdvisitaScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -656,6 +679,17 @@ abstract class BaseVisita extends BaseObject implements Persistent
     {
 
         return $this->visita_descuento;
+    }
+
+    /**
+     * Get the [idvisitapadre] column value.
+     *
+     * @return int
+     */
+    public function getIdvisitapadre()
+    {
+
+        return $this->idvisitapadre;
     }
 
     /**
@@ -1170,6 +1204,31 @@ abstract class BaseVisita extends BaseObject implements Persistent
     } // setVisitaDescuento()
 
     /**
+     * Set the value of [idvisitapadre] column.
+     *
+     * @param  int $v new value
+     * @return Visita The current object (for fluent API support)
+     */
+    public function setIdvisitapadre($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idvisitapadre !== $v) {
+            $this->idvisitapadre = $v;
+            $this->modifiedColumns[] = VisitaPeer::IDVISITAPADRE;
+        }
+
+        if ($this->aVisitaRelatedByIdvisitapadre !== null && $this->aVisitaRelatedByIdvisitapadre->getIdvisita() !== $v) {
+            $this->aVisitaRelatedByIdvisitapadre = null;
+        }
+
+
+        return $this;
+    } // setIdvisitapadre()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1224,6 +1283,7 @@ abstract class BaseVisita extends BaseObject implements Persistent
             $this->visita_horafin = ($row[$startcol + 20] !== null) ? (string) $row[$startcol + 20] : null;
             $this->visita_duracion = ($row[$startcol + 21] !== null) ? (int) $row[$startcol + 21] : null;
             $this->visita_descuento = ($row[$startcol + 22] !== null) ? (string) $row[$startcol + 22] : null;
+            $this->idvisitapadre = ($row[$startcol + 23] !== null) ? (int) $row[$startcol + 23] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1233,7 +1293,7 @@ abstract class BaseVisita extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 23; // 23 = VisitaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 24; // 24 = VisitaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Visita object", $e);
@@ -1267,6 +1327,9 @@ abstract class BaseVisita extends BaseObject implements Persistent
         }
         if ($this->aClinica !== null && $this->idclinica !== $this->aClinica->getIdclinica()) {
             $this->aClinica = null;
+        }
+        if ($this->aVisitaRelatedByIdvisitapadre !== null && $this->idvisitapadre !== $this->aVisitaRelatedByIdvisitapadre->getIdvisita()) {
+            $this->aVisitaRelatedByIdvisitapadre = null;
         }
     } // ensureConsistency
 
@@ -1311,6 +1374,9 @@ abstract class BaseVisita extends BaseObject implements Persistent
             $this->aEmpleadoRelatedByIdempleado = null;
             $this->aEmpleadoRelatedByIdempleadocreador = null;
             $this->aPaciente = null;
+            $this->aVisitaRelatedByIdvisitapadre = null;
+            $this->collVisitasRelatedByIdvisita = null;
+
             $this->collVisitadetalles = null;
 
             $this->collVisitapagos = null;
@@ -1461,6 +1527,13 @@ abstract class BaseVisita extends BaseObject implements Persistent
                 $this->setPaciente($this->aPaciente);
             }
 
+            if ($this->aVisitaRelatedByIdvisitapadre !== null) {
+                if ($this->aVisitaRelatedByIdvisitapadre->isModified() || $this->aVisitaRelatedByIdvisitapadre->isNew()) {
+                    $affectedRows += $this->aVisitaRelatedByIdvisitapadre->save($con);
+                }
+                $this->setVisitaRelatedByIdvisitapadre($this->aVisitaRelatedByIdvisitapadre);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -1470,6 +1543,23 @@ abstract class BaseVisita extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->visitasRelatedByIdvisitaScheduledForDeletion !== null) {
+                if (!$this->visitasRelatedByIdvisitaScheduledForDeletion->isEmpty()) {
+                    VisitaQuery::create()
+                        ->filterByPrimaryKeys($this->visitasRelatedByIdvisitaScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->visitasRelatedByIdvisitaScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collVisitasRelatedByIdvisita !== null) {
+                foreach ($this->collVisitasRelatedByIdvisita as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->visitadetallesScheduledForDeletion !== null) {
@@ -1601,6 +1691,9 @@ abstract class BaseVisita extends BaseObject implements Persistent
         if ($this->isColumnModified(VisitaPeer::VISITA_DESCUENTO)) {
             $modifiedColumns[':p' . $index++]  = '`visita_descuento`';
         }
+        if ($this->isColumnModified(VisitaPeer::IDVISITAPADRE)) {
+            $modifiedColumns[':p' . $index++]  = '`idvisitapadre`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `visita` (%s) VALUES (%s)',
@@ -1680,6 +1773,9 @@ abstract class BaseVisita extends BaseObject implements Persistent
                         break;
                     case '`visita_descuento`':
                         $stmt->bindValue($identifier, $this->visita_descuento, PDO::PARAM_STR);
+                        break;
+                    case '`idvisitapadre`':
+                        $stmt->bindValue($identifier, $this->idvisitapadre, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1804,11 +1900,25 @@ abstract class BaseVisita extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->aVisitaRelatedByIdvisitapadre !== null) {
+                if (!$this->aVisitaRelatedByIdvisitapadre->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aVisitaRelatedByIdvisitapadre->getValidationFailures());
+                }
+            }
+
 
             if (($retval = VisitaPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
+
+                if ($this->collVisitasRelatedByIdvisita !== null) {
+                    foreach ($this->collVisitasRelatedByIdvisita as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
 
                 if ($this->collVisitadetalles !== null) {
                     foreach ($this->collVisitadetalles as $referrerFK) {
@@ -1930,6 +2040,9 @@ abstract class BaseVisita extends BaseObject implements Persistent
             case 22:
                 return $this->getVisitaDescuento();
                 break;
+            case 23:
+                return $this->getIdvisitapadre();
+                break;
             default:
                 return null;
                 break;
@@ -1982,6 +2095,7 @@ abstract class BaseVisita extends BaseObject implements Persistent
             $keys[20] => $this->getVisitaHorafin(),
             $keys[21] => $this->getVisitaDuracion(),
             $keys[22] => $this->getVisitaDescuento(),
+            $keys[23] => $this->getIdvisitapadre(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -2000,6 +2114,12 @@ abstract class BaseVisita extends BaseObject implements Persistent
             }
             if (null !== $this->aPaciente) {
                 $result['Paciente'] = $this->aPaciente->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aVisitaRelatedByIdvisitapadre) {
+                $result['VisitaRelatedByIdvisitapadre'] = $this->aVisitaRelatedByIdvisitapadre->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collVisitasRelatedByIdvisita) {
+                $result['VisitasRelatedByIdvisita'] = $this->collVisitasRelatedByIdvisita->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collVisitadetalles) {
                 $result['Visitadetalles'] = $this->collVisitadetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2110,6 +2230,9 @@ abstract class BaseVisita extends BaseObject implements Persistent
             case 22:
                 $this->setVisitaDescuento($value);
                 break;
+            case 23:
+                $this->setIdvisitapadre($value);
+                break;
         } // switch()
     }
 
@@ -2157,6 +2280,7 @@ abstract class BaseVisita extends BaseObject implements Persistent
         if (array_key_exists($keys[20], $arr)) $this->setVisitaHorafin($arr[$keys[20]]);
         if (array_key_exists($keys[21], $arr)) $this->setVisitaDuracion($arr[$keys[21]]);
         if (array_key_exists($keys[22], $arr)) $this->setVisitaDescuento($arr[$keys[22]]);
+        if (array_key_exists($keys[23], $arr)) $this->setIdvisitapadre($arr[$keys[23]]);
     }
 
     /**
@@ -2191,6 +2315,7 @@ abstract class BaseVisita extends BaseObject implements Persistent
         if ($this->isColumnModified(VisitaPeer::VISITA_HORAFIN)) $criteria->add(VisitaPeer::VISITA_HORAFIN, $this->visita_horafin);
         if ($this->isColumnModified(VisitaPeer::VISITA_DURACION)) $criteria->add(VisitaPeer::VISITA_DURACION, $this->visita_duracion);
         if ($this->isColumnModified(VisitaPeer::VISITA_DESCUENTO)) $criteria->add(VisitaPeer::VISITA_DESCUENTO, $this->visita_descuento);
+        if ($this->isColumnModified(VisitaPeer::IDVISITAPADRE)) $criteria->add(VisitaPeer::IDVISITAPADRE, $this->idvisitapadre);
 
         return $criteria;
     }
@@ -2276,6 +2401,7 @@ abstract class BaseVisita extends BaseObject implements Persistent
         $copyObj->setVisitaHorafin($this->getVisitaHorafin());
         $copyObj->setVisitaDuracion($this->getVisitaDuracion());
         $copyObj->setVisitaDescuento($this->getVisitaDescuento());
+        $copyObj->setIdvisitapadre($this->getIdvisitapadre());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2283,6 +2409,12 @@ abstract class BaseVisita extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getVisitasRelatedByIdvisita() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addVisitaRelatedByIdvisita($relObj->copy($deepCopy));
+                }
+            }
 
             foreach ($this->getVisitadetalles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -2554,6 +2686,58 @@ abstract class BaseVisita extends BaseObject implements Persistent
         return $this->aPaciente;
     }
 
+    /**
+     * Declares an association between this object and a Visita object.
+     *
+     * @param                  Visita $v
+     * @return Visita The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setVisitaRelatedByIdvisitapadre(Visita $v = null)
+    {
+        if ($v === null) {
+            $this->setIdvisitapadre(NULL);
+        } else {
+            $this->setIdvisitapadre($v->getIdvisita());
+        }
+
+        $this->aVisitaRelatedByIdvisitapadre = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Visita object, it will not be re-added.
+        if ($v !== null) {
+            $v->addVisitaRelatedByIdvisita($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Visita object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Visita The associated Visita object.
+     * @throws PropelException
+     */
+    public function getVisitaRelatedByIdvisitapadre(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aVisitaRelatedByIdvisitapadre === null && ($this->idvisitapadre !== null) && $doQuery) {
+            $this->aVisitaRelatedByIdvisitapadre = VisitaQuery::create()->findPk($this->idvisitapadre, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aVisitaRelatedByIdvisitapadre->addVisitasRelatedByIdvisita($this);
+             */
+        }
+
+        return $this->aVisitaRelatedByIdvisitapadre;
+    }
+
 
     /**
      * Initializes a collection based on the name of a relation.
@@ -2565,12 +2749,340 @@ abstract class BaseVisita extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('VisitaRelatedByIdvisita' == $relationName) {
+            $this->initVisitasRelatedByIdvisita();
+        }
         if ('Visitadetalle' == $relationName) {
             $this->initVisitadetalles();
         }
         if ('Visitapago' == $relationName) {
             $this->initVisitapagos();
         }
+    }
+
+    /**
+     * Clears out the collVisitasRelatedByIdvisita collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Visita The current object (for fluent API support)
+     * @see        addVisitasRelatedByIdvisita()
+     */
+    public function clearVisitasRelatedByIdvisita()
+    {
+        $this->collVisitasRelatedByIdvisita = null; // important to set this to null since that means it is uninitialized
+        $this->collVisitasRelatedByIdvisitaPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collVisitasRelatedByIdvisita collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialVisitasRelatedByIdvisita($v = true)
+    {
+        $this->collVisitasRelatedByIdvisitaPartial = $v;
+    }
+
+    /**
+     * Initializes the collVisitasRelatedByIdvisita collection.
+     *
+     * By default this just sets the collVisitasRelatedByIdvisita collection to an empty array (like clearcollVisitasRelatedByIdvisita());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initVisitasRelatedByIdvisita($overrideExisting = true)
+    {
+        if (null !== $this->collVisitasRelatedByIdvisita && !$overrideExisting) {
+            return;
+        }
+        $this->collVisitasRelatedByIdvisita = new PropelObjectCollection();
+        $this->collVisitasRelatedByIdvisita->setModel('Visita');
+    }
+
+    /**
+     * Gets an array of Visita objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Visita is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Visita[] List of Visita objects
+     * @throws PropelException
+     */
+    public function getVisitasRelatedByIdvisita($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collVisitasRelatedByIdvisitaPartial && !$this->isNew();
+        if (null === $this->collVisitasRelatedByIdvisita || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collVisitasRelatedByIdvisita) {
+                // return empty collection
+                $this->initVisitasRelatedByIdvisita();
+            } else {
+                $collVisitasRelatedByIdvisita = VisitaQuery::create(null, $criteria)
+                    ->filterByVisitaRelatedByIdvisitapadre($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collVisitasRelatedByIdvisitaPartial && count($collVisitasRelatedByIdvisita)) {
+                      $this->initVisitasRelatedByIdvisita(false);
+
+                      foreach ($collVisitasRelatedByIdvisita as $obj) {
+                        if (false == $this->collVisitasRelatedByIdvisita->contains($obj)) {
+                          $this->collVisitasRelatedByIdvisita->append($obj);
+                        }
+                      }
+
+                      $this->collVisitasRelatedByIdvisitaPartial = true;
+                    }
+
+                    $collVisitasRelatedByIdvisita->getInternalIterator()->rewind();
+
+                    return $collVisitasRelatedByIdvisita;
+                }
+
+                if ($partial && $this->collVisitasRelatedByIdvisita) {
+                    foreach ($this->collVisitasRelatedByIdvisita as $obj) {
+                        if ($obj->isNew()) {
+                            $collVisitasRelatedByIdvisita[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collVisitasRelatedByIdvisita = $collVisitasRelatedByIdvisita;
+                $this->collVisitasRelatedByIdvisitaPartial = false;
+            }
+        }
+
+        return $this->collVisitasRelatedByIdvisita;
+    }
+
+    /**
+     * Sets a collection of VisitaRelatedByIdvisita objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $visitasRelatedByIdvisita A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Visita The current object (for fluent API support)
+     */
+    public function setVisitasRelatedByIdvisita(PropelCollection $visitasRelatedByIdvisita, PropelPDO $con = null)
+    {
+        $visitasRelatedByIdvisitaToDelete = $this->getVisitasRelatedByIdvisita(new Criteria(), $con)->diff($visitasRelatedByIdvisita);
+
+
+        $this->visitasRelatedByIdvisitaScheduledForDeletion = $visitasRelatedByIdvisitaToDelete;
+
+        foreach ($visitasRelatedByIdvisitaToDelete as $visitaRelatedByIdvisitaRemoved) {
+            $visitaRelatedByIdvisitaRemoved->setVisitaRelatedByIdvisitapadre(null);
+        }
+
+        $this->collVisitasRelatedByIdvisita = null;
+        foreach ($visitasRelatedByIdvisita as $visitaRelatedByIdvisita) {
+            $this->addVisitaRelatedByIdvisita($visitaRelatedByIdvisita);
+        }
+
+        $this->collVisitasRelatedByIdvisita = $visitasRelatedByIdvisita;
+        $this->collVisitasRelatedByIdvisitaPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Visita objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Visita objects.
+     * @throws PropelException
+     */
+    public function countVisitasRelatedByIdvisita(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collVisitasRelatedByIdvisitaPartial && !$this->isNew();
+        if (null === $this->collVisitasRelatedByIdvisita || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collVisitasRelatedByIdvisita) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getVisitasRelatedByIdvisita());
+            }
+            $query = VisitaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByVisitaRelatedByIdvisitapadre($this)
+                ->count($con);
+        }
+
+        return count($this->collVisitasRelatedByIdvisita);
+    }
+
+    /**
+     * Method called to associate a Visita object to this object
+     * through the Visita foreign key attribute.
+     *
+     * @param    Visita $l Visita
+     * @return Visita The current object (for fluent API support)
+     */
+    public function addVisitaRelatedByIdvisita(Visita $l)
+    {
+        if ($this->collVisitasRelatedByIdvisita === null) {
+            $this->initVisitasRelatedByIdvisita();
+            $this->collVisitasRelatedByIdvisitaPartial = true;
+        }
+
+        if (!in_array($l, $this->collVisitasRelatedByIdvisita->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddVisitaRelatedByIdvisita($l);
+
+            if ($this->visitasRelatedByIdvisitaScheduledForDeletion and $this->visitasRelatedByIdvisitaScheduledForDeletion->contains($l)) {
+                $this->visitasRelatedByIdvisitaScheduledForDeletion->remove($this->visitasRelatedByIdvisitaScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	VisitaRelatedByIdvisita $visitaRelatedByIdvisita The visitaRelatedByIdvisita object to add.
+     */
+    protected function doAddVisitaRelatedByIdvisita($visitaRelatedByIdvisita)
+    {
+        $this->collVisitasRelatedByIdvisita[]= $visitaRelatedByIdvisita;
+        $visitaRelatedByIdvisita->setVisitaRelatedByIdvisitapadre($this);
+    }
+
+    /**
+     * @param	VisitaRelatedByIdvisita $visitaRelatedByIdvisita The visitaRelatedByIdvisita object to remove.
+     * @return Visita The current object (for fluent API support)
+     */
+    public function removeVisitaRelatedByIdvisita($visitaRelatedByIdvisita)
+    {
+        if ($this->getVisitasRelatedByIdvisita()->contains($visitaRelatedByIdvisita)) {
+            $this->collVisitasRelatedByIdvisita->remove($this->collVisitasRelatedByIdvisita->search($visitaRelatedByIdvisita));
+            if (null === $this->visitasRelatedByIdvisitaScheduledForDeletion) {
+                $this->visitasRelatedByIdvisitaScheduledForDeletion = clone $this->collVisitasRelatedByIdvisita;
+                $this->visitasRelatedByIdvisitaScheduledForDeletion->clear();
+            }
+            $this->visitasRelatedByIdvisitaScheduledForDeletion[]= $visitaRelatedByIdvisita;
+            $visitaRelatedByIdvisita->setVisitaRelatedByIdvisitapadre(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Visita is new, it will return
+     * an empty collection; or if this Visita has previously
+     * been saved, it will retrieve related VisitasRelatedByIdvisita from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Visita.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Visita[] List of Visita objects
+     */
+    public function getVisitasRelatedByIdvisitaJoinClinica($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VisitaQuery::create(null, $criteria);
+        $query->joinWith('Clinica', $join_behavior);
+
+        return $this->getVisitasRelatedByIdvisita($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Visita is new, it will return
+     * an empty collection; or if this Visita has previously
+     * been saved, it will retrieve related VisitasRelatedByIdvisita from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Visita.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Visita[] List of Visita objects
+     */
+    public function getVisitasRelatedByIdvisitaJoinEmpleadoRelatedByIdempleado($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VisitaQuery::create(null, $criteria);
+        $query->joinWith('EmpleadoRelatedByIdempleado', $join_behavior);
+
+        return $this->getVisitasRelatedByIdvisita($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Visita is new, it will return
+     * an empty collection; or if this Visita has previously
+     * been saved, it will retrieve related VisitasRelatedByIdvisita from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Visita.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Visita[] List of Visita objects
+     */
+    public function getVisitasRelatedByIdvisitaJoinEmpleadoRelatedByIdempleadocreador($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VisitaQuery::create(null, $criteria);
+        $query->joinWith('EmpleadoRelatedByIdempleadocreador', $join_behavior);
+
+        return $this->getVisitasRelatedByIdvisita($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Visita is new, it will return
+     * an empty collection; or if this Visita has previously
+     * been saved, it will retrieve related VisitasRelatedByIdvisita from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Visita.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Visita[] List of Visita objects
+     */
+    public function getVisitasRelatedByIdvisitaJoinPaciente($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VisitaQuery::create(null, $criteria);
+        $query->joinWith('Paciente', $join_behavior);
+
+        return $this->getVisitasRelatedByIdvisita($query, $con);
     }
 
     /**
@@ -3126,6 +3638,7 @@ abstract class BaseVisita extends BaseObject implements Persistent
         $this->visita_horafin = null;
         $this->visita_duracion = null;
         $this->visita_descuento = null;
+        $this->idvisitapadre = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -3148,6 +3661,11 @@ abstract class BaseVisita extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collVisitasRelatedByIdvisita) {
+                foreach ($this->collVisitasRelatedByIdvisita as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collVisitadetalles) {
                 foreach ($this->collVisitadetalles as $o) {
                     $o->clearAllReferences($deep);
@@ -3170,10 +3688,17 @@ abstract class BaseVisita extends BaseObject implements Persistent
             if ($this->aPaciente instanceof Persistent) {
               $this->aPaciente->clearAllReferences($deep);
             }
+            if ($this->aVisitaRelatedByIdvisitapadre instanceof Persistent) {
+              $this->aVisitaRelatedByIdvisitapadre->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collVisitasRelatedByIdvisita instanceof PropelCollection) {
+            $this->collVisitasRelatedByIdvisita->clearIterator();
+        }
+        $this->collVisitasRelatedByIdvisita = null;
         if ($this->collVisitadetalles instanceof PropelCollection) {
             $this->collVisitadetalles->clearIterator();
         }
@@ -3186,6 +3711,7 @@ abstract class BaseVisita extends BaseObject implements Persistent
         $this->aEmpleadoRelatedByIdempleado = null;
         $this->aEmpleadoRelatedByIdempleadocreador = null;
         $this->aPaciente = null;
+        $this->aVisitaRelatedByIdvisitapadre = null;
     }
 
     /**

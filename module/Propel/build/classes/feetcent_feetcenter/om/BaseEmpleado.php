@@ -252,6 +252,12 @@ abstract class BaseEmpleado extends BaseObject implements Persistent
     protected $collPacientesPartial;
 
     /**
+     * @var        PropelObjectCollection|Pacientelog[] Collection to store aggregation of Pacientelog objects.
+     */
+    protected $collPacientelogs;
+    protected $collPacientelogsPartial;
+
+    /**
      * @var        PropelObjectCollection|Pacienteseguimiento[] Collection to store aggregation of Pacienteseguimiento objects.
      */
     protected $collPacienteseguimientos;
@@ -390,6 +396,12 @@ abstract class BaseEmpleado extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $pacientesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $pacientelogsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1342,6 +1354,8 @@ abstract class BaseEmpleado extends BaseObject implements Persistent
 
             $this->collPacientes = null;
 
+            $this->collPacientelogs = null;
+
             $this->collPacienteseguimientos = null;
 
             $this->collTransferenciasRelatedByIdempleado = null;
@@ -1725,6 +1739,23 @@ abstract class BaseEmpleado extends BaseObject implements Persistent
 
             if ($this->collPacientes !== null) {
                 foreach ($this->collPacientes as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->pacientelogsScheduledForDeletion !== null) {
+                if (!$this->pacientelogsScheduledForDeletion->isEmpty()) {
+                    PacientelogQuery::create()
+                        ->filterByPrimaryKeys($this->pacientelogsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->pacientelogsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPacientelogs !== null) {
+                foreach ($this->collPacientelogs as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -2204,6 +2235,14 @@ abstract class BaseEmpleado extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collPacientelogs !== null) {
+                    foreach ($this->collPacientelogs as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collPacienteseguimientos !== null) {
                     foreach ($this->collPacienteseguimientos as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -2447,6 +2486,9 @@ abstract class BaseEmpleado extends BaseObject implements Persistent
             }
             if (null !== $this->collPacientes) {
                 $result['Pacientes'] = $this->collPacientes->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collPacientelogs) {
+                $result['Pacientelogs'] = $this->collPacientelogs->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collPacienteseguimientos) {
                 $result['Pacienteseguimientos'] = $this->collPacienteseguimientos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2824,6 +2866,12 @@ abstract class BaseEmpleado extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getPacientelogs() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addPacientelog($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getPacienteseguimientos() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addPacienteseguimiento($relObj->copy($deepCopy));
@@ -2959,6 +3007,9 @@ abstract class BaseEmpleado extends BaseObject implements Persistent
         }
         if ('Paciente' == $relationName) {
             $this->initPacientes();
+        }
+        if ('Pacientelog' == $relationName) {
+            $this->initPacientelogs();
         }
         if ('Pacienteseguimiento' == $relationName) {
             $this->initPacienteseguimientos();
@@ -6678,6 +6729,256 @@ abstract class BaseEmpleado extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collPacientelogs collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empleado The current object (for fluent API support)
+     * @see        addPacientelogs()
+     */
+    public function clearPacientelogs()
+    {
+        $this->collPacientelogs = null; // important to set this to null since that means it is uninitialized
+        $this->collPacientelogsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collPacientelogs collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialPacientelogs($v = true)
+    {
+        $this->collPacientelogsPartial = $v;
+    }
+
+    /**
+     * Initializes the collPacientelogs collection.
+     *
+     * By default this just sets the collPacientelogs collection to an empty array (like clearcollPacientelogs());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initPacientelogs($overrideExisting = true)
+    {
+        if (null !== $this->collPacientelogs && !$overrideExisting) {
+            return;
+        }
+        $this->collPacientelogs = new PropelObjectCollection();
+        $this->collPacientelogs->setModel('Pacientelog');
+    }
+
+    /**
+     * Gets an array of Pacientelog objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empleado is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Pacientelog[] List of Pacientelog objects
+     * @throws PropelException
+     */
+    public function getPacientelogs($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collPacientelogsPartial && !$this->isNew();
+        if (null === $this->collPacientelogs || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPacientelogs) {
+                // return empty collection
+                $this->initPacientelogs();
+            } else {
+                $collPacientelogs = PacientelogQuery::create(null, $criteria)
+                    ->filterByEmpleado($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collPacientelogsPartial && count($collPacientelogs)) {
+                      $this->initPacientelogs(false);
+
+                      foreach ($collPacientelogs as $obj) {
+                        if (false == $this->collPacientelogs->contains($obj)) {
+                          $this->collPacientelogs->append($obj);
+                        }
+                      }
+
+                      $this->collPacientelogsPartial = true;
+                    }
+
+                    $collPacientelogs->getInternalIterator()->rewind();
+
+                    return $collPacientelogs;
+                }
+
+                if ($partial && $this->collPacientelogs) {
+                    foreach ($this->collPacientelogs as $obj) {
+                        if ($obj->isNew()) {
+                            $collPacientelogs[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collPacientelogs = $collPacientelogs;
+                $this->collPacientelogsPartial = false;
+            }
+        }
+
+        return $this->collPacientelogs;
+    }
+
+    /**
+     * Sets a collection of Pacientelog objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $pacientelogs A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empleado The current object (for fluent API support)
+     */
+    public function setPacientelogs(PropelCollection $pacientelogs, PropelPDO $con = null)
+    {
+        $pacientelogsToDelete = $this->getPacientelogs(new Criteria(), $con)->diff($pacientelogs);
+
+
+        $this->pacientelogsScheduledForDeletion = $pacientelogsToDelete;
+
+        foreach ($pacientelogsToDelete as $pacientelogRemoved) {
+            $pacientelogRemoved->setEmpleado(null);
+        }
+
+        $this->collPacientelogs = null;
+        foreach ($pacientelogs as $pacientelog) {
+            $this->addPacientelog($pacientelog);
+        }
+
+        $this->collPacientelogs = $pacientelogs;
+        $this->collPacientelogsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Pacientelog objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Pacientelog objects.
+     * @throws PropelException
+     */
+    public function countPacientelogs(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collPacientelogsPartial && !$this->isNew();
+        if (null === $this->collPacientelogs || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPacientelogs) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getPacientelogs());
+            }
+            $query = PacientelogQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpleado($this)
+                ->count($con);
+        }
+
+        return count($this->collPacientelogs);
+    }
+
+    /**
+     * Method called to associate a Pacientelog object to this object
+     * through the Pacientelog foreign key attribute.
+     *
+     * @param    Pacientelog $l Pacientelog
+     * @return Empleado The current object (for fluent API support)
+     */
+    public function addPacientelog(Pacientelog $l)
+    {
+        if ($this->collPacientelogs === null) {
+            $this->initPacientelogs();
+            $this->collPacientelogsPartial = true;
+        }
+
+        if (!in_array($l, $this->collPacientelogs->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddPacientelog($l);
+
+            if ($this->pacientelogsScheduledForDeletion and $this->pacientelogsScheduledForDeletion->contains($l)) {
+                $this->pacientelogsScheduledForDeletion->remove($this->pacientelogsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Pacientelog $pacientelog The pacientelog object to add.
+     */
+    protected function doAddPacientelog($pacientelog)
+    {
+        $this->collPacientelogs[]= $pacientelog;
+        $pacientelog->setEmpleado($this);
+    }
+
+    /**
+     * @param	Pacientelog $pacientelog The pacientelog object to remove.
+     * @return Empleado The current object (for fluent API support)
+     */
+    public function removePacientelog($pacientelog)
+    {
+        if ($this->getPacientelogs()->contains($pacientelog)) {
+            $this->collPacientelogs->remove($this->collPacientelogs->search($pacientelog));
+            if (null === $this->pacientelogsScheduledForDeletion) {
+                $this->pacientelogsScheduledForDeletion = clone $this->collPacientelogs;
+                $this->pacientelogsScheduledForDeletion->clear();
+            }
+            $this->pacientelogsScheduledForDeletion[]= clone $pacientelog;
+            $pacientelog->setEmpleado(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empleado is new, it will return
+     * an empty collection; or if this Empleado has previously
+     * been saved, it will retrieve related Pacientelogs from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empleado.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Pacientelog[] List of Pacientelog objects
+     */
+    public function getPacientelogsJoinPaciente($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = PacientelogQuery::create(null, $criteria);
+        $query->joinWith('Paciente', $join_behavior);
+
+        return $this->getPacientelogs($query, $con);
+    }
+
+    /**
      * Clears out the collPacienteseguimientos collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -7827,6 +8128,31 @@ abstract class BaseEmpleado extends BaseObject implements Persistent
         return $this->getVisitasRelatedByIdempleado($query, $con);
     }
 
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empleado is new, it will return
+     * an empty collection; or if this Empleado has previously
+     * been saved, it will retrieve related VisitasRelatedByIdempleado from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empleado.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Visita[] List of Visita objects
+     */
+    public function getVisitasRelatedByIdempleadoJoinVisitaRelatedByIdvisitapadre($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VisitaQuery::create(null, $criteria);
+        $query->joinWith('VisitaRelatedByIdvisitapadre', $join_behavior);
+
+        return $this->getVisitasRelatedByIdempleado($query, $con);
+    }
+
     /**
      * Clears out the collVisitasRelatedByIdempleadocreador collection
      *
@@ -8102,6 +8428,31 @@ abstract class BaseEmpleado extends BaseObject implements Persistent
         return $this->getVisitasRelatedByIdempleadocreador($query, $con);
     }
 
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empleado is new, it will return
+     * an empty collection; or if this Empleado has previously
+     * been saved, it will retrieve related VisitasRelatedByIdempleadocreador from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empleado.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Visita[] List of Visita objects
+     */
+    public function getVisitasRelatedByIdempleadocreadorJoinVisitaRelatedByIdvisitapadre($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VisitaQuery::create(null, $criteria);
+        $query->joinWith('VisitaRelatedByIdvisitapadre', $join_behavior);
+
+        return $this->getVisitasRelatedByIdempleadocreador($query, $con);
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -8226,6 +8577,11 @@ abstract class BaseEmpleado extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collPacientelogs) {
+                foreach ($this->collPacientelogs as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collPacienteseguimientos) {
                 foreach ($this->collPacienteseguimientos as $o) {
                     $o->clearAllReferences($deep);
@@ -8315,6 +8671,10 @@ abstract class BaseEmpleado extends BaseObject implements Persistent
             $this->collPacientes->clearIterator();
         }
         $this->collPacientes = null;
+        if ($this->collPacientelogs instanceof PropelCollection) {
+            $this->collPacientelogs->clearIterator();
+        }
+        $this->collPacientelogs = null;
         if ($this->collPacienteseguimientos instanceof PropelCollection) {
             $this->collPacienteseguimientos->clearIterator();
         }

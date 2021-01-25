@@ -8,12 +8,12 @@ class PacientesForm extends Form
 {
     public function __construct($clinicas, $empleados)
     {
-        
-        
+
+
         // we want to ignore the name passed
         parent::__construct('pacientesForm');
         $this->setAttribute('method', 'post');
-        
+
         $this->add(array(
              'type' => 'Select',
              'name' => 'idclinica',
@@ -24,7 +24,7 @@ class PacientesForm extends Form
                 'class' => 'width-100',
             ),
         ));
-        
+
         $this->add(array(
              'type' => 'Select',
              'name' => 'idempleado',
@@ -35,7 +35,7 @@ class PacientesForm extends Form
                 'class' => 'width-100',
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'paciente_nombre',
             'type' => 'Text',
@@ -69,16 +69,18 @@ class PacientesForm extends Form
                 'required' => true,
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'paciente_celular',
             'type' => 'Text',
             'attributes' => array(
                 'class' => 'width-100',
                 'required' => true,
+                'maxlength' => 10,
+                'maxlength' => 10,
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'paciente_telefono',
             'type' => 'Text',
@@ -86,7 +88,7 @@ class PacientesForm extends Form
                 'class' => 'width-100',
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'paciente_calle',
             'type' => 'Text',
@@ -94,7 +96,7 @@ class PacientesForm extends Form
                 'class' => 'width-100',
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'paciente_numero',
             'type' => 'Text',
@@ -102,7 +104,7 @@ class PacientesForm extends Form
                 'class' => 'width-100',
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'paciente_colonia',
             'type' => 'Text',
@@ -110,7 +112,7 @@ class PacientesForm extends Form
                 'class' => 'width-100',
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'paciente_codigopostal',
             'type' => 'Text',
@@ -118,7 +120,7 @@ class PacientesForm extends Form
                 'class' => 'width-100',
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'paciente_ciudad',
             'type' => 'Text',
@@ -126,7 +128,7 @@ class PacientesForm extends Form
                 'class' => 'width-100',
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'paciente_estado',
             'type' => 'Text',
@@ -134,8 +136,8 @@ class PacientesForm extends Form
                 'class' => 'width-100',
             ),
         ));
-        
-        
+
+
         $this->add(array(
              'type' => 'Select',
              'name' => 'paciente_sexo',
@@ -143,14 +145,14 @@ class PacientesForm extends Form
                 'value_options' => array(
                     'Mujer' => 'Mujer',
                     'Hombre' => 'Hombre',
-                        
+
                 ),
              ),
             'attributes' => array(
                 'class' => 'width-100',
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'paciente_fechanacimiento',
             'type' => 'Text',
@@ -158,8 +160,8 @@ class PacientesForm extends Form
                 'class' => 'width-100',
             ),
         ));
-        
 
- 
+
+
     }
 }

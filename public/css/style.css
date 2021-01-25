@@ -3,7 +3,7 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
-/* 
+/*
     Created on : Sep 2, 2015, 12:23:21 AM
     Author     : Castanedo
 */
@@ -82,7 +82,7 @@ h1{
 
 /*Form*/
 form > *{
-    
+
 }
 form .units-row{
     margin: 0;
@@ -183,11 +183,11 @@ table.dataTable tbody tr.warning{
         font-size: 15px;
         font-weight: 300;
     }
-    
+
     .nuevo_paciente_close:hover{
         color: #000;
     }
-    
+
     .relacionados_close{
         position: absolute;
         right: 8px;
@@ -197,69 +197,69 @@ table.dataTable tbody tr.warning{
         font-size: 15px;
         font-weight: 300;
     }
-    
+
     .relacionados_close:hover{
         color: #000;
     }
-    
+
     #modal_event_container select{
         height: 29px;
     }
-    
+
     a.btn:focus, a.btn:hover{
         color: white;
     }
-    
+
      .disable {
 
       background-color: rgb(255, 190, 190);
 
     }
-    
+
     .fc-widget-header{
         background-color: #FFF;
     }
-    
+
     .agenda_descanso{
         cursor: not-allowed;
         width: 100%;
     }
-    
+
     .visita_porconfirmar{
         background: #fbc02d;
     }
-    
+
     .visita_confirmada{
         background: #fb8c00;
     }
-    
+
     .visita_cancelo{
         background: #CC0000;
     }
-    
+
     .visita_nosepresento{
         background: #6d4c41;
     }
-    
+
     .visita_reprogramda{
         background: #9e9e9e;
     }
-    
+
     .visita_enservicio{
         background: #039be5;
     }
-    
+
     .visita_terminado{
         background: #43a047;
     }
-    
+
     .receso{
         background: #00bcd4;
     }
     .fc-event-time{
         height: 22px;
     }
-    
+
     .table-comisiones th{
         text-align: center;
     }
@@ -267,128 +267,128 @@ table.dataTable tbody tr.warning{
         text-align: center;
         font-weight: bold;
     }
-    
+
     .table.dataTable tfoot th, table.dataTable tfoot td{
         border-top:1px solid #EEE;
         padding-left: 10px;
         padding-right: 10px;
     }
-    
+
     .table-comisiones tbody div{
         text-align: center;
     }
-    
+
 
     .table-ventas tr.cancelada td:nth-child(5){
         color:red;
     }
-    
+
     .table-ventas tr.pagada td:nth-child(5){
         color:green;
     }
-    
-    
+
+
     .table-comisiones tfoot td{
         text-align: center;
     }
-    
+
     .table-comisiones tfoot td{
         text-align: center;
     }
-    
+
     .table-membresias tbody .unit-custom{
         font-size: 10px !important;
     }
-    
+
     .table-membresias th#servicios{
         min-width: 200px !important;
     }
-    
+
     .table-membresias tbody td{
         padding-top: 0px !important;
         padding-bottom: 0px !important;
     }
-    
+
     .table-membresias thead th{
         padding-top: 0px !important;
         padding-bottom: 0px !important;
     }
-    
+
     .table-membresias thead .unit-custom{
         text-align: center;
     }
-    
-    
+
+
     .table-membresias tbody .units-row .unit-custom:not(:last-child){
         border-right: solid 1px #EEEEEE;
         height: 100%;
     }
-    
+
     .table-membresias thead .units-row .unit-custom:not(:last-child){
         border-right: solid 1px #EEEEEE;
     }
-    
+
     .table-membresias tbody .units-row{
 
         height: 100%;
 
     }
-    
+
     .table-membresias th#servicios{
         padding-left: 0px;
         padding-right: 0px;
     }
-    
+
     .table-membresias td#servicios{
         padding-left: 0px;
         padding-right: 0px;
     }
-    
+
     .table-membresias th#cupones{
         padding-left: 0px;
         padding-right: 0px;
     }
-    
+
     .table-membresias td#cupones{
         padding-left: 0px;
         padding-right: 0px;
     }
-    
-    
+
+
     .table-visitas thead th{
          padding-top: 0px !important;
          padding-bottom: 0px !important;
     }
-    
+
     .table-visitas tbody td{
          padding-top: 0px !important;
          padding-bottom: 0px !important;
     }
-    
-    
+
+
     .table-visitas thead .units-row .unit-month:not(:last-child){
         border-right: solid 1px #EEEEEE;
     }
-    
+
     .table-visitas tbody .units-row .unit-month:not(:last-child){
         border-right: solid 1px #EEEEEE;
     }
-    
+
     .table-visitas tbody td[year]{
         padding-left: 0px;
         padding-right: 0px;
     }
-    
+
     .fc-event-title{
         font-size: 12px;
         color:black;
     }
-    
+
     .fc-event-time, .fc-event-inner{
         font-size: 12px;
         color:black;
     }
-    
+
    .label.label-error, .badge.label-error, .label.badge-error, .badge.badge-error {
     background: #d11149 none repeat scroll 0 0;
     color: #ffffff;
@@ -404,9 +404,9 @@ table.fc-agenda-slots tbody tr {
 
 /*.fc-agenda-slots td div {
          height: 30px !important;
-         
-    }  
-    
+
+    }
+
     .fc-agenda-axis{
         font-size: 12px !important;
         height: 10px !important;
@@ -421,7 +421,7 @@ h1{
 }
 
 .fc-header-title h2{
-  font-size: 22px;  
+  font-size: 22px;
 }
 
 .modal-loading{
@@ -432,14 +432,14 @@ h1{
     left:       0;
     height:     100%;
     width:      100%;
-    background: rgba( 255, 255, 255, .8 ) 
-                url('http://i.stack.imgur.com/FhHRx.gif') 
-                50% 50% 
+    background: rgba( 255, 255, 255, .8 )
+                url('http://i.stack.imgur.com/FhHRx.gif')
+                50% 50%
                 no-repeat;
 }
 
 body.loading {
-    overflow: hidden;   
+    overflow: hidden;
 }
 
 body.loading .modal-loading {
@@ -450,3 +450,6 @@ body.loading .modal-loading {
     padding: 0px !important;
 }
 
+[disabled], [readonly]{
+  background: #e9ecef !important;
+}

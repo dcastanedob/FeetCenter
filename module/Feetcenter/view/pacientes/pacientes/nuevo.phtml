@@ -1,4 +1,4 @@
-<?php 
+<?php
     $this->headTitle()->prepend('Nuevo cliente');
     echo $this->headTitle();
 ?>
@@ -7,20 +7,21 @@
     <?php if(count($errorMessages)) :?>
         <div class="units-row">
             <?php foreach ($errorMessages as $message) :?>
-                <div class="unit-100">    
+                <div class="unit-100">
                     <div class="tools-alert tools-alert-red">
                         <?php echo $message?>
-                    </div> 
+                    </div>
                 </div>
             <?php endforeach;?>
         </div>
     <?php endif;?>
-    <?php 
+    <?php
+        $form->setAttribute('id', 'paciente-form-create');
         $form->setAttribute('action', '/pacientes/nuevo');
         $form->setAttribute('novalidate', true);
         $form->setAttribute('class', 'forms');
         $form->prepare();
-        echo $this->form()->openTag($form); 
+        echo $this->form()->openTag($form);
     ?>
     <div class="units-row">
         <div class="unit-33">
@@ -72,7 +73,7 @@
         <div class="unit-33">
             <label>
                 Confirmar celular <span class="req">*</span>
-                <input required name="paciente_celular_confirmar" type="text" class="width-100 confirm" for="paciente_celular">
+                <input required name="paciente_celular_confirmar" type="text" class="width-100 confirm" for="paciente_celular"  maxlength="10" readonly >
             </label>
         </div>
     </div>
@@ -95,7 +96,7 @@
                 <?php echo $this->formText($form->get('paciente_numero')); ?>
             </label>
         </div>
-        
+
     </div>
     <div class="units-row">
         <div class="unit-33">
@@ -116,7 +117,7 @@
                 <?php echo $this->formText($form->get('paciente_ciudad')); ?>
             </label>
         </div>
-        
+
     </div>
     <div class="units-row">
         <div class="unit-33">
@@ -145,7 +146,7 @@
                 <div class="units-row">
                     <div class="unit-80">
                       Nombre
-                      <input class="width-100"type="text" name="paciente_autocomplete">  
+                      <input class="width-100"type="text" name="paciente_autocomplete">
                     </div>
                     <div class="unit-20" style="margin-top: 4px;">
                         <a data-action="addPaciente" class="btn btn-blue" style="height: 30px; margin-top: 20px; width: 100%;">Agregar</a>
@@ -191,15 +192,34 @@
                 selectMonths: true,
                 selectYears: 25,
             });
-    
+
     var grupoFrom = $('#clinica_container').grupos();
     grupoFrom.form();
-    
-    
+
+
     $('input[name=paciente_celular_confirmar],input[name=paciente_celular]').bind("cut copy paste",function(e) {
         e.preventDefault();
     });
-    
+
+    $('[name=paciente_celular]').on('keyup',function(){
+
+      var $span = $(this).siblings('span.req');
+      $span.siblings('span.error').remove();
+
+      var celular = $(this).val();
+      if(celular.length < 10){
+        $(this).addClass('input-error');
+        $span.after('<span class="error"> Los campos debe tener 10 digitos</span>');
+        $('[name=paciente_celular_confirmar]').prop('readonly',true);
+        $('[name=paciente_celular_confirmar]').val('');
+      }else{
+        $(this).removeClass('input-error');
+        $span.siblings('span.error').remove();
+        $('[name=paciente_celular_confirmar]').prop('readonly',false);
+      }
+
+    })
+
 
 
 </script>

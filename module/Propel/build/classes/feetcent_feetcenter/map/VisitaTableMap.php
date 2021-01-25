@@ -79,6 +79,7 @@ class VisitaTableMap extends TableMap
         $this->addColumn('visita_horafin', 'VisitaHorafin', 'TIMESTAMP', false, null, null);
         $this->addColumn('visita_duracion', 'VisitaDuracion', 'INTEGER', true, null, null);
         $this->addColumn('visita_descuento', 'VisitaDescuento', 'DECIMAL', true, 10, null);
+        $this->addForeignKey('idvisitapadre', 'Idvisitapadre', 'INTEGER', 'visita', 'idvisita', false, null, null);
         // validators
     } // initialize()
 
@@ -91,6 +92,8 @@ class VisitaTableMap extends TableMap
         $this->addRelation('EmpleadoRelatedByIdempleado', 'Empleado', RelationMap::MANY_TO_ONE, array('idempleado' => 'idempleado', ), 'CASCADE', 'CASCADE');
         $this->addRelation('EmpleadoRelatedByIdempleadocreador', 'Empleado', RelationMap::MANY_TO_ONE, array('idempleadocreador' => 'idempleado', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Paciente', 'Paciente', RelationMap::MANY_TO_ONE, array('idpaciente' => 'idpaciente', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('VisitaRelatedByIdvisitapadre', 'Visita', RelationMap::MANY_TO_ONE, array('idvisitapadre' => 'idvisita', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('VisitaRelatedByIdvisita', 'Visita', RelationMap::ONE_TO_MANY, array('idvisita' => 'idvisitapadre', ), 'CASCADE', 'CASCADE', 'VisitasRelatedByIdvisita');
         $this->addRelation('Visitadetalle', 'Visitadetalle', RelationMap::ONE_TO_MANY, array('idvisita' => 'idvisita', ), 'CASCADE', 'CASCADE', 'Visitadetalles');
         $this->addRelation('Visitapago', 'Visitapago', RelationMap::ONE_TO_MANY, array('idvisita' => 'idvisita', ), 'CASCADE', 'CASCADE', 'Visitapagos');
     } // buildRelations()

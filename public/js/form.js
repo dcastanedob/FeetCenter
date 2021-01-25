@@ -1,17 +1,17 @@
 $(document).ready(function(){
-    
+
     //Validate requiered fields
-    
-    
+
+
     $('form').delegate('button[data-action=submit]','click',function(e){
-        
+
         var $form = $(this).closest('form');
         var empty = false;
         var error = false;
-        
+
         $form.find('span.error').remove();
         $form.find('[required]').removeClass('input-error');
-        
+
         $form.find('[required]').each(function(){
             if($(this).val() == ""){
                 empty = true;
@@ -21,7 +21,7 @@ $(document).ready(function(){
                 return;
             }
             if($(this).hasClass('confirm')){
-                
+
                 var value = $(this).val();
                 var confirm_with = $(this).attr('for');
                 var $confirm_with = $form.find('[name="'+confirm_with+'"]');
@@ -34,16 +34,28 @@ $(document).ready(function(){
                     return;
                 }
             }
-            
+
         });
-        
-        console.log(empty);
+
+        var id = $form.attr('id')
+
         if(empty || error){
             e.preventDefault();
+        }else{
+
+          if(id=='paciente-form-create'){
+            e.preventDefault();
+            var r = confirm( "¿ EL NOMBRE DEL PACIENTE ES CORRECTO ? "+ $form.find('[name=paciente_ap]').val()+' '+$form.find('[name=paciente_am]').val()+', '+$form.find('[name=paciente_name]').val() );
+            if(r){
+              $form.submit()
+            }
+
+          }
+
+
         }
-        
+
     });
 
-    
-});
 
+});
