@@ -763,11 +763,6 @@ class AgendaController extends AbstractActionController
                                     $new_productos = $current_productos + $comision;
                                     $empleado_comision->setEmpleadocomisionComisionproductos($new_productos);
 
-                                    //Acumulado
-//                                    $current_acumulado = $empleado_comision->getEmpleadocomisionAcumulado();
-//                                    $new_acumulado = $current_acumulado + $visitadetalle->getVisitadetalleSubtotal();
-//                                    $empleado_comision->setEmpleadocomisionAcumulado($new_acumulado);
-
 
                                 }else if($tipoComision == 'cantidad'){
 
@@ -782,11 +777,6 @@ class AgendaController extends AbstractActionController
                                     $current_productos = $empleado_comision->getEmpleadocomisionComisionproductos();
                                     $new_productos = $current_productos + $comision;
                                     $empleado_comision->setEmpleadocomisionComisionproductos($new_productos);
-
-                                    //Acumulado
-//                                    $current_acumulado = $empleado_comision->getEmpleadocomisionAcumulado();
-//                                    $new_acumulado = $current_acumulado + $visitadetalle->getVisitadetalleSubtotal();
-//                                    $empleado_comision->setEmpleadocomisionAcumulado($new_acumulado);
 
                                 }
 
@@ -807,11 +797,6 @@ class AgendaController extends AbstractActionController
                                     $new_productos = $current_productos + $comision;
                                     $empleado_comision->setEmpleadocomisionComisionproductos($new_productos);
 
-                                    //Acumulado
-//                                    $current_acumulado = $empleado_comision->getEmpleadocomisionAcumulado();
-//                                    $new_acumulado = $current_acumulado + $visitadetalle->getVisitadetalleSubtotal();
-//                                    $empleado_comision->setEmpleadocomisionAcumulado($new_acumulado);
-
 
                                 }else if($tipoComision == 'cantidad'){
 
@@ -827,10 +812,6 @@ class AgendaController extends AbstractActionController
                                     $new_productos = $current_productos + $comision;
                                     $empleado_comision->setEmpleadocomisionComisionproductos($new_productos);
 
-                                    //Acumulado
-//                                    $current_acumulado = $empleado_comision->getEmpleadocomisionAcumulado();
-//                                    $new_acumulado = $current_acumulado + $visitadetalle->getVisitadetalleSubtotal();
-//                                    $empleado_comision->setEmpleadocomisionAcumulado($new_acumulado);
 
                                 }
                             }
@@ -841,10 +822,6 @@ class AgendaController extends AbstractActionController
                             $new_vendidos = $current_vendidos +  $visitadetalle->getVisitadetalleCantidad();
                             $empleado_comision->setEmpleadocomisionProductosvendidos($new_vendidos);
 
-                            //Acumulado
-//                            $current_acumulado = $empleado_comision->getEmpleadocomisionAcumulado();
-//                            $new_acumulado = $current_acumulado + $visitadetalle->getVisitadetalleSubtotal();
-//                            $empleado_comision->setEmpleadocomisionAcumulado($new_acumulado);
                         }
 
                     }
@@ -927,11 +904,6 @@ class AgendaController extends AbstractActionController
                                     $new_servicios = $current_servicios + $comision;
                                     $empleado_comision->setEmpleadocomisionComisionservicios($new_servicios);
 
-                                    //Acumulado
-//                                    $current_acumulado = $empleado_comision->getEmpleadocomisionAcumulado();
-//                                    $new_acumulado = $current_acumulado + $visitadetalle->getVisitadetalleSubtotal();
-//                                    $empleado_comision->setEmpleadocomisionAcumulado($new_acumulado);
-
 
                                 }else if($tipoComision == 'cantidad'){
 
@@ -946,11 +918,6 @@ class AgendaController extends AbstractActionController
                                     $current_servicios = $empleado_comision->getEmpleadocomisionComisionservicios();
                                     $new_servicios = $current_servicios + $comision;
                                     $empleado_comision->setEmpleadocomisionComisionservicios($new_servicios);
-
-                                    //Acumulado
-//                                    $current_acumulado = $empleado_comision->getEmpleadocomisionAcumulado();
-//                                    $new_acumulado = $current_acumulado + $visitadetalle->getVisitadetalleSubtotal();
-//                                    $empleado_comision->setEmpleadocomisionAcumulado($new_acumulado);
 
                                 }
 
@@ -971,11 +938,6 @@ class AgendaController extends AbstractActionController
                                     $new_servicios = $current_servicios + $comision;
                                     $empleado_comision->setEmpleadocomisionComisionservicios($new_servicios);
 
-                                    //Acumulado
-//                                    $current_acumulado = $empleado_comision->getEmpleadocomisionAcumulado();
-//                                    $new_acumulado = $current_acumulado + $visitadetalle->getVisitadetalleSubtotal();
-//                                    $empleado_comision->setEmpleadocomisionAcumulado($new_acumulado);
-
 
                                 }else if($tipoComision == 'cantidad'){
 
@@ -991,10 +953,6 @@ class AgendaController extends AbstractActionController
                                     $new_servicios = $current_servicios + $comision;
                                     $empleado_comision->setEmpleadocomisionComisionservicios($new_servicios);
 
-                                    //Acumulado
-//                                    $current_acumulado = $empleado_comision->getEmpleadocomisionAcumulado();
-//                                    $new_acumulado = $current_acumulado + $visitadetalle->getVisitadetalleSubtotal();
-//                                    $empleado_comision->setEmpleadocomisionAcumulado($new_acumulado);
 
                                 }
                             }
@@ -1004,13 +962,6 @@ class AgendaController extends AbstractActionController
                             $current_vendidos = $empleado_comision->getEmpleadocomisionServiciosvendidos();
                             $new_vendidos = $current_vendidos +  $visitadetalle->getVisitadetalleCantidad();
 
-                            //se va a comentar esta línea para evitar que se contabilicen los servicios que no generar comisión.
-                            //$empleado_comision->setEmpleadocomisionServiciosvendidos($new_vendidos);
-
-                            //Acumulado
-//                            $current_acumulado = $empleado_comision->getEmpleadocomisionAcumulado();
-//                            $new_acumulado = $current_acumulado + $visitadetalle->getVisitadetalleSubtotal();
-//                            $empleado_comision->setEmpleadocomisionAcumulado($new_acumulado);
                         }
 
                     }
@@ -1045,13 +996,7 @@ class AgendaController extends AbstractActionController
                         //Servicios vendidos
                         $current_vendidos = $empleado_comision->getEmpleadocomisionServiciosvendidos();
                         $new_vendidos = $current_vendidos +  $visitadetalle->getVisitadetalleCantidad();
-                        //$empleado_comision->setEmpleadocomisionServiciosvendidos($new_vendidos);
 
-
-                        //Acumulado
-//                        $current_acumulado = $empleado_comision->getEmpleadocomisionAcumulado();
-//                        $new_acumulado = $current_acumulado + $visitadetalle->getVisitadetalleSubtotal();
-//                        $empleado_comision->setEmpleadocomisionAcumulado($new_acumulado)->save();
 
                     }
 
@@ -1078,7 +1023,7 @@ class AgendaController extends AbstractActionController
 
                         if($detalle->getServicioclinica()->getServicio()->getServicioDependencia() == 'membresia'){
 
-                            //for($i=0; $i<(int)$detalle->getVisitadetalleCantidad();$i++){
+
 
                                 //Insertamos en paciente membresia seguimiento
                                 $paciente_membresia_segumiento = new \Pacientemembresiadetalle();
@@ -1096,7 +1041,13 @@ class AgendaController extends AbstractActionController
                                     $membresia_paciente->setPacientemembresiaEstatus('terminada')->save();
                                 }
                                 $visita->setVisitaFoliomembresia($membresia_paciente->getPacientemembresiaFolio())->save();
-                            //}
+
+                                //DEFINIMOS LA VIGENCIA
+                                if(is_null($membresia_paciente->getPacientemembresiaVigencia() )){
+                                  $expira = date("Y-m-d", strtotime("+".$membresia_paciente->getMembresia()->getMembresiaVigencia()." months"));
+                                  $membresia_paciente->setPacientemembresiaVigencia($expira." 00:00:00")->save();
+                                }
+
                         }
                     }
                 }
@@ -1129,6 +1080,12 @@ class AgendaController extends AbstractActionController
                                 }
                                 //SETEAMOS LA MEMBRESIA EN LA VISITA
                                 $visita->setVisitaFoliomembresia($membresia_paciente->getPacientemembresiaFolio())->save();
+
+                                //DEFINIMOS LA VIGENCIA
+                                if(is_null($membresia_paciente->getPacientemembresiaVigencia() )){
+                                  $expira = date("Y-m-d", strtotime("+".$membresia_paciente->getMembresia()->getMembresiaVigencia()." months"));
+                                  $membresia_paciente->setPacientemembresiaVigencia($expira." 00:00:00")->save();
+                                }
                             //}
                         }
                     }
@@ -1366,9 +1323,28 @@ class AgendaController extends AbstractActionController
 
             if(\PacientemembresiaQuery::create()->filterByIdpaciente($r['idpaciente'])->filterByPacientemembresiaEstatus('activa')->exists()){
 
+
                 $paciente_membresia = \PacientemembresiaQuery::create()->joinMembresia()->withColumn('membresia_nombre')->withColumn('membresia_servicios')->withColumn('membresia_cupones')->filterByIdpaciente($r['idpaciente'])->filterByPacientemembresiaEstatus('activa')->findOne();
 
                 $tmp['membresia'] = $paciente_membresia->toArray(\BasePeer::TYPE_FIELDNAME);
+                if(!is_null($paciente_membresia->getPacientemembresiaVigencia())){
+                    $tmp['membresia']['pacientemembresia_vigencia'] = $paciente_membresia->getPacientemembresiaVigencia('d/m/Y');
+                }
+
+            }else{
+
+              //revisamos si tiene alguna membresia vencida
+
+              $vencidas = \PacientemembresiaQuery::create()->filterByIdpaciente($r['idpaciente'])->filterByPacientemembresiaEstatus('vencida')->filterByPacientemembresiaVigencia(date('Y-m-d'),\Criteria::LESS_THAN)->count();
+              if($vencidas>0){
+                $paciente_membresia = \PacientemembresiaQuery::create()->joinMembresia()->withColumn('membresia_nombre')->withColumn('membresia_servicios')->withColumn('membresia_cupones')->filterByIdpaciente($r['idpaciente'])->filterByPacientemembresiaEstatus('vencida')->orderByIdpacientemembresia(\Criteria::DESC)->findOne();
+                $tmp['membresia'] = $paciente_membresia->toArray(\BasePeer::TYPE_FIELDNAME);
+                if(!is_null($paciente_membresia->getPacientemembresiaVigencia())){
+                    $tmp['membresia']['pacientemembresia_vigencia'] = $paciente_membresia->getPacientemembresiaVigencia('d/m/Y');
+                }
+
+              }
+
             }
 
             $result_array[] = $tmp;

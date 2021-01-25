@@ -1,5 +1,5 @@
 <div id="modal_event_container" >
-     
+
     <?php echo $this->formHidden($form->get('idvisita')); ?>
     <?php echo $this->formHidden($form->get('idpaciente')); ?>
     <?php echo $this->formHidden($form->get('idclinica')); ?>
@@ -10,11 +10,11 @@
     <?php echo $this->formHidden($form->get('visita_fechafin')); ?>
     <?php echo $this->formHidden($form->get('visita_tipo')); ?>
     <input name="anticipado" value="<?php echo $anticipado?>" type="hidden">
-    
-   
+
+
     <div class="units-row" style="margin-bottom: 0px;">
-        <?php 
-            echo $this->form()->openTag($form); 
+        <?php
+            echo $this->form()->openTag($form);
             //$visita = new Visita();
         ?>
         <div class="unit-50">
@@ -36,11 +36,11 @@
                 <div class="unit-60">
                      <div><span><b>Última visita: </b></span><span id="visita_ultima"></span></div>
                 </div>
-               
+
                 <div class="unit-100">
                     <div><span><b>Último comentario: </b></span><span id="visita_comentario"></span></div>
                 </div>
-          
+
             </div>
         </div>
         <div class="unit-40" style="margin-top: 25px;">
@@ -53,14 +53,14 @@
             <label>
                 <b>Tiempo en servicio: </b><?php echo date("H:i:s",strtotime($visita->getVisitaHorainicio()))." - ".date("H:i:s",strtotime($visita->getVisitaHorafin()))." ".$visita->getVisitaduracion()." minutos"; ?>
             </label>
-        
+
         </div>
         <div class="unit-40" style="margin-top: 0px;">
             <div class="unit-100">
                 <div><a target="_blank" href="/pacientes/expediente/ver/<?php echo $visita->getIdpaciente(); ?>"> <h2>Expediente</h2></a></div>
             </div>
         </div>
-        
+
     </div>
         <div id="paciente_membresia_container" class="units-row" style="display: none">
         <div class="unit-100">
@@ -85,7 +85,7 @@
             <fieldset style="position: relative">
                 <span class="nuevo_paciente_close">x</span>
                 <legend>Nuevo cliente</legend>
-                <div class="units-row" style="margin-bottom: 0px;">                  
+                <div class="units-row" style="margin-bottom: 0px;">
                     <div class="unit-100">
                         <label>
                             Nombre <span class="req">*</span>
@@ -123,7 +123,7 @@
                 <div class="units-row">
                     <div class="unit-80">
                       Nombre
-                      <input class="width-100"type="text" name="paciente_relacionados_autocomplete">  
+                      <input class="width-100"type="text" name="paciente_relacionados_autocomplete">
                     </div>
                     <div class="unit-20" style="margin-top: 4px;">
                         <a data-action="addPaciente" class="btn btn-blue" style="height: 30px; margin-top: 20px; width: 100%;">Agregar</a>
@@ -140,7 +140,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                     </tbody>
                 </table>
                 <div class="units-row">
@@ -160,7 +160,7 @@
                     <label>Consulta</label>
                     <input type="radio" name="visita_tipo" value="servicio">
                     <label>Servicio</label>
-                    
+
                 </li>
             </ul>
         </div>
@@ -238,7 +238,7 @@
             <?php $value = new Visitadetalle()?>
             <?php foreach ($visita->getVisitadetalles() as $key => $value) :?>
             <!--VALIDAMOS SI SE TRATA DE UN SERVICIO CON DEPENDENCIA EN MEMBRESIA-->
-            <?php 
+            <?php
             $dependencia = false;
                 if(!is_null($value->getIdservicioclinica())){
                     if($value->getServicioclinica()->getServicio()->getServicioDependencia() == 'membresia'){
@@ -279,14 +279,14 @@
             <?php endforeach;?>
         </tbody>
         <tfoot>
-             
-         
+
+
             <tr>
             <input name="visita_iva" type="hidden" value="0">
                 <td colspan="3">IVA</td>
                 <td id="iva">$ 0</td>
             </tr>
-            <tr>    
+            <tr>
             <input name="visita_total" type="hidden" value="0">
                 <td colspan="3">Total</td>
                 <td id="total">$ 0</td>
@@ -294,7 +294,7 @@
         </tfoot>
     </table>
     </div>
-    
+
     <div class="units-row" style="margin-bottom: 0px;">
         <div class="unit-100">
             <div id="visita_estatuspago" value="<?php echo $visita->getVisitaEstatuspago()?>"><span><b>Estatus de pago: </b></span><span><?php echo ucfirst($visita->getVisitaEstatuspago()) ?></span></div>
@@ -305,7 +305,7 @@
         <div class="unit-100" style="border : solid 2px #DCDCDC; background : #ffffff; color : #000000; padding : 4px; height : 50px; overflow : auto; ">
 
         <?php
-        
+
                $logs =  \VisitalogQuery::create()->filterByIdvisita($visita->getIdvisita())->orderByIdvisitalog(Criteria::DESC)->find();
                $log = new Visitalog();
                foreach ($logs as $log)
@@ -315,15 +315,35 @@
                         <div id="visita_log" value="<?php echo $visita->getVisitaEstatuspago()?>"><span></span><span><?php echo "De: ".$empleado->getEmpleadoNombre().", acción: ".$log->getVisitalogAccion().", fecha: ".$log->getVisitalogFecha()  ?></span></div>
 
                    <?php
-                   
+
                }
-               
+
         ?>
+        </div>
+        <div class="unit-100">
+            <div><span><b>Histórico de modificaciones  del cliente: </b></span></div>
+        </div>
+        <div class="unit-100" style="border : solid 2px #DCDCDC; background : #ffffff; color : #000000; padding : 4px; height : 50px; overflow : auto; ">
+
+        <?php
+               $logs =  \PacientelogQuery::create()->filterByIdpaciente($visita->getIdpaciente())->orderByPacientelogFecha(\Criteria::DESC)->find();
+        ?>
+        <?php foreach ($logs as $log) : ?>
+          <div class="history-log" style="padding: 5px;border-bottom: dotted 2px;">
+            <p style="margin-bottom:2px"><b><?php echo $log->getEmpleado()->getEmpleadoNombre(). " ( ".$log->getPacientelogFecha('d/m/Y H:i').' )'; ?></b></p>
+            <?php if($log->getPacientelogNombreOld() != $log->getPacientelogNombreNew()) :?>
+              <span style="display:block"><b>NOMBRE: </b><?php echo $log->getPacientelogNombreOld()."   ---->  ".$log->getPacientelogNombreNew()?></span>
+            <?php endif;?>
+            <?php if($log->getPacientelogTelefonoOld() != $log->getPacientelogTelefonoNew()) :?>
+                <span style="display:block"><b>CELULAR: </b><?php echo $log->getPacientelogTelefonoOld()."   ---->  ".$log->getPacientelogTelefonoNew()?></span>
+            <?php endif;?>
+          </div>
+        <?php endforeach;?>
         </div>
 
     </div>
 
-   
+
     <div id="pay_container">
         <div id="pay_nextdate_container"class="units-row" style="margin-bottom: 0px; display: none">
             <div class="unit-100">
@@ -359,12 +379,12 @@
             <div class="unit-100">
                 <fieldset>
                     <?php if($next_date) :?>
-                    
+
                     <div class="unit-100">
                     <b>Fecha y hora: </b>
                     <?php echo $next_date->getVisitaFechainicio('d/m/Y')?>
                     </div>
-             
+
                     <div class="units-row" style="margin-bottom: 0px;">
                     <div class="unit-100">
                     <b>Pedicurista: </b>
@@ -384,9 +404,9 @@
                                         <option value="<?php echo $empleado->getEmpleado()->getIdempleado()?>"><?php echo $empleado->getEmpleado()->getEmpleadoNombre()?></option>
                                     <?php endforeach;?>
                                 </select>
-                            </label> 
+                            </label>
                         </div>
-                        
+
                         <div class="unit-33">
                             <label style="margin-bottom: 0px">
                                 Fecha <span class="req">*</span>
@@ -445,11 +465,11 @@
                         </div>
                     </div>
                     <?php endif;?>
-                    
+
                 </fieldset>
             </div>
         </div>
-      
+
         <div id="pay_details_container"class="units-row" style="margin-bottom: 0px; display: none">
             <div class="unit-100">
                 <fieldset>
@@ -509,7 +529,7 @@
                                                 <input type="hidden" value="<?php echo $value->getIdmembresia()?>" name="vistadetallepay[<?php echo $key?>][id]">
                                                 <input type="hidden" value="<?php echo $value->getVisitadetalleCantidad()?>" name="vistadetallepay[<?php echo $key?>][cantidad]">
                                                 <input type="hidden" value="membresia" name="vistadetallepay[<?php echo $key?>][type]">
-                                                <?php $name = $value->getMembresia()->getMembresiaNombre()?>    
+                                                <?php $name = $value->getMembresia()->getMembresiaNombre()?>
                                                 <td><?php echo (int) $value->getVisitadetalleCantidad() ?></td>
                                                 <td><?php echo $name ?></td>
                                                 <td><input required type="text" name="vistadetallepay[<?php echo $key ?>][folio]"></td>
@@ -519,11 +539,11 @@
                                     <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
-                                        
 
-                                
+
+
                                  <tr>
-                                <tr>    
+                                <tr>
                                  <input name="visita_total" type="hidden" value="0">
                                  <td colspan="3
                                      ">Descuento</td>
@@ -582,16 +602,16 @@
                                         <?php endforeach;?>
                                     </tbody>
                                     <tfoot>
-                                           
 
-                                 
-                                 <tr>    
+
+
+                                 <tr>
                                  <input name="visita_total" type="hidden" value="0">
                                  <td colspan="2
                                      ">Descuento</td>
                                  <td id="visita_descuento"><input name="visita_descuento" value="0"></td>
                                  </tr>
-                                 <tr>    
+                                 <tr>
                                  <input name="visita_total" type="hidden" value="0">
                                  <td colspan="2
                                      ">Total</td>
@@ -603,14 +623,14 @@
                                  <td id="iva">$ 0</td>
                                  </tr>
                                  </tfoot>
-                                <?php endif;?>  
+                                <?php endif;?>
                             </table>
                         </div>
                     </div>
                 </fieldset>
             </div>
         </div>
-        
+
          <div id="pay_method_container"class="units-row" style="margin-bottom: 0px; display: none">
             <div class="unit-100">
                 <fieldset>
@@ -644,7 +664,7 @@
                         Calculadora
                     </legend>
                     <div class="units-row">
-                        
+
                         <div class="unit-30">
                             <label class="forms-inline-list">
                                 <b>Recibí</b> <span ></span>
@@ -662,13 +682,13 @@
             </div>
         </div>
     </div>
-    
+
 </div>
 
 <script src="/js/agenda/modalEvent.js"></script>
 
 <script>
-   
+
     //Nuestro checkbox de tipo de servicio
     var visita_tipo = "<?php echo $visita->getVisitaTipo() ?>";
     $('#modal_event_container').find('input[name=visita_tipo]').prop('checked',false);
@@ -685,4 +705,3 @@
         paciente:<?php echo $paciente?>,
     });
 </script>
-

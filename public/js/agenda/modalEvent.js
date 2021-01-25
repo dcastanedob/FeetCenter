@@ -696,36 +696,48 @@
                     showRelacionados(item.relacionados);
 
                     if(item.membresia != null){
-                        $container.find('#membresia_nombre').text(item.membresia.membresia_nombre);
-                        $container.find('#pacientemembresia_serviciosdisponibles').text(item.membresia.pacientemembresia_serviciosdisponibles);
-                        $container.find('#pacientemembresia_cuponesdisponibles').text(item.membresia.pacientemembresia_cuponesdisponibles);
-                        $container.find('#paciente_membresia_container').slideDown();
 
-                        $('select#visitadetalle_tipo option[data-dependencia=membresia]').remove();
+                        if(item.membresia.pacientemembresia_estatus == 'activa'){
 
-                        $.ajax({
-                            dataType: 'json',
-                            url: '/getserviciosbymembresia',
-                            data: {idmembresia: 1, idclinica: 2},
-                            success: function (data) {
+                          $container.find('#membresia_vigencia').text(item.membresia.pacientemembresia_vigencia);
+                          $container.find('#membresia_nombre').text(item.membresia.membresia_nombre);
+                          $container.find('#pacientemembresia_serviciosdisponibles').text(item.membresia.pacientemembresia_serviciosdisponibles);
+                          $container.find('#pacientemembresia_cuponesdisponibles').text(item.membresia.pacientemembresia_cuponesdisponibles);
+                          $container.find('#paciente_membresia_container').slideDown();
 
-                                $container.find('select[name=visita_status]').on('change',function(){
+                          $('select#visitadetalle_tipo option[data-dependencia=membresia]').remove();
 
-                                    if($(this).val() == 'en servicio'){
-                                        alert('Actualizar datos');
-                                    }
+                          $.ajax({
+                              dataType: 'json',
+                              url: '/getserviciosbymembresia',
+                              data: {idmembresia: 1, idclinica: 2},
+                              success: function (data) {
 
-                                });
+                                  $container.find('select[name=visita_status]').on('change',function(){
 
-                                var $opt_servicios = $('select#visitadetalle_tipo optgroup[label=Servicios]');
-                                $.each(data, function () {
-                                    var $option = $('<option>', {'data-dependencia': 'membresia', 'data-available': this.disponible, 'data-name': this.servicio_nombre, 'data-price': this.servicioclinica_precio, 'data-type': 'servicio', 'value': this.idservicioclinica}).text(this.servicio_nombre);
+                                      if($(this).val() == 'en servicio'){
+                                          alert('Actualizar datos');
+                                      }
 
-                                    $opt_servicios.append($option);
-                                });
-                                formatoCatalogo();
-                            }
-                        });
+                                  });
+
+                                  var $opt_servicios = $('select#visitadetalle_tipo optgroup[label=Servicios]');
+                                  $.each(data, function () {
+                                      var $option = $('<option>', {'data-dependencia': 'membresia', 'data-available': this.disponible, 'data-name': this.servicio_nombre, 'data-price': this.servicioclinica_precio, 'data-type': 'servicio', 'value': this.idservicioclinica}).text(this.servicio_nombre);
+
+                                      $opt_servicios.append($option);
+                                  });
+                                  formatoCatalogo();
+                              }
+                          });
+
+                        }else if (item.membresia.pacientemembresia_estatus == 'vencida') {
+
+                          alert('MEMBRESIA VENCIDA EL '+item.membresia.pacientemembresia_vigencia)
+
+                        }
+
+
 
                     }
 

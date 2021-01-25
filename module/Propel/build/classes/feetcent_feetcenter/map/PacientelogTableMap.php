@@ -42,8 +42,10 @@ class PacientelogTableMap extends TableMap
         $this->addForeignKey('idpaciente', 'Idpaciente', 'INTEGER', 'paciente', 'idpaciente', true, null, null);
         $this->addForeignKey('idempleado', 'Idempleado', 'INTEGER', 'empleado', 'idempleado', true, null, null);
         $this->addColumn('pacientelog_fecha', 'PacientelogFecha', 'TIMESTAMP', true, null, null);
-        $this->addColumn('pacientelog_nombre', 'PacientelogNombre', 'VARCHAR', true, 255, '');
-        $this->addColumn('pacientelog_telefono', 'PacientelogTelefono', 'VARCHAR', true, 255, '');
+        $this->addColumn('pacientelog_nombre_old', 'PacientelogNombreOld', 'VARCHAR', true, 255, '');
+        $this->addColumn('pacientelog_telefono_old', 'PacientelogTelefonoOld', 'VARCHAR', true, 255, '');
+        $this->addColumn('pacientelog_nombre_new', 'PacientelogNombreNew', 'VARCHAR', true, 255, '');
+        $this->addColumn('pacientelog_telefono_new', 'PacientelogTelefonoNew', 'VARCHAR', true, 255, '');
         // validators
     } // initialize()
 

@@ -79,9 +79,16 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
 
     /**
      * The value for the pacientemembresia_estatus field.
+     * Note: this column has a database default value of: 'activa'
      * @var        string
      */
     protected $pacientemembresia_estatus;
+
+    /**
+     * The value for the pacientemembresia_vigencia field.
+     * @var        string
+     */
+    protected $pacientemembresia_vigencia;
 
     /**
      * @var        Clinica
@@ -129,6 +136,27 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $pacientemembresiadetallesScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->pacientemembresia_estatus = 'activa';
+    }
+
+    /**
+     * Initializes internal state of BasePacientemembresia object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [idpacientemembresia] column value.
@@ -256,6 +284,46 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
     {
 
         return $this->pacientemembresia_estatus;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [pacientemembresia_vigencia] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getPacientemembresiaVigencia($format = 'Y-m-d H:i:s')
+    {
+        if ($this->pacientemembresia_vigencia === null) {
+            return null;
+        }
+
+        if ($this->pacientemembresia_vigencia === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->pacientemembresia_vigencia);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->pacientemembresia_vigencia, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
     }
 
     /**
@@ -462,6 +530,29 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
     } // setPacientemembresiaEstatus()
 
     /**
+     * Sets the value of [pacientemembresia_vigencia] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return Pacientemembresia The current object (for fluent API support)
+     */
+    public function setPacientemembresiaVigencia($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->pacientemembresia_vigencia !== null || $dt !== null) {
+            $currentDateAsString = ($this->pacientemembresia_vigencia !== null && $tmpDt = new DateTime($this->pacientemembresia_vigencia)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->pacientemembresia_vigencia = $newDateAsString;
+                $this->modifiedColumns[] = PacientemembresiaPeer::PACIENTEMEMBRESIA_VIGENCIA;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setPacientemembresiaVigencia()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -471,6 +562,10 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->pacientemembresia_estatus !== 'activa') {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -502,6 +597,7 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
             $this->pacientemembresia_serviciosdisponibles = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
             $this->pacientemembresia_cuponesdisponibles = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
             $this->pacientemembresia_estatus = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->pacientemembresia_vigencia = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -511,7 +607,7 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 9; // 9 = PacientemembresiaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = PacientemembresiaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Pacientemembresia object", $e);
@@ -807,6 +903,9 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
         if ($this->isColumnModified(PacientemembresiaPeer::PACIENTEMEMBRESIA_ESTATUS)) {
             $modifiedColumns[':p' . $index++]  = '`pacientemembresia_estatus`';
         }
+        if ($this->isColumnModified(PacientemembresiaPeer::PACIENTEMEMBRESIA_VIGENCIA)) {
+            $modifiedColumns[':p' . $index++]  = '`pacientemembresia_vigencia`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `pacientemembresia` (%s) VALUES (%s)',
@@ -844,6 +943,9 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
                         break;
                     case '`pacientemembresia_estatus`':
                         $stmt->bindValue($identifier, $this->pacientemembresia_estatus, PDO::PARAM_STR);
+                        break;
+                    case '`pacientemembresia_vigencia`':
+                        $stmt->bindValue($identifier, $this->pacientemembresia_vigencia, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1038,6 +1140,9 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
             case 8:
                 return $this->getPacientemembresiaEstatus();
                 break;
+            case 9:
+                return $this->getPacientemembresiaVigencia();
+                break;
             default:
                 return null;
                 break;
@@ -1076,6 +1181,7 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
             $keys[6] => $this->getPacientemembresiaServiciosdisponibles(),
             $keys[7] => $this->getPacientemembresiaCuponesdisponibles(),
             $keys[8] => $this->getPacientemembresiaEstatus(),
+            $keys[9] => $this->getPacientemembresiaVigencia(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1156,6 +1262,9 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
             case 8:
                 $this->setPacientemembresiaEstatus($value);
                 break;
+            case 9:
+                $this->setPacientemembresiaVigencia($value);
+                break;
         } // switch()
     }
 
@@ -1189,6 +1298,7 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
         if (array_key_exists($keys[6], $arr)) $this->setPacientemembresiaServiciosdisponibles($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setPacientemembresiaCuponesdisponibles($arr[$keys[7]]);
         if (array_key_exists($keys[8], $arr)) $this->setPacientemembresiaEstatus($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setPacientemembresiaVigencia($arr[$keys[9]]);
     }
 
     /**
@@ -1209,6 +1319,7 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
         if ($this->isColumnModified(PacientemembresiaPeer::PACIENTEMEMBRESIA_SERVICIOSDISPONIBLES)) $criteria->add(PacientemembresiaPeer::PACIENTEMEMBRESIA_SERVICIOSDISPONIBLES, $this->pacientemembresia_serviciosdisponibles);
         if ($this->isColumnModified(PacientemembresiaPeer::PACIENTEMEMBRESIA_CUPONESDISPONIBLES)) $criteria->add(PacientemembresiaPeer::PACIENTEMEMBRESIA_CUPONESDISPONIBLES, $this->pacientemembresia_cuponesdisponibles);
         if ($this->isColumnModified(PacientemembresiaPeer::PACIENTEMEMBRESIA_ESTATUS)) $criteria->add(PacientemembresiaPeer::PACIENTEMEMBRESIA_ESTATUS, $this->pacientemembresia_estatus);
+        if ($this->isColumnModified(PacientemembresiaPeer::PACIENTEMEMBRESIA_VIGENCIA)) $criteria->add(PacientemembresiaPeer::PACIENTEMEMBRESIA_VIGENCIA, $this->pacientemembresia_vigencia);
 
         return $criteria;
     }
@@ -1280,6 +1391,7 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
         $copyObj->setPacientemembresiaServiciosdisponibles($this->getPacientemembresiaServiciosdisponibles());
         $copyObj->setPacientemembresiaCuponesdisponibles($this->getPacientemembresiaCuponesdisponibles());
         $copyObj->setPacientemembresiaEstatus($this->getPacientemembresiaEstatus());
+        $copyObj->setPacientemembresiaVigencia($this->getPacientemembresiaVigencia());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1780,10 +1892,12 @@ abstract class BasePacientemembresia extends BaseObject implements Persistent
         $this->pacientemembresia_serviciosdisponibles = null;
         $this->pacientemembresia_cuponesdisponibles = null;
         $this->pacientemembresia_estatus = null;
+        $this->pacientemembresia_vigencia = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

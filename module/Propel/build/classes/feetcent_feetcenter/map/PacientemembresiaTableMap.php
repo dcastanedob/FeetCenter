@@ -46,12 +46,14 @@ class PacientemembresiaTableMap extends TableMap
         $this->addColumn('pacientemembresia_fechainicio', 'PacientemembresiaFechainicio', 'TIMESTAMP', true, null, null);
         $this->addColumn('pacientemembresia_serviciosdisponibles', 'PacientemembresiaServiciosdisponibles', 'INTEGER', true, null, null);
         $this->addColumn('pacientemembresia_cuponesdisponibles', 'PacientemembresiaCuponesdisponibles', 'INTEGER', true, null, null);
-        $this->addColumn('pacientemembresia_estatus', 'PacientemembresiaEstatus', 'CHAR', true, null, null);
+        $this->addColumn('pacientemembresia_estatus', 'PacientemembresiaEstatus', 'CHAR', true, null, 'activa');
         $this->getColumn('pacientemembresia_estatus', false)->setValueSet(array (
   0 => 'activa',
   1 => 'terminada',
   2 => 'cancelada',
+  3 => 'vencida',
 ));
+        $this->addColumn('pacientemembresia_vigencia', 'PacientemembresiaVigencia', 'TIMESTAMP', false, null, null);
         // validators
     } // initialize()
 

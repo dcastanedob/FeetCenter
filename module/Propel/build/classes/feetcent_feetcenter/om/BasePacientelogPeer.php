@@ -24,13 +24,13 @@ abstract class BasePacientelogPeer
     const TM_CLASS = 'PacientelogTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 8;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /** the column name for the idpacientelog field */
     const IDPACIENTELOG = 'pacientelog.idpacientelog';
@@ -44,11 +44,17 @@ abstract class BasePacientelogPeer
     /** the column name for the pacientelog_fecha field */
     const PACIENTELOG_FECHA = 'pacientelog.pacientelog_fecha';
 
-    /** the column name for the pacientelog_nombre field */
-    const PACIENTELOG_NOMBRE = 'pacientelog.pacientelog_nombre';
+    /** the column name for the pacientelog_nombre_old field */
+    const PACIENTELOG_NOMBRE_OLD = 'pacientelog.pacientelog_nombre_old';
 
-    /** the column name for the pacientelog_telefono field */
-    const PACIENTELOG_TELEFONO = 'pacientelog.pacientelog_telefono';
+    /** the column name for the pacientelog_telefono_old field */
+    const PACIENTELOG_TELEFONO_OLD = 'pacientelog.pacientelog_telefono_old';
+
+    /** the column name for the pacientelog_nombre_new field */
+    const PACIENTELOG_NOMBRE_NEW = 'pacientelog.pacientelog_nombre_new';
+
+    /** the column name for the pacientelog_telefono_new field */
+    const PACIENTELOG_TELEFONO_NEW = 'pacientelog.pacientelog_telefono_new';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -69,12 +75,12 @@ abstract class BasePacientelogPeer
      * e.g. PacientelogPeer::$fieldNames[PacientelogPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idpacientelog', 'Idpaciente', 'Idempleado', 'PacientelogFecha', 'PacientelogNombre', 'PacientelogTelefono', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idpacientelog', 'idpaciente', 'idempleado', 'pacientelogFecha', 'pacientelogNombre', 'pacientelogTelefono', ),
-        BasePeer::TYPE_COLNAME => array (PacientelogPeer::IDPACIENTELOG, PacientelogPeer::IDPACIENTE, PacientelogPeer::IDEMPLEADO, PacientelogPeer::PACIENTELOG_FECHA, PacientelogPeer::PACIENTELOG_NOMBRE, PacientelogPeer::PACIENTELOG_TELEFONO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDPACIENTELOG', 'IDPACIENTE', 'IDEMPLEADO', 'PACIENTELOG_FECHA', 'PACIENTELOG_NOMBRE', 'PACIENTELOG_TELEFONO', ),
-        BasePeer::TYPE_FIELDNAME => array ('idpacientelog', 'idpaciente', 'idempleado', 'pacientelog_fecha', 'pacientelog_nombre', 'pacientelog_telefono', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Idpacientelog', 'Idpaciente', 'Idempleado', 'PacientelogFecha', 'PacientelogNombreOld', 'PacientelogTelefonoOld', 'PacientelogNombreNew', 'PacientelogTelefonoNew', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idpacientelog', 'idpaciente', 'idempleado', 'pacientelogFecha', 'pacientelogNombreOld', 'pacientelogTelefonoOld', 'pacientelogNombreNew', 'pacientelogTelefonoNew', ),
+        BasePeer::TYPE_COLNAME => array (PacientelogPeer::IDPACIENTELOG, PacientelogPeer::IDPACIENTE, PacientelogPeer::IDEMPLEADO, PacientelogPeer::PACIENTELOG_FECHA, PacientelogPeer::PACIENTELOG_NOMBRE_OLD, PacientelogPeer::PACIENTELOG_TELEFONO_OLD, PacientelogPeer::PACIENTELOG_NOMBRE_NEW, PacientelogPeer::PACIENTELOG_TELEFONO_NEW, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPACIENTELOG', 'IDPACIENTE', 'IDEMPLEADO', 'PACIENTELOG_FECHA', 'PACIENTELOG_NOMBRE_OLD', 'PACIENTELOG_TELEFONO_OLD', 'PACIENTELOG_NOMBRE_NEW', 'PACIENTELOG_TELEFONO_NEW', ),
+        BasePeer::TYPE_FIELDNAME => array ('idpacientelog', 'idpaciente', 'idempleado', 'pacientelog_fecha', 'pacientelog_nombre_old', 'pacientelog_telefono_old', 'pacientelog_nombre_new', 'pacientelog_telefono_new', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -84,12 +90,12 @@ abstract class BasePacientelogPeer
      * e.g. PacientelogPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idpacientelog' => 0, 'Idpaciente' => 1, 'Idempleado' => 2, 'PacientelogFecha' => 3, 'PacientelogNombre' => 4, 'PacientelogTelefono' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idpacientelog' => 0, 'idpaciente' => 1, 'idempleado' => 2, 'pacientelogFecha' => 3, 'pacientelogNombre' => 4, 'pacientelogTelefono' => 5, ),
-        BasePeer::TYPE_COLNAME => array (PacientelogPeer::IDPACIENTELOG => 0, PacientelogPeer::IDPACIENTE => 1, PacientelogPeer::IDEMPLEADO => 2, PacientelogPeer::PACIENTELOG_FECHA => 3, PacientelogPeer::PACIENTELOG_NOMBRE => 4, PacientelogPeer::PACIENTELOG_TELEFONO => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDPACIENTELOG' => 0, 'IDPACIENTE' => 1, 'IDEMPLEADO' => 2, 'PACIENTELOG_FECHA' => 3, 'PACIENTELOG_NOMBRE' => 4, 'PACIENTELOG_TELEFONO' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('idpacientelog' => 0, 'idpaciente' => 1, 'idempleado' => 2, 'pacientelog_fecha' => 3, 'pacientelog_nombre' => 4, 'pacientelog_telefono' => 5, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Idpacientelog' => 0, 'Idpaciente' => 1, 'Idempleado' => 2, 'PacientelogFecha' => 3, 'PacientelogNombreOld' => 4, 'PacientelogTelefonoOld' => 5, 'PacientelogNombreNew' => 6, 'PacientelogTelefonoNew' => 7, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idpacientelog' => 0, 'idpaciente' => 1, 'idempleado' => 2, 'pacientelogFecha' => 3, 'pacientelogNombreOld' => 4, 'pacientelogTelefonoOld' => 5, 'pacientelogNombreNew' => 6, 'pacientelogTelefonoNew' => 7, ),
+        BasePeer::TYPE_COLNAME => array (PacientelogPeer::IDPACIENTELOG => 0, PacientelogPeer::IDPACIENTE => 1, PacientelogPeer::IDEMPLEADO => 2, PacientelogPeer::PACIENTELOG_FECHA => 3, PacientelogPeer::PACIENTELOG_NOMBRE_OLD => 4, PacientelogPeer::PACIENTELOG_TELEFONO_OLD => 5, PacientelogPeer::PACIENTELOG_NOMBRE_NEW => 6, PacientelogPeer::PACIENTELOG_TELEFONO_NEW => 7, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPACIENTELOG' => 0, 'IDPACIENTE' => 1, 'IDEMPLEADO' => 2, 'PACIENTELOG_FECHA' => 3, 'PACIENTELOG_NOMBRE_OLD' => 4, 'PACIENTELOG_TELEFONO_OLD' => 5, 'PACIENTELOG_NOMBRE_NEW' => 6, 'PACIENTELOG_TELEFONO_NEW' => 7, ),
+        BasePeer::TYPE_FIELDNAME => array ('idpacientelog' => 0, 'idpaciente' => 1, 'idempleado' => 2, 'pacientelog_fecha' => 3, 'pacientelog_nombre_old' => 4, 'pacientelog_telefono_old' => 5, 'pacientelog_nombre_new' => 6, 'pacientelog_telefono_new' => 7, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -167,15 +173,19 @@ abstract class BasePacientelogPeer
             $criteria->addSelectColumn(PacientelogPeer::IDPACIENTE);
             $criteria->addSelectColumn(PacientelogPeer::IDEMPLEADO);
             $criteria->addSelectColumn(PacientelogPeer::PACIENTELOG_FECHA);
-            $criteria->addSelectColumn(PacientelogPeer::PACIENTELOG_NOMBRE);
-            $criteria->addSelectColumn(PacientelogPeer::PACIENTELOG_TELEFONO);
+            $criteria->addSelectColumn(PacientelogPeer::PACIENTELOG_NOMBRE_OLD);
+            $criteria->addSelectColumn(PacientelogPeer::PACIENTELOG_TELEFONO_OLD);
+            $criteria->addSelectColumn(PacientelogPeer::PACIENTELOG_NOMBRE_NEW);
+            $criteria->addSelectColumn(PacientelogPeer::PACIENTELOG_TELEFONO_NEW);
         } else {
             $criteria->addSelectColumn($alias . '.idpacientelog');
             $criteria->addSelectColumn($alias . '.idpaciente');
             $criteria->addSelectColumn($alias . '.idempleado');
             $criteria->addSelectColumn($alias . '.pacientelog_fecha');
-            $criteria->addSelectColumn($alias . '.pacientelog_nombre');
-            $criteria->addSelectColumn($alias . '.pacientelog_telefono');
+            $criteria->addSelectColumn($alias . '.pacientelog_nombre_old');
+            $criteria->addSelectColumn($alias . '.pacientelog_telefono_old');
+            $criteria->addSelectColumn($alias . '.pacientelog_nombre_new');
+            $criteria->addSelectColumn($alias . '.pacientelog_telefono_new');
         }
     }
 

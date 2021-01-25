@@ -40,4 +40,17 @@ class CronjobController extends AbstractActionController
 
     }
 
+    public function membresiasAction()
+    {
+          $vencidas = \PacientemembresiaQuery::create()->filterByPacientemembresiaEstatus('activa')->filterByPacientemembresiaVigencia(date('Y-m-d'),\Criteria::LESS_THAN)->find();
+          foreach ($vencidas as $membresia) {
+            $membresia->setPacientemembresiaServiciosdisponibles(0)
+                      ->setPacientemembresiaCuponesdisponibles(0)
+                      ->setPacientemembresiaEstatus('vencida')
+                      ->save();
+          }
+        
+
+    }
+
 }

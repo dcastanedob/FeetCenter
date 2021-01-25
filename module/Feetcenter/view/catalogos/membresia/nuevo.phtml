@@ -1,15 +1,15 @@
-<?php 
+<?php
     $this->headTitle()->prepend('Nueva membresía');
     echo $this->headTitle();
 ?>
 <div id="membresia_container">
     <h1>Nueva Membresía</h1>
-    <?php 
+    <?php
         $form->setAttribute('action', '/catalogos/membresias/nuevo');
         $form->setAttribute('novalidate', true);
         $form->setAttribute('class', 'forms');
         $form->prepare();
-        echo $this->form()->openTag($form); 
+        echo $this->form()->openTag($form);
     ?>
     <div class="units-row">
         <div class="unit-100">
@@ -28,19 +28,25 @@
         </div>
     </div>
     <div class="units-row">
-        <div class="unit-33">
+      <div class="unit-25">
+          <label>
+              Vigencia (No. de meses ) <span class="req">*</span>
+              <?php echo $this->formText($form->get('membresia_vigencia')); ?>
+          </label>
+      </div>
+        <div class="unit-25">
             <label>
                 Cantidad de servicios <span class="req">*</span>
                 <?php echo $this->formText($form->get('membresia_servicios')); ?>
             </label>
         </div>
-        <div class="unit-33">
+        <div class="unit-25">
             <label>
                 Cantidad de cupones <span class="req">*</span>
                 <?php echo $this->formText($form->get('membresia_cupones')); ?>
             </label>
         </div>
-        <div class="unit-33">
+        <div class="unit-25">
             <label>
                 Precio <span class="req">*</span>
                 <?php echo $this->formText($form->get('membresia_precio')); ?>

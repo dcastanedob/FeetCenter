@@ -1,15 +1,15 @@
-<?php 
+<?php
     $this->headTitle()->prepend('Editar cliente');
     echo $this->headTitle();
 ?>
 <div id="clinica_container">
     <h1>Cliente: <?php echo $form->get('paciente_nombre')->getValue()?></h1>
-    <?php 
+    <?php
         $form->setAttribute('action', '/pacientes/editar/'.$id);
         $form->setAttribute('novalidate', true);
         $form->setAttribute('class', 'forms');
         $form->prepare();
-        echo $this->form()->openTag($form); 
+        echo $this->form()->openTag($form);
     ?>
     <div class="units-row">
         <div class="unit-33">
@@ -55,23 +55,14 @@
         <div class="unit-33">
             <label>
                 Celular <span class="req">*</span>
-                <?php if(\Shared\Session\AouthSession::getIdrol() != 1) :?>
-                 <input disabled value="<?php echo $form->get('paciente_celular')->getValue()?>"required name="paciente_celular" type="password" class="width-100" >
-                <?php else :?>
-                 <input  value="<?php echo $form->get('paciente_celular')->getValue()?>"required name="paciente_celular" type="password" class="width-100" >
-                <?php endif;?>
-               
+                <input  value="<?php echo $form->get('paciente_celular')->getValue()?>"required name="paciente_celular" type="password" class="width-100" maxlength="10">
+
             </label>
         </div>
         <div class="unit-33">
             <label>
                 Confirmar celular <span class="req">*</span>
-                <?php if(\Shared\Session\AouthSession::getIdrol() != 1) :?>
-                  <input  disabled value="<?php echo $form->get('paciente_celular')->getValue()?>"required name="paciente_celular_confirmar" type="text" class="width-100 confirm" for="paciente_celular">
-                <?php else :?>
-                  <input  value="<?php echo $form->get('paciente_celular')->getValue()?>"required name="paciente_celular_confirmar" type="text" class="width-100 confirm" for="paciente_celular">
-                <?php endif;?>
-                
+                <input  value="<?php echo $form->get('paciente_celular')->getValue()?>"required name="paciente_celular_confirmar" type="text" class="width-100 confirm" for="paciente_celular" maxlength="10">
             </label>
         </div>
     </div>
@@ -94,7 +85,7 @@
                 <?php echo $this->formText($form->get('paciente_numero')); ?>
             </label>
         </div>
-        
+
     </div>
     <div class="units-row">
         <div class="unit-33">
@@ -115,7 +106,7 @@
                 <?php echo $this->formText($form->get('paciente_ciudad')); ?>
             </label>
         </div>
-        
+
     </div>
     <div class="units-row">
         <div class="unit-33">
@@ -144,7 +135,7 @@
                 <div class="units-row">
                     <div class="unit-80">
                       Nombre
-                      <input class="width-100"type="text" name="paciente_autocomplete">  
+                      <input class="width-100"type="text" name="paciente_autocomplete">
                     </div>
                     <div class="unit-20" style="margin-top: 4px;">
                         <a data-action="addPaciente" class="btn btn-blue" style="height: 30px; margin-top: 20px; width: 100%;">Agregar</a>
@@ -180,6 +171,24 @@
         </div>
     </div>
     <div class="units-row">
+        <div class="unit-100">
+            <fieldset>
+                <legend>Historial</legend>
+                <?php foreach ($historial as $log) : ?>
+                  <div class="history-log" style="padding: 5px;border-bottom: dotted 2px;">
+                    <p><b><?php echo $log->getEmpleado()->getEmpleadoNombre(). " ( ".$log->getPacientelogFecha('d/m/Y H:i').' )'; ?></b></p>
+                    <?php if($log->getPacientelogNombreOld() != $log->getPacientelogNombreNew()) :?>
+                      <span style="display:block"><b>NOMBRE: </b><?php echo $log->getPacientelogNombreOld()."   ---->  ".$log->getPacientelogNombreNew()?></span>
+                    <?php endif;?>
+                    <?php if($log->getPacientelogTelefonoOld() != $log->getPacientelogTelefonoNew()) :?>
+                        <span style="display:block"><b>CELULAR: </b><?php echo $log->getPacientelogTelefonoOld()."   ---->  ".$log->getPacientelogTelefonoNew()?></span>
+                    <?php endif;?>
+                  </div>
+                <?php endforeach;?>
+            </fieldset>
+        </div>
+    </div>
+    <div class="units-row">
         <div class="unit-centered unit-40"><button data-action="submit" class="btn btn-green">Guardar</button></div>
     </div>
 </div>
@@ -206,7 +215,26 @@
 
     var grupoFrom = $('#clinica_container').grupos();
     grupoFrom.form();
-    
+
+    $('[name=paciente_celular]').on('keyup',function(){
+
+      var $span = $(this).siblings('span.req');
+      $span.siblings('span.error').remove();
+
+      var celular = $(this).val();
+      if(celular.length < 10){
+        $(this).addClass('input-error');
+        $span.after('<span class="error"> Los campos debe tener 10 digitos</span>');
+        $('[name=paciente_celular_confirmar]').prop('readonly',true);
+        $('[name=paciente_celular_confirmar]').val('');
+      }else{
+        $(this).removeClass('input-error');
+        $span.siblings('span.error').remove();
+        $('[name=paciente_celular_confirmar]').prop('readonly',false);
+      }
+
+    })
+
     $('input[name=paciente_celular_confirmar],input[name=paciente_celular]').bind("cut copy paste",function(e) {
         e.preventDefault();
     });

@@ -500,6 +500,7 @@
     <column name="servicio_tipocomision" phpName="ServicioTipocomision" type="CHAR" sqlType="enum('porcentaje','cantidad')" required="false"/>
     <column name="servicio_comision" phpName="ServicioComision" type="DECIMAL" size="10" scale="2" required="false"/>
     <column name="membresia_precio" phpName="MembresiaPrecio" type="DECIMAL" size="10" scale="2" required="true"/>
+    <column name="membresia_vigencia" phpName="MembresiaVigencia" type="INTEGER" required="false"/>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -597,8 +598,10 @@
     <column name="idpaciente" phpName="Idpaciente" type="INTEGER" required="true"/>
     <column name="idempleado" phpName="Idempleado" type="INTEGER" required="true"/>
     <column name="pacientelog_fecha" phpName="PacientelogFecha" type="TIMESTAMP" required="true"/>
-    <column name="pacientelog_nombre" phpName="PacientelogNombre" type="VARCHAR" size="255" required="true" defaultValue=""/>
-    <column name="pacientelog_telefono" phpName="PacientelogTelefono" type="VARCHAR" size="255" required="true" defaultValue=""/>
+    <column name="pacientelog_nombre_old" phpName="PacientelogNombreOld" type="VARCHAR" size="255" required="true" defaultValue=""/>
+    <column name="pacientelog_telefono_old" phpName="PacientelogTelefonoOld" type="VARCHAR" size="255" required="true" defaultValue=""/>
+    <column name="pacientelog_nombre_new" phpName="PacientelogNombreNew" type="VARCHAR" size="255" required="true" defaultValue=""/>
+    <column name="pacientelog_telefono_new" phpName="PacientelogTelefonoNew" type="VARCHAR" size="255" required="true" defaultValue=""/>
     <foreign-key foreignTable="empleado" name="idempleado_pacientelog" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idempleado" foreign="idempleado"/>
     </foreign-key>
@@ -624,7 +627,8 @@
     <column name="pacientemembresia_fechainicio" phpName="PacientemembresiaFechainicio" type="TIMESTAMP" required="true"/>
     <column name="pacientemembresia_serviciosdisponibles" phpName="PacientemembresiaServiciosdisponibles" type="INTEGER" required="true"/>
     <column name="pacientemembresia_cuponesdisponibles" phpName="PacientemembresiaCuponesdisponibles" type="INTEGER" required="true"/>
-    <column name="pacientemembresia_estatus" phpName="PacientemembresiaEstatus" type="CHAR" sqlType="enum('activa','terminada','cancelada')" description="se agregó la columna estatus para saber con una sola consulta si aún tiene cupones o servicios disponibles una membresia" required="true"/>
+    <column name="pacientemembresia_estatus" phpName="PacientemembresiaEstatus" type="CHAR" sqlType="enum('activa','terminada','cancelada','vencida')" description="se agregó la columna estatus para saber con una sola consulta si aún tiene cupones o servicios disponibles una membresia" required="true" defaultValue="activa"/>
+    <column name="pacientemembresia_vigencia" phpName="PacientemembresiaVigencia" type="TIMESTAMP" required="false"/>
     <foreign-key foreignTable="clinica" name="idclinica_pacientemembresia" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idclinica" foreign="idclinica"/>
     </foreign-key>

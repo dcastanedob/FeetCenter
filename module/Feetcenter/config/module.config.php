@@ -722,6 +722,15 @@ return array(
                         ),
                     ),
                 ),
+                'cron-membresias' => array(
+                    'options' => array(
+                        'route' => 'membresias',
+                        'defaults' => array(
+                            'controller' => 'Feetcenter\Controller\Cronjob',
+                            'action' => 'membresias',
+                        ),
+                    ),
+                ),
             )
         )
     ),

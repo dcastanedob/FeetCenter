@@ -51,6 +51,25 @@
             <?php endforeach;?>
         </tbody>
     </table>
+    <div class="units-row">
+        <div class="unit-100">
+            <fieldset>
+                <legend>Historial</legend>
+                <?php $historial = \PacientelogQuery::create()->filterByIdpaciente($paciente->getIdpaciente())->orderByPacientelogFecha(\Criteria::DESC)->find(); ?>
+                <?php foreach ($historial as $log) : ?>
+                  <div class="history-log" style="padding: 5px;border-bottom: dotted 2px;">
+                    <p><b><?php echo $log->getEmpleado()->getEmpleadoNombre(). " ( ".$log->getPacientelogFecha('d/m/Y H:i').' )'; ?></b></p>
+                    <?php if($log->getPacientelogNombreOld() != $log->getPacientelogNombreNew()) :?>
+                      <span style="display:block"><b>NOMBRE: </b><?php echo $log->getPacientelogNombreOld()."   ---->  ".$log->getPacientelogNombreNew()?></span>
+                    <?php endif;?>
+                    <?php if($log->getPacientelogTelefonoOld() != $log->getPacientelogTelefonoNew()) :?>
+                        <span style="display:block"><b>CELULAR: </b><?php echo $log->getPacientelogTelefonoOld()."   ---->  ".$log->getPacientelogTelefonoNew()?></span>
+                    <?php endif;?>
+                  </div>
+                <?php endforeach;?>
+            </fieldset>
+        </div>
+    </div>
 </div>
 <script src="https://unpkg.com/@popperjs/core@2"></script>
 <script src="https://unpkg.com/tippy.js@6"></script>

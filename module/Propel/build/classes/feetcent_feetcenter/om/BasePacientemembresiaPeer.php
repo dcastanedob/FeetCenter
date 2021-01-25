@@ -24,13 +24,13 @@ abstract class BasePacientemembresiaPeer
     const TM_CLASS = 'PacientemembresiaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 10;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /** the column name for the idpacientemembresia field */
     const IDPACIENTEMEMBRESIA = 'pacientemembresia.idpacientemembresia';
@@ -59,10 +59,14 @@ abstract class BasePacientemembresiaPeer
     /** the column name for the pacientemembresia_estatus field */
     const PACIENTEMEMBRESIA_ESTATUS = 'pacientemembresia.pacientemembresia_estatus';
 
+    /** the column name for the pacientemembresia_vigencia field */
+    const PACIENTEMEMBRESIA_VIGENCIA = 'pacientemembresia.pacientemembresia_vigencia';
+
     /** The enumerated values for the pacientemembresia_estatus field */
     const PACIENTEMEMBRESIA_ESTATUS_ACTIVA = 'activa';
     const PACIENTEMEMBRESIA_ESTATUS_TERMINADA = 'terminada';
     const PACIENTEMEMBRESIA_ESTATUS_CANCELADA = 'cancelada';
+    const PACIENTEMEMBRESIA_ESTATUS_VENCIDA = 'vencida';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -83,12 +87,12 @@ abstract class BasePacientemembresiaPeer
      * e.g. PacientemembresiaPeer::$fieldNames[PacientemembresiaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idpacientemembresia', 'Idpaciente', 'Idclinica', 'Idmembresia', 'PacientemembresiaFolio', 'PacientemembresiaFechainicio', 'PacientemembresiaServiciosdisponibles', 'PacientemembresiaCuponesdisponibles', 'PacientemembresiaEstatus', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idpacientemembresia', 'idpaciente', 'idclinica', 'idmembresia', 'pacientemembresiaFolio', 'pacientemembresiaFechainicio', 'pacientemembresiaServiciosdisponibles', 'pacientemembresiaCuponesdisponibles', 'pacientemembresiaEstatus', ),
-        BasePeer::TYPE_COLNAME => array (PacientemembresiaPeer::IDPACIENTEMEMBRESIA, PacientemembresiaPeer::IDPACIENTE, PacientemembresiaPeer::IDCLINICA, PacientemembresiaPeer::IDMEMBRESIA, PacientemembresiaPeer::PACIENTEMEMBRESIA_FOLIO, PacientemembresiaPeer::PACIENTEMEMBRESIA_FECHAINICIO, PacientemembresiaPeer::PACIENTEMEMBRESIA_SERVICIOSDISPONIBLES, PacientemembresiaPeer::PACIENTEMEMBRESIA_CUPONESDISPONIBLES, PacientemembresiaPeer::PACIENTEMEMBRESIA_ESTATUS, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDPACIENTEMEMBRESIA', 'IDPACIENTE', 'IDCLINICA', 'IDMEMBRESIA', 'PACIENTEMEMBRESIA_FOLIO', 'PACIENTEMEMBRESIA_FECHAINICIO', 'PACIENTEMEMBRESIA_SERVICIOSDISPONIBLES', 'PACIENTEMEMBRESIA_CUPONESDISPONIBLES', 'PACIENTEMEMBRESIA_ESTATUS', ),
-        BasePeer::TYPE_FIELDNAME => array ('idpacientemembresia', 'idpaciente', 'idclinica', 'idmembresia', 'pacientemembresia_folio', 'pacientemembresia_fechainicio', 'pacientemembresia_serviciosdisponibles', 'pacientemembresia_cuponesdisponibles', 'pacientemembresia_estatus', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('Idpacientemembresia', 'Idpaciente', 'Idclinica', 'Idmembresia', 'PacientemembresiaFolio', 'PacientemembresiaFechainicio', 'PacientemembresiaServiciosdisponibles', 'PacientemembresiaCuponesdisponibles', 'PacientemembresiaEstatus', 'PacientemembresiaVigencia', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idpacientemembresia', 'idpaciente', 'idclinica', 'idmembresia', 'pacientemembresiaFolio', 'pacientemembresiaFechainicio', 'pacientemembresiaServiciosdisponibles', 'pacientemembresiaCuponesdisponibles', 'pacientemembresiaEstatus', 'pacientemembresiaVigencia', ),
+        BasePeer::TYPE_COLNAME => array (PacientemembresiaPeer::IDPACIENTEMEMBRESIA, PacientemembresiaPeer::IDPACIENTE, PacientemembresiaPeer::IDCLINICA, PacientemembresiaPeer::IDMEMBRESIA, PacientemembresiaPeer::PACIENTEMEMBRESIA_FOLIO, PacientemembresiaPeer::PACIENTEMEMBRESIA_FECHAINICIO, PacientemembresiaPeer::PACIENTEMEMBRESIA_SERVICIOSDISPONIBLES, PacientemembresiaPeer::PACIENTEMEMBRESIA_CUPONESDISPONIBLES, PacientemembresiaPeer::PACIENTEMEMBRESIA_ESTATUS, PacientemembresiaPeer::PACIENTEMEMBRESIA_VIGENCIA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPACIENTEMEMBRESIA', 'IDPACIENTE', 'IDCLINICA', 'IDMEMBRESIA', 'PACIENTEMEMBRESIA_FOLIO', 'PACIENTEMEMBRESIA_FECHAINICIO', 'PACIENTEMEMBRESIA_SERVICIOSDISPONIBLES', 'PACIENTEMEMBRESIA_CUPONESDISPONIBLES', 'PACIENTEMEMBRESIA_ESTATUS', 'PACIENTEMEMBRESIA_VIGENCIA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idpacientemembresia', 'idpaciente', 'idclinica', 'idmembresia', 'pacientemembresia_folio', 'pacientemembresia_fechainicio', 'pacientemembresia_serviciosdisponibles', 'pacientemembresia_cuponesdisponibles', 'pacientemembresia_estatus', 'pacientemembresia_vigencia', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -98,12 +102,12 @@ abstract class BasePacientemembresiaPeer
      * e.g. PacientemembresiaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idpacientemembresia' => 0, 'Idpaciente' => 1, 'Idclinica' => 2, 'Idmembresia' => 3, 'PacientemembresiaFolio' => 4, 'PacientemembresiaFechainicio' => 5, 'PacientemembresiaServiciosdisponibles' => 6, 'PacientemembresiaCuponesdisponibles' => 7, 'PacientemembresiaEstatus' => 8, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idpacientemembresia' => 0, 'idpaciente' => 1, 'idclinica' => 2, 'idmembresia' => 3, 'pacientemembresiaFolio' => 4, 'pacientemembresiaFechainicio' => 5, 'pacientemembresiaServiciosdisponibles' => 6, 'pacientemembresiaCuponesdisponibles' => 7, 'pacientemembresiaEstatus' => 8, ),
-        BasePeer::TYPE_COLNAME => array (PacientemembresiaPeer::IDPACIENTEMEMBRESIA => 0, PacientemembresiaPeer::IDPACIENTE => 1, PacientemembresiaPeer::IDCLINICA => 2, PacientemembresiaPeer::IDMEMBRESIA => 3, PacientemembresiaPeer::PACIENTEMEMBRESIA_FOLIO => 4, PacientemembresiaPeer::PACIENTEMEMBRESIA_FECHAINICIO => 5, PacientemembresiaPeer::PACIENTEMEMBRESIA_SERVICIOSDISPONIBLES => 6, PacientemembresiaPeer::PACIENTEMEMBRESIA_CUPONESDISPONIBLES => 7, PacientemembresiaPeer::PACIENTEMEMBRESIA_ESTATUS => 8, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDPACIENTEMEMBRESIA' => 0, 'IDPACIENTE' => 1, 'IDCLINICA' => 2, 'IDMEMBRESIA' => 3, 'PACIENTEMEMBRESIA_FOLIO' => 4, 'PACIENTEMEMBRESIA_FECHAINICIO' => 5, 'PACIENTEMEMBRESIA_SERVICIOSDISPONIBLES' => 6, 'PACIENTEMEMBRESIA_CUPONESDISPONIBLES' => 7, 'PACIENTEMEMBRESIA_ESTATUS' => 8, ),
-        BasePeer::TYPE_FIELDNAME => array ('idpacientemembresia' => 0, 'idpaciente' => 1, 'idclinica' => 2, 'idmembresia' => 3, 'pacientemembresia_folio' => 4, 'pacientemembresia_fechainicio' => 5, 'pacientemembresia_serviciosdisponibles' => 6, 'pacientemembresia_cuponesdisponibles' => 7, 'pacientemembresia_estatus' => 8, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('Idpacientemembresia' => 0, 'Idpaciente' => 1, 'Idclinica' => 2, 'Idmembresia' => 3, 'PacientemembresiaFolio' => 4, 'PacientemembresiaFechainicio' => 5, 'PacientemembresiaServiciosdisponibles' => 6, 'PacientemembresiaCuponesdisponibles' => 7, 'PacientemembresiaEstatus' => 8, 'PacientemembresiaVigencia' => 9, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idpacientemembresia' => 0, 'idpaciente' => 1, 'idclinica' => 2, 'idmembresia' => 3, 'pacientemembresiaFolio' => 4, 'pacientemembresiaFechainicio' => 5, 'pacientemembresiaServiciosdisponibles' => 6, 'pacientemembresiaCuponesdisponibles' => 7, 'pacientemembresiaEstatus' => 8, 'pacientemembresiaVigencia' => 9, ),
+        BasePeer::TYPE_COLNAME => array (PacientemembresiaPeer::IDPACIENTEMEMBRESIA => 0, PacientemembresiaPeer::IDPACIENTE => 1, PacientemembresiaPeer::IDCLINICA => 2, PacientemembresiaPeer::IDMEMBRESIA => 3, PacientemembresiaPeer::PACIENTEMEMBRESIA_FOLIO => 4, PacientemembresiaPeer::PACIENTEMEMBRESIA_FECHAINICIO => 5, PacientemembresiaPeer::PACIENTEMEMBRESIA_SERVICIOSDISPONIBLES => 6, PacientemembresiaPeer::PACIENTEMEMBRESIA_CUPONESDISPONIBLES => 7, PacientemembresiaPeer::PACIENTEMEMBRESIA_ESTATUS => 8, PacientemembresiaPeer::PACIENTEMEMBRESIA_VIGENCIA => 9, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPACIENTEMEMBRESIA' => 0, 'IDPACIENTE' => 1, 'IDCLINICA' => 2, 'IDMEMBRESIA' => 3, 'PACIENTEMEMBRESIA_FOLIO' => 4, 'PACIENTEMEMBRESIA_FECHAINICIO' => 5, 'PACIENTEMEMBRESIA_SERVICIOSDISPONIBLES' => 6, 'PACIENTEMEMBRESIA_CUPONESDISPONIBLES' => 7, 'PACIENTEMEMBRESIA_ESTATUS' => 8, 'PACIENTEMEMBRESIA_VIGENCIA' => 9, ),
+        BasePeer::TYPE_FIELDNAME => array ('idpacientemembresia' => 0, 'idpaciente' => 1, 'idclinica' => 2, 'idmembresia' => 3, 'pacientemembresia_folio' => 4, 'pacientemembresia_fechainicio' => 5, 'pacientemembresia_serviciosdisponibles' => 6, 'pacientemembresia_cuponesdisponibles' => 7, 'pacientemembresia_estatus' => 8, 'pacientemembresia_vigencia' => 9, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /** The enumerated values for this table */
@@ -112,6 +116,7 @@ abstract class BasePacientemembresiaPeer
             PacientemembresiaPeer::PACIENTEMEMBRESIA_ESTATUS_ACTIVA,
             PacientemembresiaPeer::PACIENTEMEMBRESIA_ESTATUS_TERMINADA,
             PacientemembresiaPeer::PACIENTEMEMBRESIA_ESTATUS_CANCELADA,
+            PacientemembresiaPeer::PACIENTEMEMBRESIA_ESTATUS_VENCIDA,
         ),
     );
 
@@ -240,6 +245,7 @@ abstract class BasePacientemembresiaPeer
             $criteria->addSelectColumn(PacientemembresiaPeer::PACIENTEMEMBRESIA_SERVICIOSDISPONIBLES);
             $criteria->addSelectColumn(PacientemembresiaPeer::PACIENTEMEMBRESIA_CUPONESDISPONIBLES);
             $criteria->addSelectColumn(PacientemembresiaPeer::PACIENTEMEMBRESIA_ESTATUS);
+            $criteria->addSelectColumn(PacientemembresiaPeer::PACIENTEMEMBRESIA_VIGENCIA);
         } else {
             $criteria->addSelectColumn($alias . '.idpacientemembresia');
             $criteria->addSelectColumn($alias . '.idpaciente');
@@ -250,6 +256,7 @@ abstract class BasePacientemembresiaPeer
             $criteria->addSelectColumn($alias . '.pacientemembresia_serviciosdisponibles');
             $criteria->addSelectColumn($alias . '.pacientemembresia_cuponesdisponibles');
             $criteria->addSelectColumn($alias . '.pacientemembresia_estatus');
+            $criteria->addSelectColumn($alias . '.pacientemembresia_vigencia');
         }
     }
 

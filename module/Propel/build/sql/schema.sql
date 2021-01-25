@@ -663,6 +663,7 @@ CREATE TABLE `membresia`
     `servicio_tipocomision` enum('porcentaje','cantidad'),
     `servicio_comision` DECIMAL(10,2),
     `membresia_precio` DECIMAL(10,2) NOT NULL,
+    `membresia_vigencia` INTEGER,
     PRIMARY KEY (`idmembresia`)
 ) ENGINE=InnoDB;
 
@@ -790,8 +791,10 @@ CREATE TABLE `pacientelog`
     `idpaciente` INTEGER NOT NULL,
     `idempleado` INTEGER NOT NULL,
     `pacientelog_fecha` DATETIME NOT NULL,
-    `pacientelog_nombre` VARCHAR(255) DEFAULT '' NOT NULL,
-    `pacientelog_telefono` VARCHAR(255) DEFAULT '' NOT NULL,
+    `pacientelog_nombre_old` VARCHAR(255) DEFAULT '' NOT NULL,
+    `pacientelog_telefono_old` VARCHAR(255) DEFAULT '' NOT NULL,
+    `pacientelog_nombre_new` VARCHAR(255) DEFAULT '' NOT NULL,
+    `pacientelog_telefono_new` VARCHAR(255) DEFAULT '' NOT NULL,
     PRIMARY KEY (`idpacientelog`),
     INDEX `idpaciente` (`idpaciente`),
     INDEX `idempleado` (`idempleado`),
@@ -823,7 +826,8 @@ CREATE TABLE `pacientemembresia`
     `pacientemembresia_fechainicio` DATETIME NOT NULL,
     `pacientemembresia_serviciosdisponibles` INTEGER NOT NULL,
     `pacientemembresia_cuponesdisponibles` INTEGER NOT NULL,
-    `pacientemembresia_estatus` enum('activa','terminada','cancelada') NOT NULL COMMENT 'se agregó la columna estatus para saber con una sola consulta si aún tiene cupones o servicios disponibles una membresia',
+    `pacientemembresia_estatus` enum('activa','terminada','cancelada','vencida') DEFAULT 'activa' NOT NULL COMMENT 'se agregó la columna estatus para saber con una sola consulta si aún tiene cupones o servicios disponibles una membresia',
+    `pacientemembresia_vigencia` DATETIME,
     PRIMARY KEY (`idpacientemembresia`),
     INDEX `idmembresia` (`idmembresia`),
     INDEX `idpaciente` (`idpaciente`),

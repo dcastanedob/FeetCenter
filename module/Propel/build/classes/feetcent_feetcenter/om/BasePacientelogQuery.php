@@ -10,15 +10,19 @@
  * @method PacientelogQuery orderByIdpaciente($order = Criteria::ASC) Order by the idpaciente column
  * @method PacientelogQuery orderByIdempleado($order = Criteria::ASC) Order by the idempleado column
  * @method PacientelogQuery orderByPacientelogFecha($order = Criteria::ASC) Order by the pacientelog_fecha column
- * @method PacientelogQuery orderByPacientelogNombre($order = Criteria::ASC) Order by the pacientelog_nombre column
- * @method PacientelogQuery orderByPacientelogTelefono($order = Criteria::ASC) Order by the pacientelog_telefono column
+ * @method PacientelogQuery orderByPacientelogNombreOld($order = Criteria::ASC) Order by the pacientelog_nombre_old column
+ * @method PacientelogQuery orderByPacientelogTelefonoOld($order = Criteria::ASC) Order by the pacientelog_telefono_old column
+ * @method PacientelogQuery orderByPacientelogNombreNew($order = Criteria::ASC) Order by the pacientelog_nombre_new column
+ * @method PacientelogQuery orderByPacientelogTelefonoNew($order = Criteria::ASC) Order by the pacientelog_telefono_new column
  *
  * @method PacientelogQuery groupByIdpacientelog() Group by the idpacientelog column
  * @method PacientelogQuery groupByIdpaciente() Group by the idpaciente column
  * @method PacientelogQuery groupByIdempleado() Group by the idempleado column
  * @method PacientelogQuery groupByPacientelogFecha() Group by the pacientelog_fecha column
- * @method PacientelogQuery groupByPacientelogNombre() Group by the pacientelog_nombre column
- * @method PacientelogQuery groupByPacientelogTelefono() Group by the pacientelog_telefono column
+ * @method PacientelogQuery groupByPacientelogNombreOld() Group by the pacientelog_nombre_old column
+ * @method PacientelogQuery groupByPacientelogTelefonoOld() Group by the pacientelog_telefono_old column
+ * @method PacientelogQuery groupByPacientelogNombreNew() Group by the pacientelog_nombre_new column
+ * @method PacientelogQuery groupByPacientelogTelefonoNew() Group by the pacientelog_telefono_new column
  *
  * @method PacientelogQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method PacientelogQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -38,15 +42,19 @@
  * @method Pacientelog findOneByIdpaciente(int $idpaciente) Return the first Pacientelog filtered by the idpaciente column
  * @method Pacientelog findOneByIdempleado(int $idempleado) Return the first Pacientelog filtered by the idempleado column
  * @method Pacientelog findOneByPacientelogFecha(string $pacientelog_fecha) Return the first Pacientelog filtered by the pacientelog_fecha column
- * @method Pacientelog findOneByPacientelogNombre(string $pacientelog_nombre) Return the first Pacientelog filtered by the pacientelog_nombre column
- * @method Pacientelog findOneByPacientelogTelefono(string $pacientelog_telefono) Return the first Pacientelog filtered by the pacientelog_telefono column
+ * @method Pacientelog findOneByPacientelogNombreOld(string $pacientelog_nombre_old) Return the first Pacientelog filtered by the pacientelog_nombre_old column
+ * @method Pacientelog findOneByPacientelogTelefonoOld(string $pacientelog_telefono_old) Return the first Pacientelog filtered by the pacientelog_telefono_old column
+ * @method Pacientelog findOneByPacientelogNombreNew(string $pacientelog_nombre_new) Return the first Pacientelog filtered by the pacientelog_nombre_new column
+ * @method Pacientelog findOneByPacientelogTelefonoNew(string $pacientelog_telefono_new) Return the first Pacientelog filtered by the pacientelog_telefono_new column
  *
  * @method array findByIdpacientelog(int $idpacientelog) Return Pacientelog objects filtered by the idpacientelog column
  * @method array findByIdpaciente(int $idpaciente) Return Pacientelog objects filtered by the idpaciente column
  * @method array findByIdempleado(int $idempleado) Return Pacientelog objects filtered by the idempleado column
  * @method array findByPacientelogFecha(string $pacientelog_fecha) Return Pacientelog objects filtered by the pacientelog_fecha column
- * @method array findByPacientelogNombre(string $pacientelog_nombre) Return Pacientelog objects filtered by the pacientelog_nombre column
- * @method array findByPacientelogTelefono(string $pacientelog_telefono) Return Pacientelog objects filtered by the pacientelog_telefono column
+ * @method array findByPacientelogNombreOld(string $pacientelog_nombre_old) Return Pacientelog objects filtered by the pacientelog_nombre_old column
+ * @method array findByPacientelogTelefonoOld(string $pacientelog_telefono_old) Return Pacientelog objects filtered by the pacientelog_telefono_old column
+ * @method array findByPacientelogNombreNew(string $pacientelog_nombre_new) Return Pacientelog objects filtered by the pacientelog_nombre_new column
+ * @method array findByPacientelogTelefonoNew(string $pacientelog_telefono_new) Return Pacientelog objects filtered by the pacientelog_telefono_new column
  *
  * @package    propel.generator.feetcent_feetcenter.om
  */
@@ -154,7 +162,7 @@ abstract class BasePacientelogQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idpacientelog`, `idpaciente`, `idempleado`, `pacientelog_fecha`, `pacientelog_nombre`, `pacientelog_telefono` FROM `pacientelog` WHERE `idpacientelog` = :p0';
+        $sql = 'SELECT `idpacientelog`, `idpaciente`, `idempleado`, `pacientelog_fecha`, `pacientelog_nombre_old`, `pacientelog_telefono_old`, `pacientelog_nombre_new`, `pacientelog_telefono_new` FROM `pacientelog` WHERE `idpacientelog` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -417,61 +425,119 @@ abstract class BasePacientelogQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the pacientelog_nombre column
+     * Filter the query on the pacientelog_nombre_old column
      *
      * Example usage:
      * <code>
-     * $query->filterByPacientelogNombre('fooValue');   // WHERE pacientelog_nombre = 'fooValue'
-     * $query->filterByPacientelogNombre('%fooValue%'); // WHERE pacientelog_nombre LIKE '%fooValue%'
+     * $query->filterByPacientelogNombreOld('fooValue');   // WHERE pacientelog_nombre_old = 'fooValue'
+     * $query->filterByPacientelogNombreOld('%fooValue%'); // WHERE pacientelog_nombre_old LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $pacientelogNombre The value to use as filter.
+     * @param     string $pacientelogNombreOld The value to use as filter.
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return PacientelogQuery The current query, for fluid interface
      */
-    public function filterByPacientelogNombre($pacientelogNombre = null, $comparison = null)
+    public function filterByPacientelogNombreOld($pacientelogNombreOld = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($pacientelogNombre)) {
+            if (is_array($pacientelogNombreOld)) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $pacientelogNombre)) {
-                $pacientelogNombre = str_replace('*', '%', $pacientelogNombre);
+            } elseif (preg_match('/[\%\*]/', $pacientelogNombreOld)) {
+                $pacientelogNombreOld = str_replace('*', '%', $pacientelogNombreOld);
                 $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(PacientelogPeer::PACIENTELOG_NOMBRE, $pacientelogNombre, $comparison);
+        return $this->addUsingAlias(PacientelogPeer::PACIENTELOG_NOMBRE_OLD, $pacientelogNombreOld, $comparison);
     }
 
     /**
-     * Filter the query on the pacientelog_telefono column
+     * Filter the query on the pacientelog_telefono_old column
      *
      * Example usage:
      * <code>
-     * $query->filterByPacientelogTelefono('fooValue');   // WHERE pacientelog_telefono = 'fooValue'
-     * $query->filterByPacientelogTelefono('%fooValue%'); // WHERE pacientelog_telefono LIKE '%fooValue%'
+     * $query->filterByPacientelogTelefonoOld('fooValue');   // WHERE pacientelog_telefono_old = 'fooValue'
+     * $query->filterByPacientelogTelefonoOld('%fooValue%'); // WHERE pacientelog_telefono_old LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $pacientelogTelefono The value to use as filter.
+     * @param     string $pacientelogTelefonoOld The value to use as filter.
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return PacientelogQuery The current query, for fluid interface
      */
-    public function filterByPacientelogTelefono($pacientelogTelefono = null, $comparison = null)
+    public function filterByPacientelogTelefonoOld($pacientelogTelefonoOld = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($pacientelogTelefono)) {
+            if (is_array($pacientelogTelefonoOld)) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $pacientelogTelefono)) {
-                $pacientelogTelefono = str_replace('*', '%', $pacientelogTelefono);
+            } elseif (preg_match('/[\%\*]/', $pacientelogTelefonoOld)) {
+                $pacientelogTelefonoOld = str_replace('*', '%', $pacientelogTelefonoOld);
                 $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(PacientelogPeer::PACIENTELOG_TELEFONO, $pacientelogTelefono, $comparison);
+        return $this->addUsingAlias(PacientelogPeer::PACIENTELOG_TELEFONO_OLD, $pacientelogTelefonoOld, $comparison);
+    }
+
+    /**
+     * Filter the query on the pacientelog_nombre_new column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPacientelogNombreNew('fooValue');   // WHERE pacientelog_nombre_new = 'fooValue'
+     * $query->filterByPacientelogNombreNew('%fooValue%'); // WHERE pacientelog_nombre_new LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $pacientelogNombreNew The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return PacientelogQuery The current query, for fluid interface
+     */
+    public function filterByPacientelogNombreNew($pacientelogNombreNew = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($pacientelogNombreNew)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $pacientelogNombreNew)) {
+                $pacientelogNombreNew = str_replace('*', '%', $pacientelogNombreNew);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(PacientelogPeer::PACIENTELOG_NOMBRE_NEW, $pacientelogNombreNew, $comparison);
+    }
+
+    /**
+     * Filter the query on the pacientelog_telefono_new column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPacientelogTelefonoNew('fooValue');   // WHERE pacientelog_telefono_new = 'fooValue'
+     * $query->filterByPacientelogTelefonoNew('%fooValue%'); // WHERE pacientelog_telefono_new LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $pacientelogTelefonoNew The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return PacientelogQuery The current query, for fluid interface
+     */
+    public function filterByPacientelogTelefonoNew($pacientelogTelefonoNew = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($pacientelogTelefonoNew)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $pacientelogTelefonoNew)) {
+                $pacientelogTelefonoNew = str_replace('*', '%', $pacientelogTelefonoNew);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(PacientelogPeer::PACIENTELOG_TELEFONO_NEW, $pacientelogTelefonoNew, $comparison);
     }
 
     /**

@@ -52,6 +52,7 @@ class MembresiaTableMap extends TableMap
 ));
         $this->addColumn('servicio_comision', 'ServicioComision', 'DECIMAL', false, 10, null);
         $this->addColumn('membresia_precio', 'MembresiaPrecio', 'DECIMAL', true, 10, null);
+        $this->addColumn('membresia_vigencia', 'MembresiaVigencia', 'INTEGER', false, null, null);
         // validators
     } // initialize()
 

@@ -15,6 +15,7 @@
  * @method PacientemembresiaQuery orderByPacientemembresiaServiciosdisponibles($order = Criteria::ASC) Order by the pacientemembresia_serviciosdisponibles column
  * @method PacientemembresiaQuery orderByPacientemembresiaCuponesdisponibles($order = Criteria::ASC) Order by the pacientemembresia_cuponesdisponibles column
  * @method PacientemembresiaQuery orderByPacientemembresiaEstatus($order = Criteria::ASC) Order by the pacientemembresia_estatus column
+ * @method PacientemembresiaQuery orderByPacientemembresiaVigencia($order = Criteria::ASC) Order by the pacientemembresia_vigencia column
  *
  * @method PacientemembresiaQuery groupByIdpacientemembresia() Group by the idpacientemembresia column
  * @method PacientemembresiaQuery groupByIdpaciente() Group by the idpaciente column
@@ -25,6 +26,7 @@
  * @method PacientemembresiaQuery groupByPacientemembresiaServiciosdisponibles() Group by the pacientemembresia_serviciosdisponibles column
  * @method PacientemembresiaQuery groupByPacientemembresiaCuponesdisponibles() Group by the pacientemembresia_cuponesdisponibles column
  * @method PacientemembresiaQuery groupByPacientemembresiaEstatus() Group by the pacientemembresia_estatus column
+ * @method PacientemembresiaQuery groupByPacientemembresiaVigencia() Group by the pacientemembresia_vigencia column
  *
  * @method PacientemembresiaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method PacientemembresiaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -57,6 +59,7 @@
  * @method Pacientemembresia findOneByPacientemembresiaServiciosdisponibles(int $pacientemembresia_serviciosdisponibles) Return the first Pacientemembresia filtered by the pacientemembresia_serviciosdisponibles column
  * @method Pacientemembresia findOneByPacientemembresiaCuponesdisponibles(int $pacientemembresia_cuponesdisponibles) Return the first Pacientemembresia filtered by the pacientemembresia_cuponesdisponibles column
  * @method Pacientemembresia findOneByPacientemembresiaEstatus(string $pacientemembresia_estatus) Return the first Pacientemembresia filtered by the pacientemembresia_estatus column
+ * @method Pacientemembresia findOneByPacientemembresiaVigencia(string $pacientemembresia_vigencia) Return the first Pacientemembresia filtered by the pacientemembresia_vigencia column
  *
  * @method array findByIdpacientemembresia(int $idpacientemembresia) Return Pacientemembresia objects filtered by the idpacientemembresia column
  * @method array findByIdpaciente(int $idpaciente) Return Pacientemembresia objects filtered by the idpaciente column
@@ -67,6 +70,7 @@
  * @method array findByPacientemembresiaServiciosdisponibles(int $pacientemembresia_serviciosdisponibles) Return Pacientemembresia objects filtered by the pacientemembresia_serviciosdisponibles column
  * @method array findByPacientemembresiaCuponesdisponibles(int $pacientemembresia_cuponesdisponibles) Return Pacientemembresia objects filtered by the pacientemembresia_cuponesdisponibles column
  * @method array findByPacientemembresiaEstatus(string $pacientemembresia_estatus) Return Pacientemembresia objects filtered by the pacientemembresia_estatus column
+ * @method array findByPacientemembresiaVigencia(string $pacientemembresia_vigencia) Return Pacientemembresia objects filtered by the pacientemembresia_vigencia column
  *
  * @package    propel.generator.feetcent_feetcenter.om
  */
@@ -174,7 +178,7 @@ abstract class BasePacientemembresiaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idpacientemembresia`, `idpaciente`, `idclinica`, `idmembresia`, `pacientemembresia_folio`, `pacientemembresia_fechainicio`, `pacientemembresia_serviciosdisponibles`, `pacientemembresia_cuponesdisponibles`, `pacientemembresia_estatus` FROM `pacientemembresia` WHERE `idpacientemembresia` = :p0';
+        $sql = 'SELECT `idpacientemembresia`, `idpaciente`, `idclinica`, `idmembresia`, `pacientemembresia_folio`, `pacientemembresia_fechainicio`, `pacientemembresia_serviciosdisponibles`, `pacientemembresia_cuponesdisponibles`, `pacientemembresia_estatus`, `pacientemembresia_vigencia` FROM `pacientemembresia` WHERE `idpacientemembresia` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -620,6 +624,49 @@ abstract class BasePacientemembresiaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PacientemembresiaPeer::PACIENTEMEMBRESIA_ESTATUS, $pacientemembresiaEstatus, $comparison);
+    }
+
+    /**
+     * Filter the query on the pacientemembresia_vigencia column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPacientemembresiaVigencia('2011-03-14'); // WHERE pacientemembresia_vigencia = '2011-03-14'
+     * $query->filterByPacientemembresiaVigencia('now'); // WHERE pacientemembresia_vigencia = '2011-03-14'
+     * $query->filterByPacientemembresiaVigencia(array('max' => 'yesterday')); // WHERE pacientemembresia_vigencia < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $pacientemembresiaVigencia The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return PacientemembresiaQuery The current query, for fluid interface
+     */
+    public function filterByPacientemembresiaVigencia($pacientemembresiaVigencia = null, $comparison = null)
+    {
+        if (is_array($pacientemembresiaVigencia)) {
+            $useMinMax = false;
+            if (isset($pacientemembresiaVigencia['min'])) {
+                $this->addUsingAlias(PacientemembresiaPeer::PACIENTEMEMBRESIA_VIGENCIA, $pacientemembresiaVigencia['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($pacientemembresiaVigencia['max'])) {
+                $this->addUsingAlias(PacientemembresiaPeer::PACIENTEMEMBRESIA_VIGENCIA, $pacientemembresiaVigencia['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(PacientemembresiaPeer::PACIENTEMEMBRESIA_VIGENCIA, $pacientemembresiaVigencia, $comparison);
     }
 
     /**

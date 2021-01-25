@@ -16,6 +16,7 @@
  * @method MembresiaQuery orderByServicioTipocomision($order = Criteria::ASC) Order by the servicio_tipocomision column
  * @method MembresiaQuery orderByServicioComision($order = Criteria::ASC) Order by the servicio_comision column
  * @method MembresiaQuery orderByMembresiaPrecio($order = Criteria::ASC) Order by the membresia_precio column
+ * @method MembresiaQuery orderByMembresiaVigencia($order = Criteria::ASC) Order by the membresia_vigencia column
  *
  * @method MembresiaQuery groupByIdmembresia() Group by the idmembresia column
  * @method MembresiaQuery groupByMembresiaNombre() Group by the membresia_nombre column
@@ -27,6 +28,7 @@
  * @method MembresiaQuery groupByServicioTipocomision() Group by the servicio_tipocomision column
  * @method MembresiaQuery groupByServicioComision() Group by the servicio_comision column
  * @method MembresiaQuery groupByMembresiaPrecio() Group by the membresia_precio column
+ * @method MembresiaQuery groupByMembresiaVigencia() Group by the membresia_vigencia column
  *
  * @method MembresiaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method MembresiaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -56,6 +58,7 @@
  * @method Membresia findOneByServicioTipocomision(string $servicio_tipocomision) Return the first Membresia filtered by the servicio_tipocomision column
  * @method Membresia findOneByServicioComision(string $servicio_comision) Return the first Membresia filtered by the servicio_comision column
  * @method Membresia findOneByMembresiaPrecio(string $membresia_precio) Return the first Membresia filtered by the membresia_precio column
+ * @method Membresia findOneByMembresiaVigencia(int $membresia_vigencia) Return the first Membresia filtered by the membresia_vigencia column
  *
  * @method array findByIdmembresia(int $idmembresia) Return Membresia objects filtered by the idmembresia column
  * @method array findByMembresiaNombre(string $membresia_nombre) Return Membresia objects filtered by the membresia_nombre column
@@ -67,6 +70,7 @@
  * @method array findByServicioTipocomision(string $servicio_tipocomision) Return Membresia objects filtered by the servicio_tipocomision column
  * @method array findByServicioComision(string $servicio_comision) Return Membresia objects filtered by the servicio_comision column
  * @method array findByMembresiaPrecio(string $membresia_precio) Return Membresia objects filtered by the membresia_precio column
+ * @method array findByMembresiaVigencia(int $membresia_vigencia) Return Membresia objects filtered by the membresia_vigencia column
  *
  * @package    propel.generator.feetcent_feetcenter.om
  */
@@ -174,7 +178,7 @@ abstract class BaseMembresiaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idmembresia`, `membresia_nombre`, `membresia_descripcion`, `membresia_servicios`, `membresia_cupones`, `servicio_generaingreso`, `servicio_generacomision`, `servicio_tipocomision`, `servicio_comision`, `membresia_precio` FROM `membresia` WHERE `idmembresia` = :p0';
+        $sql = 'SELECT `idmembresia`, `membresia_nombre`, `membresia_descripcion`, `membresia_servicios`, `membresia_cupones`, `servicio_generaingreso`, `servicio_generacomision`, `servicio_tipocomision`, `servicio_comision`, `membresia_precio`, `membresia_vigencia` FROM `membresia` WHERE `idmembresia` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -612,6 +616,48 @@ abstract class BaseMembresiaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MembresiaPeer::MEMBRESIA_PRECIO, $membresiaPrecio, $comparison);
+    }
+
+    /**
+     * Filter the query on the membresia_vigencia column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMembresiaVigencia(1234); // WHERE membresia_vigencia = 1234
+     * $query->filterByMembresiaVigencia(array(12, 34)); // WHERE membresia_vigencia IN (12, 34)
+     * $query->filterByMembresiaVigencia(array('min' => 12)); // WHERE membresia_vigencia >= 12
+     * $query->filterByMembresiaVigencia(array('max' => 12)); // WHERE membresia_vigencia <= 12
+     * </code>
+     *
+     * @param     mixed $membresiaVigencia The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return MembresiaQuery The current query, for fluid interface
+     */
+    public function filterByMembresiaVigencia($membresiaVigencia = null, $comparison = null)
+    {
+        if (is_array($membresiaVigencia)) {
+            $useMinMax = false;
+            if (isset($membresiaVigencia['min'])) {
+                $this->addUsingAlias(MembresiaPeer::MEMBRESIA_VIGENCIA, $membresiaVigencia['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($membresiaVigencia['max'])) {
+                $this->addUsingAlias(MembresiaPeer::MEMBRESIA_VIGENCIA, $membresiaVigencia['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(MembresiaPeer::MEMBRESIA_VIGENCIA, $membresiaVigencia, $comparison);
     }
 
     /**

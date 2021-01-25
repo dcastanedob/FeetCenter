@@ -54,18 +54,32 @@ abstract class BasePacientelog extends BaseObject implements Persistent
     protected $pacientelog_fecha;
 
     /**
-     * The value for the pacientelog_nombre field.
+     * The value for the pacientelog_nombre_old field.
      * Note: this column has a database default value of: ''
      * @var        string
      */
-    protected $pacientelog_nombre;
+    protected $pacientelog_nombre_old;
 
     /**
-     * The value for the pacientelog_telefono field.
+     * The value for the pacientelog_telefono_old field.
      * Note: this column has a database default value of: ''
      * @var        string
      */
-    protected $pacientelog_telefono;
+    protected $pacientelog_telefono_old;
+
+    /**
+     * The value for the pacientelog_nombre_new field.
+     * Note: this column has a database default value of: ''
+     * @var        string
+     */
+    protected $pacientelog_nombre_new;
+
+    /**
+     * The value for the pacientelog_telefono_new field.
+     * Note: this column has a database default value of: ''
+     * @var        string
+     */
+    protected $pacientelog_telefono_new;
 
     /**
      * @var        Empleado
@@ -105,8 +119,10 @@ abstract class BasePacientelog extends BaseObject implements Persistent
      */
     public function applyDefaultValues()
     {
-        $this->pacientelog_nombre = '';
-        $this->pacientelog_telefono = '';
+        $this->pacientelog_nombre_old = '';
+        $this->pacientelog_telefono_old = '';
+        $this->pacientelog_nombre_new = '';
+        $this->pacientelog_telefono_new = '';
     }
 
     /**
@@ -193,25 +209,47 @@ abstract class BasePacientelog extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [pacientelog_nombre] column value.
+     * Get the [pacientelog_nombre_old] column value.
      *
      * @return string
      */
-    public function getPacientelogNombre()
+    public function getPacientelogNombreOld()
     {
 
-        return $this->pacientelog_nombre;
+        return $this->pacientelog_nombre_old;
     }
 
     /**
-     * Get the [pacientelog_telefono] column value.
+     * Get the [pacientelog_telefono_old] column value.
      *
      * @return string
      */
-    public function getPacientelogTelefono()
+    public function getPacientelogTelefonoOld()
     {
 
-        return $this->pacientelog_telefono;
+        return $this->pacientelog_telefono_old;
+    }
+
+    /**
+     * Get the [pacientelog_nombre_new] column value.
+     *
+     * @return string
+     */
+    public function getPacientelogNombreNew()
+    {
+
+        return $this->pacientelog_nombre_new;
+    }
+
+    /**
+     * Get the [pacientelog_telefono_new] column value.
+     *
+     * @return string
+     */
+    public function getPacientelogTelefonoNew()
+    {
+
+        return $this->pacientelog_telefono_new;
     }
 
     /**
@@ -309,46 +347,88 @@ abstract class BasePacientelog extends BaseObject implements Persistent
     } // setPacientelogFecha()
 
     /**
-     * Set the value of [pacientelog_nombre] column.
+     * Set the value of [pacientelog_nombre_old] column.
      *
      * @param  string $v new value
      * @return Pacientelog The current object (for fluent API support)
      */
-    public function setPacientelogNombre($v)
+    public function setPacientelogNombreOld($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->pacientelog_nombre !== $v) {
-            $this->pacientelog_nombre = $v;
-            $this->modifiedColumns[] = PacientelogPeer::PACIENTELOG_NOMBRE;
+        if ($this->pacientelog_nombre_old !== $v) {
+            $this->pacientelog_nombre_old = $v;
+            $this->modifiedColumns[] = PacientelogPeer::PACIENTELOG_NOMBRE_OLD;
         }
 
 
         return $this;
-    } // setPacientelogNombre()
+    } // setPacientelogNombreOld()
 
     /**
-     * Set the value of [pacientelog_telefono] column.
+     * Set the value of [pacientelog_telefono_old] column.
      *
      * @param  string $v new value
      * @return Pacientelog The current object (for fluent API support)
      */
-    public function setPacientelogTelefono($v)
+    public function setPacientelogTelefonoOld($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->pacientelog_telefono !== $v) {
-            $this->pacientelog_telefono = $v;
-            $this->modifiedColumns[] = PacientelogPeer::PACIENTELOG_TELEFONO;
+        if ($this->pacientelog_telefono_old !== $v) {
+            $this->pacientelog_telefono_old = $v;
+            $this->modifiedColumns[] = PacientelogPeer::PACIENTELOG_TELEFONO_OLD;
         }
 
 
         return $this;
-    } // setPacientelogTelefono()
+    } // setPacientelogTelefonoOld()
+
+    /**
+     * Set the value of [pacientelog_nombre_new] column.
+     *
+     * @param  string $v new value
+     * @return Pacientelog The current object (for fluent API support)
+     */
+    public function setPacientelogNombreNew($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->pacientelog_nombre_new !== $v) {
+            $this->pacientelog_nombre_new = $v;
+            $this->modifiedColumns[] = PacientelogPeer::PACIENTELOG_NOMBRE_NEW;
+        }
+
+
+        return $this;
+    } // setPacientelogNombreNew()
+
+    /**
+     * Set the value of [pacientelog_telefono_new] column.
+     *
+     * @param  string $v new value
+     * @return Pacientelog The current object (for fluent API support)
+     */
+    public function setPacientelogTelefonoNew($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->pacientelog_telefono_new !== $v) {
+            $this->pacientelog_telefono_new = $v;
+            $this->modifiedColumns[] = PacientelogPeer::PACIENTELOG_TELEFONO_NEW;
+        }
+
+
+        return $this;
+    } // setPacientelogTelefonoNew()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -360,11 +440,19 @@ abstract class BasePacientelog extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->pacientelog_nombre !== '') {
+            if ($this->pacientelog_nombre_old !== '') {
                 return false;
             }
 
-            if ($this->pacientelog_telefono !== '') {
+            if ($this->pacientelog_telefono_old !== '') {
+                return false;
+            }
+
+            if ($this->pacientelog_nombre_new !== '') {
+                return false;
+            }
+
+            if ($this->pacientelog_telefono_new !== '') {
                 return false;
             }
 
@@ -394,8 +482,10 @@ abstract class BasePacientelog extends BaseObject implements Persistent
             $this->idpaciente = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->idempleado = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->pacientelog_fecha = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->pacientelog_nombre = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->pacientelog_telefono = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->pacientelog_nombre_old = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->pacientelog_telefono_old = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->pacientelog_nombre_new = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->pacientelog_telefono_new = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -405,7 +495,7 @@ abstract class BasePacientelog extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 6; // 6 = PacientelogPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = PacientelogPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Pacientelog object", $e);
@@ -656,11 +746,17 @@ abstract class BasePacientelog extends BaseObject implements Persistent
         if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_FECHA)) {
             $modifiedColumns[':p' . $index++]  = '`pacientelog_fecha`';
         }
-        if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_NOMBRE)) {
-            $modifiedColumns[':p' . $index++]  = '`pacientelog_nombre`';
+        if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_NOMBRE_OLD)) {
+            $modifiedColumns[':p' . $index++]  = '`pacientelog_nombre_old`';
         }
-        if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_TELEFONO)) {
-            $modifiedColumns[':p' . $index++]  = '`pacientelog_telefono`';
+        if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_TELEFONO_OLD)) {
+            $modifiedColumns[':p' . $index++]  = '`pacientelog_telefono_old`';
+        }
+        if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_NOMBRE_NEW)) {
+            $modifiedColumns[':p' . $index++]  = '`pacientelog_nombre_new`';
+        }
+        if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_TELEFONO_NEW)) {
+            $modifiedColumns[':p' . $index++]  = '`pacientelog_telefono_new`';
         }
 
         $sql = sprintf(
@@ -685,11 +781,17 @@ abstract class BasePacientelog extends BaseObject implements Persistent
                     case '`pacientelog_fecha`':
                         $stmt->bindValue($identifier, $this->pacientelog_fecha, PDO::PARAM_STR);
                         break;
-                    case '`pacientelog_nombre`':
-                        $stmt->bindValue($identifier, $this->pacientelog_nombre, PDO::PARAM_STR);
+                    case '`pacientelog_nombre_old`':
+                        $stmt->bindValue($identifier, $this->pacientelog_nombre_old, PDO::PARAM_STR);
                         break;
-                    case '`pacientelog_telefono`':
-                        $stmt->bindValue($identifier, $this->pacientelog_telefono, PDO::PARAM_STR);
+                    case '`pacientelog_telefono_old`':
+                        $stmt->bindValue($identifier, $this->pacientelog_telefono_old, PDO::PARAM_STR);
+                        break;
+                    case '`pacientelog_nombre_new`':
+                        $stmt->bindValue($identifier, $this->pacientelog_nombre_new, PDO::PARAM_STR);
+                        break;
+                    case '`pacientelog_telefono_new`':
+                        $stmt->bindValue($identifier, $this->pacientelog_telefono_new, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -856,10 +958,16 @@ abstract class BasePacientelog extends BaseObject implements Persistent
                 return $this->getPacientelogFecha();
                 break;
             case 4:
-                return $this->getPacientelogNombre();
+                return $this->getPacientelogNombreOld();
                 break;
             case 5:
-                return $this->getPacientelogTelefono();
+                return $this->getPacientelogTelefonoOld();
+                break;
+            case 6:
+                return $this->getPacientelogNombreNew();
+                break;
+            case 7:
+                return $this->getPacientelogTelefonoNew();
                 break;
             default:
                 return null;
@@ -894,8 +1002,10 @@ abstract class BasePacientelog extends BaseObject implements Persistent
             $keys[1] => $this->getIdpaciente(),
             $keys[2] => $this->getIdempleado(),
             $keys[3] => $this->getPacientelogFecha(),
-            $keys[4] => $this->getPacientelogNombre(),
-            $keys[5] => $this->getPacientelogTelefono(),
+            $keys[4] => $this->getPacientelogNombreOld(),
+            $keys[5] => $this->getPacientelogTelefonoOld(),
+            $keys[6] => $this->getPacientelogNombreNew(),
+            $keys[7] => $this->getPacientelogTelefonoNew(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -956,10 +1066,16 @@ abstract class BasePacientelog extends BaseObject implements Persistent
                 $this->setPacientelogFecha($value);
                 break;
             case 4:
-                $this->setPacientelogNombre($value);
+                $this->setPacientelogNombreOld($value);
                 break;
             case 5:
-                $this->setPacientelogTelefono($value);
+                $this->setPacientelogTelefonoOld($value);
+                break;
+            case 6:
+                $this->setPacientelogNombreNew($value);
+                break;
+            case 7:
+                $this->setPacientelogTelefonoNew($value);
                 break;
         } // switch()
     }
@@ -989,8 +1105,10 @@ abstract class BasePacientelog extends BaseObject implements Persistent
         if (array_key_exists($keys[1], $arr)) $this->setIdpaciente($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setIdempleado($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setPacientelogFecha($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setPacientelogNombre($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setPacientelogTelefono($arr[$keys[5]]);
+        if (array_key_exists($keys[4], $arr)) $this->setPacientelogNombreOld($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setPacientelogTelefonoOld($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setPacientelogNombreNew($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setPacientelogTelefonoNew($arr[$keys[7]]);
     }
 
     /**
@@ -1006,8 +1124,10 @@ abstract class BasePacientelog extends BaseObject implements Persistent
         if ($this->isColumnModified(PacientelogPeer::IDPACIENTE)) $criteria->add(PacientelogPeer::IDPACIENTE, $this->idpaciente);
         if ($this->isColumnModified(PacientelogPeer::IDEMPLEADO)) $criteria->add(PacientelogPeer::IDEMPLEADO, $this->idempleado);
         if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_FECHA)) $criteria->add(PacientelogPeer::PACIENTELOG_FECHA, $this->pacientelog_fecha);
-        if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_NOMBRE)) $criteria->add(PacientelogPeer::PACIENTELOG_NOMBRE, $this->pacientelog_nombre);
-        if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_TELEFONO)) $criteria->add(PacientelogPeer::PACIENTELOG_TELEFONO, $this->pacientelog_telefono);
+        if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_NOMBRE_OLD)) $criteria->add(PacientelogPeer::PACIENTELOG_NOMBRE_OLD, $this->pacientelog_nombre_old);
+        if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_TELEFONO_OLD)) $criteria->add(PacientelogPeer::PACIENTELOG_TELEFONO_OLD, $this->pacientelog_telefono_old);
+        if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_NOMBRE_NEW)) $criteria->add(PacientelogPeer::PACIENTELOG_NOMBRE_NEW, $this->pacientelog_nombre_new);
+        if ($this->isColumnModified(PacientelogPeer::PACIENTELOG_TELEFONO_NEW)) $criteria->add(PacientelogPeer::PACIENTELOG_TELEFONO_NEW, $this->pacientelog_telefono_new);
 
         return $criteria;
     }
@@ -1074,8 +1194,10 @@ abstract class BasePacientelog extends BaseObject implements Persistent
         $copyObj->setIdpaciente($this->getIdpaciente());
         $copyObj->setIdempleado($this->getIdempleado());
         $copyObj->setPacientelogFecha($this->getPacientelogFecha());
-        $copyObj->setPacientelogNombre($this->getPacientelogNombre());
-        $copyObj->setPacientelogTelefono($this->getPacientelogTelefono());
+        $copyObj->setPacientelogNombreOld($this->getPacientelogNombreOld());
+        $copyObj->setPacientelogTelefonoOld($this->getPacientelogTelefonoOld());
+        $copyObj->setPacientelogNombreNew($this->getPacientelogNombreNew());
+        $copyObj->setPacientelogTelefonoNew($this->getPacientelogTelefonoNew());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1247,8 +1369,10 @@ abstract class BasePacientelog extends BaseObject implements Persistent
         $this->idpaciente = null;
         $this->idempleado = null;
         $this->pacientelog_fecha = null;
-        $this->pacientelog_nombre = null;
-        $this->pacientelog_telefono = null;
+        $this->pacientelog_nombre_old = null;
+        $this->pacientelog_telefono_old = null;
+        $this->pacientelog_nombre_new = null;
+        $this->pacientelog_telefono_new = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

@@ -11,7 +11,7 @@ class MembresiaForm extends Form
         // we want to ignore the name passed
         parent::__construct('membresiaForm');
         $this->setAttribute('method', 'post');
-        
+
         $this->add(array(
             'name' => 'membresia_nombre',
             'type' => 'Text',
@@ -20,7 +20,7 @@ class MembresiaForm extends Form
                 'required' => true,
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'membresia_descripcion',
             'type' => 'Text',
@@ -29,7 +29,16 @@ class MembresiaForm extends Form
                 'required' => true,
             ),
         ));
-        
+
+        $this->add(array(
+            'name' => 'membresia_vigencia',
+            'type' => 'Text',
+            'attributes' => array(
+                'class' => 'width-100',
+                'required' => true,
+            ),
+        ));
+
         $this->add(array(
             'name' => 'membresia_servicios',
             'type' => 'Text',
@@ -38,7 +47,7 @@ class MembresiaForm extends Form
                 'required' => true,
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'membresia_cupones',
             'type' => 'Text',
@@ -47,7 +56,7 @@ class MembresiaForm extends Form
                 'required' => true,
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'membresia_precio',
             'type' => 'Text',
@@ -56,6 +65,6 @@ class MembresiaForm extends Form
                 'required' => true,
             ),
         ));
-        
+
     }
 }
